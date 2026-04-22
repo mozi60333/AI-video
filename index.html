@@ -6,62 +6,34 @@
     <title>AI Video</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Meta Pixel Code (Facebook 像素基础代码) -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '963884939510284'); // 您的像素 ID
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=963884939510284&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
     <style>
         body { background-color: #000; color: #fff; font-family: -apple-system, sans-serif; overflow: hidden; margin: 0; }
-        
-        /* 触摸点动画 */
-        .touch-dot {
-            width: 35px; height: 35px;
-            background: rgba(255, 255, 255, 0.3);
-            border: 2px solid #fff;
-            border-radius: 50%;
-            position: absolute;
-            z-index: 100;
-            pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: scale(0);
-            opacity: 0;
-        }
-
-        /* 扫描线动画 */
-        .scan-line {
-            position: absolute;
-            width: 100%; height: 60px;
-            background: linear-gradient(to bottom, transparent, #8b5cf6, transparent);
-            opacity: 0; z-index: 50;
-        }
-
-        /* 视频覆盖层 */
-        #result-overlay {
-            position: absolute; inset: 0;
-            background: #000; z-index: 60;
-            display: none; opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        /* 吸底按钮 */
-        .sticky-cta {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            padding: 20px;
-            background: linear-gradient(to top, #000 85%, transparent);
-            z-index: 100;
-        }
-
-        /* 飞入图片样式 */
-        .flying-photo {
-            position: absolute;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 40;
-            border-radius: 20px;
-            object-fit: cover;
-        }
-
-        /* 呼吸效果 */
+        .touch-dot { width: 35px; height: 35px; background: rgba(255, 255, 255, 0.3); border: 2px solid #fff; border-radius: 50%; position: absolute; z-index: 100; pointer-events: none; transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); transform: scale(0); opacity: 0; }
+        .scan-line { position: absolute; width: 100%; height: 60px; background: linear-gradient(to bottom, transparent, #8b5cf6, transparent); opacity: 0; z-index: 50; }
+        #result-overlay { position: absolute; inset: 0; background: #000; z-index: 60; display: none; opacity: 0; transition: opacity 0.4s; }
+        .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(to top, #000 85%, transparent); z-index: 100; }
+        .flying-photo { position: absolute; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 40; border-radius: 20px; object-fit: cover; }
         .glow { animation: pulse-glow 2s infinite; }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
-            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
-        }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); } 50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); } }
     </style>
 </head>
 <body class="flex flex-col h-screen">
@@ -74,25 +46,17 @@
 
     <!-- 交互展示舞台 -->
     <div id="stage" class="flex-1 relative flex flex-col items-center pt-24">
-        
-        <!-- 手势圆点 -->
         <div id="cursor" class="touch-dot"></div>
-
-        <!-- 魔法生成槽位 -->
         <div id="main-slot" class="w-[280px] h-[380px] border-2 border-dashed border-gray-800 rounded-[30px] flex flex-col items-center justify-center text-gray-700 bg-gray-900/20 glow relative overflow-hidden">
             <div class="flex flex-col items-center opacity-40">
                 <i class="fas fa-plus-circle text-4xl mb-4"></i>
                 <span class="text-[10px] font-bold tracking-[0.3em]">UPLOAD PHOTO</span>
             </div>
-            
-            <!-- 槽位内的扫描线 -->
             <div id="scanner" class="scan-line"></div>
         </div>
 
-        <!-- 底部资产选择器 -->
         <div class="absolute bottom-36 left-0 right-0 px-6">
             <div class="flex justify-center gap-3">
-                <!-- 这里请填入您的三张展示图的 URL -->
                 <div id="asset-1" class="w-16 h-16 bg-gray-800 rounded-xl overflow-hidden border border-white/10 active:scale-90 transition-transform">
                     <img src="https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-15_21-03-01.jpg?w=480&h=704" class="w-full h-full object-cover">
                 </div>
@@ -103,16 +67,10 @@
                     <img src="https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-11_20-16-19.jpg?w=480&h=704" class="w-full h-full object-cover">
                 </div>
             </div>
-            
-            <!-- 生成按钮 -->
-            <div id="fake-btn" class="mt-8 w-full py-4 bg-gray-900 border border-purple-900/30 rounded-2xl text-center text-gray-400 font-black tracking-[0.2em] transition-all">
-                GENERATE VIDEO
-            </div>
+            <div id="fake-btn" class="mt-8 w-full py-4 bg-gray-900 border border-purple-900/30 rounded-2xl text-center text-gray-400 font-black tracking-[0.2em] transition-all">GENERATE VIDEO</div>
         </div>
 
-        <!-- 结果展示层 -->
         <div id="result-overlay">
-            <!-- 这里请填入生成后的视频 URL -->
             <video id="demo-video" class="w-full h-full object-cover" muted playsinline loop></video>
             <div class="absolute top-10 left-0 right-0 flex justify-center">
                 <span class="bg-purple-600 text-white px-5 py-1.5 rounded-full text-[11px] font-black tracking-widest shadow-xl">AI GENERATED</span>
@@ -120,15 +78,29 @@
         </div>
     </div>
 
-    <!-- 下载按钮区域 -->
+    <!-- 下载按钮区域：已优化追踪事件 -->
     <div class="sticky-cta">
-        <a href="https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD" target="_blank" class="block w-full"> <button class="w-full bg-white text-black h-16 rounded-[20px] font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(139,92,246,0.4)] active:scale-95 transition-transform">
+        <button onclick="trackDownloadAndRedirect()" class="w-full bg-white text-black h-16 rounded-[20px] font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(139,92,246,0.4)] active:scale-95 transition-transform">
             Download Now
-        </button> </a>
+        </button>
         <p class="text-center text-gray-500 text-[9px] mt-3 tracking-[0.2em]">FAST AI • HD EXPORT • FREE TRIAL</p>
     </div>
 
     <script>
+        // --- 1. Facebook 追踪跳转逻辑 ---
+        function trackDownloadAndRedirect() {
+            // 发送 Download 事件到 Facebook
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Download');
+            }
+            
+            // 延迟跳转，确保追踪请求发出（200-300ms足够）
+            setTimeout(function() {
+                window.location.href = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
+            }, 250);
+        }
+
+        // --- 2. 动画演示逻辑 ---
         const cursor = document.getElementById('cursor');
         const mainSlot = document.getElementById('main-slot');
         const btn = document.getElementById('fake-btn');
@@ -136,42 +108,28 @@
         const overlay = document.getElementById('result-overlay');
         const video = document.getElementById('demo-video');
 
-        // 这里设置对应关系：点击哪张图，对应飞入哪张图，最后显示哪个视频
         const demoAssets = [
             { id: 'asset-1', img: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-15_21-03-01.jpg?w=480&h=704', vid: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/%E5%90%8E%E5%85%A5%E6%89%AD%E8%87%80.mp4' },
             { id: 'asset-2', img: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-11_20-17-33.jpg?w=480&h=704', vid: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/3-2.mp4' },
-           { id: 'asset-3', img: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-11_20-16-19.jpg?w=480&h=704', vid: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/3-1.mp4' }
+            { id: 'asset-3', img: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-11_20-16-19.jpg?w=480&h=704', vid: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/3-1.mp4' }
         ];
 
         async function runAutoDemo() {
             let index = 0;
             while (true) {
                 const current = demoAssets[index % demoAssets.length];
-                
-                // 1. 重置界面
                 await reset();
-
-                // 2. 模拟点击下方小图
                 const assetEl = document.getElementById(current.id);
                 await moveAndTap(assetEl);
-                
-                // 3. 执行照片飞入槽位动画
                 flyPhoto(current.img);
                 await sleep(1000);
-
-                // 4. 点击生成按钮
                 await moveAndTap(btn);
                 btn.style.backgroundColor = '#8b5cf6';
                 btn.style.color = '#fff';
                 btn.innerText = 'AI PROCESSING...';
-
-                // 5. 扫描线扫过
                 await runScanner();
-                
-                // 6. 全屏展示视频结果
                 showResult(current.vid);
-                
-                await sleep(5000); // 视频展示 5 秒
+                await sleep(5000);
                 index++;
             }
         }
@@ -204,13 +162,10 @@
             const photo = document.createElement('img');
             photo.src = url;
             photo.className = 'flying-photo w-16 h-16';
-            
             const startRect = cursor.getBoundingClientRect();
             photo.style.left = startRect.left + 'px';
             photo.style.top = startRect.top + 'px';
-            
             document.getElementById('stage').appendChild(photo);
-
             const targetRect = mainSlot.getBoundingClientRect();
             setTimeout(() => {
                 photo.style.left = (targetRect.left + 5) + 'px';
@@ -239,7 +194,6 @@
 
         function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-        // 启动演示动画
         window.onload = runAutoDemo;
     </script>
 </body>
