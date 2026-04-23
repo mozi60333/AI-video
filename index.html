@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code (Facebook 像素) -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -38,11 +38,13 @@
 </head>
 <body class="flex flex-col h-screen">
 
+    <!-- 头部 -->
     <header class="pt-6 px-6 text-center fixed top-0 w-full z-50">
         <div class="text-xl font-black italic tracking-tighter">AI<span class="text-purple-500">MAGIC</span></div>
         <div class="mt-1 h-[2px] w-12 bg-purple-600 mx-auto rounded-full"></div>
     </header>
 
+    <!-- 演示台 -->
     <div id="stage" class="flex-1 relative flex flex-col items-center pt-24">
         <div id="cursor" class="touch-dot"></div>
         <div id="main-slot" class="w-[280px] h-[380px] border-2 border-dashed border-gray-800 rounded-[30px] flex flex-col items-center justify-center text-gray-700 bg-gray-900/20 glow relative overflow-hidden">
@@ -53,6 +55,7 @@
             <div id="scanner" class="scan-line"></div>
         </div>
 
+        <!-- 底部缩略图 -->
         <div class="absolute bottom-36 left-0 right-0 px-6">
             <div class="flex justify-center gap-3">
                 <div id="asset-1" class="w-16 h-16 bg-gray-800 rounded-xl overflow-hidden border border-white/10 active:scale-90 transition-transform">
@@ -68,6 +71,7 @@
             <div id="fake-btn" class="mt-8 w-full py-4 bg-gray-900 border border-purple-900/30 rounded-2xl text-center text-gray-400 font-black tracking-[0.2em] transition-all">GENERATE VIDEO</div>
         </div>
 
+        <!-- 视频结果层 -->
         <div id="result-overlay">
             <video id="demo-video" class="w-full h-full object-cover" muted playsinline loop></video>
             <div class="absolute top-10 left-0 right-0 flex justify-center">
@@ -76,7 +80,7 @@
         </div>
     </div>
 
-    <!-- 下载按钮 -->
+    <!-- 下载按钮区域 -->
     <div class="sticky-cta">
         <button onclick="handleAdjustDownload()" class="w-full bg-white text-black h-16 rounded-[20px] font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(139,92,246,0.4)] active:scale-95 transition-transform">
             Download Now
@@ -86,39 +90,42 @@
 
     <script>
         // ==========================================
-        // 1. Adjust 参数透传逻辑
+        // 1. Adjust 参数透传 + Facebook 像素回传逻辑
         // ==========================================
         function handleAdjustDownload() {
-            // A. 获取当前网页的所有参数 (如 ?fbclid=xxx&utm_source=yyy)
-            const queryString = window.location.search; 
-            
-            // B. 定义 App 内部协议头 (请确保这与你 App 里的 URL Scheme 一致)
-            // 如果不确定，可以咨询开发，通常是 pictopop://
-            const appScheme = "pictopop://open"; 
+            console.log("Download clicked...");
 
-            // C. 拼接 Deep Link 并进行二次编码
-            // 第一次拼接：pictopop://open?fbclid=xxx...
-            const fullDeepLink = queryString ? (appScheme + queryString) : appScheme;
-            // 进行编码
-            const encodedDeepLink = encodeURIComponent(fullDeepLink);
-
-            // D. 准备基础 Adjust 链接 (你之前提供的链接)
-            // 注意：Adjust 链接如果已经有参数，后面拼接 deep_link 要用 &
-            const baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
-
-            // E. 生成最终跳转链接
-            const finalUrl = baseAdjustUrl + "&deep_link=" + encodedDeepLink;
-
-            // F. 触发 Facebook Pixel 追踪
+            // A. 立即发送 Facebook 追踪事件
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Download');
+                console.log("Pixel Download event fired.");
             }
 
-            // G. 执行跳转 (延迟 250ms 确保追踪发出)
-            console.log("Final Adjust URL:", finalUrl); // 调试用
+            // B. 处理 Adjust 透传参数
+            // 获取落地页当前 URL 后面的参数 (?adj_t=... 等)
+            const queryString = window.location.search; 
+            
+            // 定义 App 内部协议头
+            const appScheme = "pictopop://open"; 
+
+            // 拼接 Deep Link：pictopop://open?adj_t=...
+            const fullDeepLink = queryString ? (appScheme + queryString) : appScheme;
+            
+            // 对整个 Deep Link 进行编码
+            const encodedDeepLink = encodeURIComponent(fullDeepLink);
+
+            // 你的 Adjust 基础追踪链接
+            const baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
+
+            // 最终生成的 Adjust 链接
+            const finalUrl = baseAdjustUrl + "&deep_link=" + encodedDeepLink;
+
+            console.log("Final URL:", finalUrl);
+
+            // C. 延迟跳转：给像素代码留出发送时间（500ms 比较保险）
             setTimeout(() => {
                 window.location.href = finalUrl;
-            }, 250);
+            }, 500);
         }
 
         // ==========================================
@@ -152,7 +159,7 @@
                 btn.innerText = 'AI PROCESSING...';
                 await runScanner();
                 showResult(current.vid);
-                await sleep(5000);
+                await sleep(5000); // 结果停留
                 index++;
             }
         }
@@ -212,7 +219,7 @@
             overlay.style.display = 'block';
             setTimeout(() => { overlay.style.opacity = '1'; }, 10);
             video.src = vidUrl;
-            video.play().catch(e => console.log("Auto-play blocked"));
+            video.play().catch(e => console.log("Video play failed:", e));
         }
 
         function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
