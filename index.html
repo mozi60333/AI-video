@@ -115,7 +115,7 @@
             const encodedDeepLink = encodeURIComponent(fullDeepLink);
 
             // 你的 Adjust 基础追踪链接
-            const baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
+            const baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}&adj_adgroup={{adset.name}}&adj_creative={{ad.name}}&fb_pixel_id=963884939510284&fbclid={{fbclid}}&deep_link=pictopop%3A%2F%2Fopen%3Fadj_t%3D1zqd1lb7%26adj_campaign%3D{{campaign.name}}%26fbclid%3D{{fbclid}}";
 
             // 最终生成的 Adjust 链接
             const finalUrl = baseAdjustUrl + "&deep_link=" + encodedDeepLink;
