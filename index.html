@@ -89,46 +89,61 @@
     </div>
 
     <script>
-       function handleAdjustDownload() {
-    console.log("Download process started...");
+  function handleAdjustDownload() {
+    console.log("--- 1. 开始处理下载追踪 ---");
 
-    // 1. 获取当前落地页 URL 的参数
-    const urlParams = new URLSearchParams(window.location.search);
-    const fbclid = urlParams.get('fbclid'); // 特别提取 fbclid
-    const allQueryParams = window.location.search; // 获取完整参数字符串
+    // 获取当前页面 URL 参数
+    const searchParams = new URLSearchParams(window.location.search);
+    const fbclid = searchParams.get('fbclid');
+    const allSearch = window.location.search; 
 
-    // 2. 构造 Deep Link (App 内部协议)
-    // 确保 fbclid 包含在内部，供 App 启动后读取
+    // 获取 Facebook 广告相关的宏（如果有）
+    const campaign = searchParams.get('adj_campaign') || "{{campaign.name}}";
+
+    // 1. 触发 Facebook 像素 (改为 trackCustom 以消除警告)
+    if (typeof fbq !== 'undefined') {
+        fbq('trackCustom', 'Download');
+        console.log("--- 2. FB Pixel 事件已发送 (trackCustom) ---");
+    }
+
+    // 2. 构造内部 Deep Link
     const appScheme = "pictopop://open";
-    const fullDeepLink = allQueryParams ? (appScheme + allQueryParams) : appScheme;
+    // 确保把当前页面的所有参数带入 App 内部
+    const fullDeepLink = allSearch ? (appScheme + allSearch) : appScheme;
+    // 进行 URL 编码
     const encodedDeepLink = encodeURIComponent(fullDeepLink);
 
-    // 3. 定义 Adjust 基础追踪链接 (Tracker URL)
-    // 注意：这里已经带了很多参数，所以后续添加要用 &
-    let baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
-
-    // 4. 生成最终跳转 URL (双重透传 fbclid)
-    let finalUrl = baseAdjustUrl;
+    // 3. 构造基础 Adjust 链接
+    // 注意：我们将在这里动态拼接参数，不再直接写死超长字符串
+    const trackerToken = "1zqd1lb7";
+    const pixelId = "963884939510284";
     
-    // A. 根部透传：如果当前 URL 存在 fbclid，强制拼接到 Adjust 根链接
+    // 重新构建，确保逻辑清晰
+    let finalUrl = `https://pictopop.go.link?adj_t=${trackerToken}`;
+    finalUrl += `&adj_campaign=${encodeURIComponent(campaign)}`;
+    finalUrl += `&fb_pixel_id=${pixelId}`;
+    
+    // 关键：透传 fbclid (给 Adjust 服务器)
     if (fbclid) {
-        finalUrl += "&fbclid=" + fbclid;
-    }
-    
-    // B. Deep Link 透传：把编码后的全量参数作为 deep_link 字段
-    finalUrl += "&deep_link=" + encodedDeepLink;
-
-    console.log("Generated Final URL:", finalUrl);
-
-    // 5. Facebook 像素触发
-    if (typeof fbq !== 'undefined') {
-        fbq('track', 'Download');
+        finalUrl += `&fbclid=${fbclid}`;
+        console.log("--- 3. 检测到 fbclid 并已附加到根链接:", fbclid);
+    } else {
+        console.warn("--- 3. 警告：未在 URL 中检测到 fbclid，请检查测试链接 ---");
     }
 
-    // 6. 执行跳转
+    // 关键：附加 deep_link (给 App 内部)
+    finalUrl += `&deep_link=${encodedDeepLink}`;
+
+    // 把原始 Token 也带上（如果需要）
+    finalUrl += `&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD`;
+
+    console.log("--- 4. 最终生成的跳转链接: ---");
+    console.log(finalUrl);
+
+    // 4. 执行跳转 (延迟 400ms)
     setTimeout(() => {
         window.location.href = finalUrl;
-    }, 400); 
+    }, 400);
 }
 
         // ==========================================
