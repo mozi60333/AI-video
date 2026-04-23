@@ -89,44 +89,47 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. Adjust 参数透传 + Facebook 像素回传逻辑
-        // ==========================================
-        function handleAdjustDownload() {
-            console.log("Download clicked...");
+       function handleAdjustDownload() {
+    console.log("Download process started...");
 
-            // A. 立即发送 Facebook 追踪事件
-            if (typeof fbq !== 'undefined') {
-                fbq('track', 'Download');
-                console.log("Pixel Download event fired.");
-            }
+    // 1. 获取当前落地页 URL 的参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const fbclid = urlParams.get('fbclid'); // 特别提取 fbclid
+    const allQueryParams = window.location.search; // 获取完整参数字符串
 
-            // B. 处理 Adjust 透传参数
-            // 获取落地页当前 URL 后面的参数 (?adj_t=... 等)
-            const queryString = window.location.search; 
-            
-            // 定义 App 内部协议头
-            const appScheme = "pictopop://open"; 
+    // 2. 构造 Deep Link (App 内部协议)
+    // 确保 fbclid 包含在内部，供 App 启动后读取
+    const appScheme = "pictopop://open";
+    const fullDeepLink = allQueryParams ? (appScheme + allQueryParams) : appScheme;
+    const encodedDeepLink = encodeURIComponent(fullDeepLink);
 
-            // 拼接 Deep Link：pictopop://open?adj_t=...
-            const fullDeepLink = queryString ? (appScheme + queryString) : appScheme;
-            
-            // 对整个 Deep Link 进行编码
-            const encodedDeepLink = encodeURIComponent(fullDeepLink);
+    // 3. 定义 Adjust 基础追踪链接 (Tracker URL)
+    // 注意：这里已经带了很多参数，所以后续添加要用 &
+    let baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
 
-            // 你的 Adjust 基础追踪链接
-            const baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}&adj_adgroup={{adset.name}}&adj_creative={{ad.name}}&fb_pixel_id=963884939510284&fbclid={{fbclid}}&deep_link=pictopop%3A%2F%2Fopen%3Fadj_t%3D1zqd1lb7%26adj_campaign%3D{{campaign.name}}%26fbclid%3D{{fbclid}}";
+    // 4. 生成最终跳转 URL (双重透传 fbclid)
+    let finalUrl = baseAdjustUrl;
+    
+    // A. 根部透传：如果当前 URL 存在 fbclid，强制拼接到 Adjust 根链接
+    if (fbclid) {
+        finalUrl += "&fbclid=" + fbclid;
+    }
+    
+    // B. Deep Link 透传：把编码后的全量参数作为 deep_link 字段
+    finalUrl += "&deep_link=" + encodedDeepLink;
 
-            // 最终生成的 Adjust 链接
-            const finalUrl = baseAdjustUrl + "&deep_link=" + encodedDeepLink;
+    console.log("Generated Final URL:", finalUrl);
 
-            console.log("Final URL:", finalUrl);
+    // 5. Facebook 像素触发
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Download');
+    }
 
-            // C. 延迟跳转：给像素代码留出发送时间（500ms 比较保险）
-            setTimeout(() => {
-                window.location.href = finalUrl;
-            }, 500);
-        }
+    // 6. 执行跳转
+    setTimeout(() => {
+        window.location.href = finalUrl;
+    }, 400); 
+}
 
         // ==========================================
         // 2. 自动化演示逻辑
