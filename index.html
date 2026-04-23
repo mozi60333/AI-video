@@ -116,7 +116,7 @@
     // 3. 构造基础 Adjust 链接
     // 注意：我们将在这里动态拼接参数，不再直接写死超长字符串
     const trackerToken = "1zqd1lb7";
-    const pixelId = "963884939510284";
+    const pixelId = "434853860205686";
     
     // 重新构建，确保逻辑清晰
     let finalUrl = `https://pictopop.go.link?adj_t=${trackerToken}`;
@@ -135,7 +135,7 @@
     finalUrl += `&deep_link=${encodedDeepLink}`;
 
     // 把原始 Token 也带上（如果需要）
-    finalUrl += `&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD`;
+    finalUrl += `&fb_access_token=EAAOIx6UTjK0BRWbkmiLPnZClaObVs5fyu2BDaHg3FOA9BZC9XZBZCeTPbdYWWJQjcyzTngrH8tUKgW6O9WHBS3OKGIOayZCHVP4gCCjtnHNvwvRZCLUcnsWdQudqs2DFZAsHBoHXau8n6xlP3QhvQ0g82UtfVy5XYBuZBuyRAZC5iaZCuZC8zuksgXbcS0jYjuNiZBs4LAZDZD`;
 
     console.log("--- 4. 最终生成的跳转链接: ---");
     console.log(finalUrl);
