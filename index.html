@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI Video</title>
+    <title>AI Video Magic</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Meta Pixel Code (Facebook 像素基础代码) -->
+    <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -17,7 +17,7 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '963884939510284'); // 您的像素 ID
+    fbq('init', '963884939510284'); 
     fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
@@ -38,13 +38,11 @@
 </head>
 <body class="flex flex-col h-screen">
 
-    <!-- 顶部状态栏 -->
     <header class="pt-6 px-6 text-center fixed top-0 w-full z-50">
         <div class="text-xl font-black italic tracking-tighter">AI<span class="text-purple-500">MAGIC</span></div>
         <div class="mt-1 h-[2px] w-12 bg-purple-600 mx-auto rounded-full"></div>
     </header>
 
-    <!-- 交互展示舞台 -->
     <div id="stage" class="flex-1 relative flex flex-col items-center pt-24">
         <div id="cursor" class="touch-dot"></div>
         <div id="main-slot" class="w-[280px] h-[380px] border-2 border-dashed border-gray-800 rounded-[30px] flex flex-col items-center justify-center text-gray-700 bg-gray-900/20 glow relative overflow-hidden">
@@ -78,29 +76,54 @@
         </div>
     </div>
 
-    <!-- 下载按钮区域：已优化追踪事件 -->
+    <!-- 下载按钮 -->
     <div class="sticky-cta">
-        <button onclick="trackDownloadAndRedirect()" class="w-full bg-white text-black h-16 rounded-[20px] font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(139,92,246,0.4)] active:scale-95 transition-transform">
+        <button onclick="handleAdjustDownload()" class="w-full bg-white text-black h-16 rounded-[20px] font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(139,92,246,0.4)] active:scale-95 transition-transform">
             Download Now
         </button>
         <p class="text-center text-gray-500 text-[9px] mt-3 tracking-[0.2em]">FAST AI • HD EXPORT • FREE TRIAL</p>
     </div>
 
     <script>
-        // --- 1. Facebook 追踪跳转逻辑 ---
-        function trackDownloadAndRedirect() {
-            // 发送 Download 事件到 Facebook
+        // ==========================================
+        // 1. Adjust 参数透传逻辑
+        // ==========================================
+        function handleAdjustDownload() {
+            // A. 获取当前网页的所有参数 (如 ?fbclid=xxx&utm_source=yyy)
+            const queryString = window.location.search; 
+            
+            // B. 定义 App 内部协议头 (请确保这与你 App 里的 URL Scheme 一致)
+            // 如果不确定，可以咨询开发，通常是 pictopop://
+            const appScheme = "pictopop://open"; 
+
+            // C. 拼接 Deep Link 并进行二次编码
+            // 第一次拼接：pictopop://open?fbclid=xxx...
+            const fullDeepLink = queryString ? (appScheme + queryString) : appScheme;
+            // 进行编码
+            const encodedDeepLink = encodeURIComponent(fullDeepLink);
+
+            // D. 准备基础 Adjust 链接 (你之前提供的链接)
+            // 注意：Adjust 链接如果已经有参数，后面拼接 deep_link 要用 &
+            const baseAdjustUrl = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
+
+            // E. 生成最终跳转链接
+            const finalUrl = baseAdjustUrl + "&deep_link=" + encodedDeepLink;
+
+            // F. 触发 Facebook Pixel 追踪
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Download');
             }
-            
-            // 延迟跳转，确保追踪请求发出（200-300ms足够）
-            setTimeout(function() {
-                window.location.href = "https://pictopop.go.link?adj_t=1zqd1lb7&adj_campaign={{campaign.name}}%20%28{{campaign.id}}%29&adj_adgroup={{adset.name}}%20%28{{adset.id}}%29&adj_creative={{ad.name}}%20%28{{ad.id}}%29&fb_pixel_id=963884939510284&fb_access_token=EAAVMrwgXrPoBRQ2ZAs28ir8AvdFdEDADNgzNi28LpydqBzrCNNZCy3uuZAjb98YTvqN49arQdShgMvEEQ4aGqJQmG1ZBQv6PpK0pKq8m2myaWW9e8diIBOX1EHoPNK9upDqZCMMLi1r7ZA9u19Wq6FbxUFLm7uRRNryHPCRtoTDtU7neYcBXMgSZAS9NApN2wZDZD";
+
+            // G. 执行跳转 (延迟 250ms 确保追踪发出)
+            console.log("Final Adjust URL:", finalUrl); // 调试用
+            setTimeout(() => {
+                window.location.href = finalUrl;
             }, 250);
         }
 
-        // --- 2. 动画演示逻辑 ---
+        // ==========================================
+        // 2. 自动化演示逻辑
+        // ==========================================
         const cursor = document.getElementById('cursor');
         const mainSlot = document.getElementById('main-slot');
         const btn = document.getElementById('fake-btn');
