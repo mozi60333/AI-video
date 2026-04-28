@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Meta Pixel Code (Facebook 像素) -->
+    <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -18,7 +18,7 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    // 更新为你新链接中的 Pixel ID
+    // 初始化像素
     fbq('init', '968820212523051'); 
     fbq('track', 'PageView');
     </script>
@@ -57,7 +57,6 @@
             <div id="scanner" class="scan-line"></div>
         </div>
 
-        <!-- 底部缩略图 -->
         <div class="absolute bottom-36 left-0 right-0 px-6">
             <div class="flex justify-center gap-3">
                 <div id="asset-1" class="w-16 h-16 bg-gray-800 rounded-xl overflow-hidden border border-white/10 active:scale-90 transition-transform">
@@ -82,7 +81,7 @@
         </div>
     </div>
 
-    <!-- 下载按钮区域 -->
+    <!-- 下载按钮 -->
     <div class="sticky-cta">
         <button onclick="handleAdjustDownload()" class="w-full bg-white text-black h-16 rounded-[20px] font-black text-lg flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(139,92,246,0.4)] active:scale-95 transition-transform">
             Download Now
@@ -92,52 +91,49 @@
 
     <script>
     function handleAdjustDownload() {
-        console.log("--- 1. 开始处理下载追踪 ---");
+        console.log("--- 开始处理下载追踪 ---");
 
-        // 1. 触发 Facebook 像素 (trackCustom 以消除警告)
+        // 1. 发送 FB 像素事件
         if (typeof fbq !== 'undefined') {
             fbq('trackCustom', 'Download');
-            console.log("--- 2. FB Pixel 事件已发送 (trackCustom) ---");
         }
 
-        // 获取当前页面 URL 参数
-        const searchParams = new URLSearchParams(window.location.search);
-        const fbclid = searchParams.get('fbclid');
-        const allSearch = window.location.search; 
+        // 2. 抓取网址栏里的所有参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const allSearchString = window.location.search; 
 
-        // 2. 构造内部 Deep Link
+        // 提取我们在测试链接里放进去的信息（如果没有，给个默认值防止报错）
+        const campaign = urlParams.get('campaign') || 'Organic_Traffic';
+        const adgroup = urlParams.get('adgroup') || '';
+        const creative = urlParams.get('creative') || '';
+        const fb_pixel_id = urlParams.get('fb_pixel_id') || '968820212523051';
+        const fb_access_token = urlParams.get('fb_access_token') || '';
+        const fbclid = urlParams.get('fbclid') || '';
+
+        // 3. 构造传递给 App 内部的 Deep Link
         const appScheme = "pictopop://open";
-        const fullDeepLink = allSearch ? (appScheme + allSearch) : appScheme;
+        const fullDeepLink = allSearchString ? (appScheme + allSearchString) : appScheme;
         const encodedDeepLink = encodeURIComponent(fullDeepLink);
 
-        // 3. 使用你提供的新 Adjust 链接作为基础链接
-        let finalUrl = "https://app.adjust.com/1zolxg53" +
-                       "?campaign={{campaign.name}}%20%28{{campaign.id}}%29" +
-                       "&adgroup={{adset.name}}%20%28{{adset.id}}%29" +
-                       "&creative={{ad.name}}%20%28{{ad.id}}%29" +
-                       "&fb_pixel_id=968820212523051" +
-                       "&fb_access_token=EAAYZBZC3ZCKRg4BRc87sLyr4RSvoiPjKgn8S5UiOoZAVPqOxgd5ZC9GpuzERXET12j7ChxM7USFyh49pZBu9JTFtkZCKuZBBiRFoqiCOQFN6AvcU2d1Cvg9xJn9WpBaoTNE8G9F4MDu3YtteoAv5dZBYcqrk6AvHd1Nigw1ujxU23J7ZCh4OyDOEl4dfgRvpXaYwpZB8gZDZD";
-        
-        // 关键：动态追加 fbclid (如果用户点击FB广告进来，URL中会有fbclid，需传给Adjust后端)
+        // 4. 组装最终的 Adjust 跳转链接 (1zolxg53 是你的 Tracker Token)
+        let finalUrl = `https://app.adjust.com/1zolxg53?campaign=${encodeURIComponent(campaign)}&adgroup=${encodeURIComponent(adgroup)}&creative=${encodeURIComponent(creative)}&fb_pixel_id=${fb_pixel_id}&fb_access_token=${fb_access_token}&deep_link=${encodedDeepLink}`;
+
+        // 如果用户是从 FB 广告点进来的，会有 fbclid，拼进去
         if (fbclid) {
-            finalUrl += "&fbclid=" + fbclid;
-            console.log("--- 3. 检测到 fbclid 并已附加到根链接:", fbclid);
+            finalUrl += `&fbclid=${fbclid}`;
+            console.log("成功抓取到 fbclid:", fbclid);
         }
 
-        // 关键：附加 deep_link (给 App 内部用)
-        finalUrl += "&deep_link=" + encodedDeepLink;
+        console.log("最终跳转链接: \n", finalUrl);
 
-        console.log("--- 4. 最终生成的跳转链接: ---");
-        console.log(finalUrl);
-
-        // 4. 执行跳转 (延迟 400ms，确保FB像素有时间发出去)
+        // 5. 执行跳转
         setTimeout(() => {
             window.location.href = finalUrl;
         }, 400);
     }
 
         // ==========================================
-        // 2. 自动化演示逻辑
+        // 下面是 UI 动画逻辑，保持不变
         // ==========================================
         const cursor = document.getElementById('cursor');
         const mainSlot = document.getElementById('main-slot');
@@ -167,7 +163,7 @@
                 btn.innerText = 'AI PROCESSING...';
                 await runScanner();
                 showResult(current.vid);
-                await sleep(5000); // 结果停留
+                await sleep(5000);
                 index++;
             }
         }
