@@ -33,7 +33,6 @@
         .btn-glow { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); transition: all 0.3s; }
         .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 75%, transparent); z-index: 1000; }
         
-        /* 针对视频全屏覆盖时的圆角裁剪 */
         #result-overlay { border-radius: inherit; }
         #demo-video { border-radius: inherit; }
     </style>
@@ -50,7 +49,7 @@
     </header>
     <p class="text-center text-gray-300 text-xs font-medium mb-4 px-4">Upload a clear photo for best results.</p>
 
-    <!-- 主展示区 (完全自适应比例 aspect-3/4) -->
+    <!-- 主展示区 -->
     <div class="px-5 relative z-10 w-full max-w-md mx-auto">
         <div id="main-board" class="border-[1.5px] border-[#3b2a5c] rounded-[24px] aspect-[3/4] relative overflow-hidden flex flex-col justify-between p-4 bg-[#0a0a0c]">
             
@@ -66,7 +65,7 @@
                 </div>
             </div>
 
-            <!-- 视频结果 (生成后全屏覆盖在主画板内) -->
+            <!-- 视频结果 -->
             <div id="result-overlay" class="absolute inset-0 bg-black z-20 hidden opacity-0 transition-opacity duration-500 overflow-hidden">
                 <video id="demo-video" class="w-full h-full object-cover" muted playsinline loop></video>
                 <div class="absolute top-4 right-4 bg-black/60 px-3 py-1 rounded-full border border-white/20 flex items-center gap-1.5 z-30">
@@ -77,14 +76,14 @@
         </div>
     </div>
 
-    <!-- 相册区 (替代原有的建议区) -->
+    <!-- 相册区 -->
     <div class="px-5 mt-6 w-full max-w-md mx-auto">
         <div class="flex justify-between items-center mb-2 px-1">
             <h2 class="text-[15px] font-bold tracking-wide">Gallery</h2>
             <i class="fas fa-ellipsis-h text-gray-500"></i>
         </div>
         
-        <!-- 相册网格 (自动填满等宽) -->
+        <!-- 相册网格 -->
         <div class="flex gap-2 w-full">
             <div id="gallery-0" class="flex-1 aspect-square rounded-[12px] overflow-hidden relative border-2 border-transparent transition-all">
                 <img src="https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-15_21-03-01.jpg?w=300" class="w-full h-full object-cover">
@@ -96,7 +95,6 @@
                 <img src="https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-11_20-16-19.jpg?w=300" class="w-full h-full object-cover">
             </div>
             <div id="gallery-3" class="flex-1 aspect-square rounded-[12px] overflow-hidden relative border-2 border-transparent transition-all">
-                <!-- 复用第一张或者换别的图 -->
                 <img src="https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-15_21-03-01.jpg?w=300" class="w-full h-full object-cover grayscale-[30%]">
             </div>
         </div>
@@ -123,31 +121,66 @@
     </div>
 
     <script>
-        // --- 1. Adjust 跳转数据透传 (不变) ---
+        // ==========================================
+        // 1. 完美级数据透传逻辑 (修复版)
+        // ==========================================
         function handleAdjustDownload() {
-            console.log("--- 开始处理下载追踪 ---");
+            console.log("--- 开始处理数据追踪与透传 ---");
+            
+            // 触发 FB 像素
             if (typeof fbq !== 'undefined') fbq('trackCustom', 'Download');
 
+            // 获取网页 URL 中的所有参数
             const urlParams = new URLSearchParams(window.location.search);
-            const allSearchString = window.location.search; 
 
+            // 提取关键字段，如果没有则赋予默认值（确保不会丢失）
             const campaign = urlParams.get('campaign') || 'Organic_Traffic';
             const adgroup = urlParams.get('adgroup') || '';
             const creative = urlParams.get('creative') || '';
-            const fb_pixel_id = urlParams.get('fb_pixel_id') || '968820212523051';
-            const fb_access_token = urlParams.get('fb_access_token') || '';
             const fbclid = urlParams.get('fbclid') || '';
+            
+            // 强绑定 Pixel ID 和 Token，确保 App 内接收数据时绝不漏传
+            const fb_pixel_id = urlParams.get('fb_pixel_id') || '968820212523051';
+            const fb_access_token = urlParams.get('fb_access_token') || 'EAAYZBZC3ZCKRg4BRc87sLyr4RSvoiPjKgn8S5UiOoZAVPqOxgd5ZC9GpuzERXET12j7ChxM7USFyh49pZBu9JTFtkZCKuZBBiRFoqiCOQFN6AvcU2d1Cvg9xJn9WpBaoTNE8G9F4MDu3YtteoAv5dZBYcqrk6AvHd1Nigw1ujxU23J7ZCh4OyDOEl4dfgRvpXaYwpZB8gZDZD';
 
+            // --- 构建传给 APP 的 Deep Link (核心修复区) ---
+            // 重新打包所有参数给 APP，避免因原网址缺少参数导致 APP 收不到 Token
+            const deepLinkParams = new URLSearchParams();
+            deepLinkParams.set('campaign', campaign);
+            if(adgroup) deepLinkParams.set('adgroup', adgroup);
+            if(creative) deepLinkParams.set('creative', creative);
+            deepLinkParams.set('fb_pixel_id', fb_pixel_id);
+            deepLinkParams.set('fb_access_token', fb_access_token);
+            if(fbclid) deepLinkParams.set('fbclid', fbclid);
+
+            // 将网页 URL 里其他杂项参数也合并进去
+            for (const [key, value] of urlParams.entries()) {
+                if (!deepLinkParams.has(key)) deepLinkParams.set(key, value);
+            }
+
+            // 生成最终传递给 App 的 Deep Link
             const appScheme = "pictopop://open";
-            const fullDeepLink = allSearchString ? (appScheme + allSearchString) : appScheme;
+            const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
 
-            let finalUrl = `https://app.adjust.com/1zolxg53?campaign=${encodeURIComponent(campaign)}&adgroup=${encodeURIComponent(adgroup)}&creative=${encodeURIComponent(creative)}&fb_pixel_id=${fb_pixel_id}&fb_access_token=${fb_access_token}&deep_link=${encodeURIComponent(fullDeepLink)}`;
-            if (fbclid) finalUrl += `&fbclid=${fbclid}`;
+            // --- 构建发给 Adjust 的最终链接 ---
+            let finalUrl = `https://app.adjust.com/1zolxg53?campaign=${encodeURIComponent(campaign)}&adgroup=${encodeURIComponent(adgroup)}&creative=${encodeURIComponent(creative)}&fb_pixel_id=${fb_pixel_id}&fb_access_token=${fb_access_token}`;
+            
+            if (fbclid) {
+                finalUrl += `&fbclid=${fbclid}`;
+            }
+            
+            // 将 Deep Link 拼在末尾
+            finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
 
+            console.log("最终跳转完整链接: \n", finalUrl);
+
+            // 延迟跳转以保证像素发送成功
             setTimeout(() => { window.location.href = finalUrl; }, 400);
         }
 
-        // --- 2. 自动化演示脚本 ---
+        // ==========================================
+        // 2. 自动化 UI 演示逻辑
+        // ==========================================
         const cursor = document.getElementById('cursor');
         const targetSlot = document.getElementById('thumbnail-slot');
         const uploadedPreview = document.getElementById('uploaded-preview');
@@ -157,7 +190,6 @@
         const resultOverlay = document.getElementById('result-overlay');
         const demoVideo = document.getElementById('demo-video');
 
-        // 将相册中的资源与生成的视频绑定
         const demoAssets = [
             { id: 'gallery-0', img: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-15_21-03-01.jpg?w=300', vid: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/%E5%90%8E%E5%85%A5%E6%89%AD%E8%87%80.mp4' },
             { id: 'gallery-1', img: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/photo_2026-04-11_20-17-33.jpg?w=300', vid: 'https://69e74eaf19995cfcc32b1c4a.imgix.net/3-2.mp4' },
@@ -173,23 +205,19 @@
                 
                 await resetUI();
                 
-                // 1. 点选相册图片
                 await moveAndTap(activeGalleryThumb);
-                activeGalleryThumb.classList.add('border-[#a855f7]', 'scale-95'); // 添加紫色边框和点击缩放感
+                activeGalleryThumb.classList.add('border-[#a855f7]', 'scale-95');
                 
-                // 2. 图片飞入画板
                 flyPhoto(current.img, activeGalleryThumb);
                 await sleep(700);
                 uploadedPreview.src = current.img;
                 uploadedPreview.style.opacity = '1';
                 
-                // 3. 点击生成
                 await moveAndTap(generateBtn);
                 generateBtn.classList.remove('bg-[#a855f7]', 'btn-glow');
                 generateBtn.classList.add('bg-[#4b5563]');
                 btnText.innerText = 'Processing...';
                 
-                // 4. 扫描与展示
                 await runScanner();
                 showResult(current.vid);
                 await sleep(4000); 
