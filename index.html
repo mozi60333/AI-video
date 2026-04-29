@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Meta Pixel Code (Facebook 像素) -->
+    <!-- Meta Pixel Code (Facebook 像素 - 已更新为最新ID) -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -17,11 +17,13 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '4348538602056868'); 
+    
+    // 初始化新像素 ID
+    fbq('init', '810992764584239'); 
     fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=4348538602056868&ev=PageView&noscript=1"
+    src="https://www.facebook.com/tr?id=810992764584239&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
 
@@ -89,65 +91,76 @@
     </div>
 
     <script>
-  function handleAdjustDownload() {
-    console.log("--- 1. 开始处理下载追踪 ---");
+    // ==========================================
+    // 1. 最新下载按钮逻辑 (替换为 go.link 和新 Token)
+    // ==========================================
+    function handleAdjustDownload() {
+        console.log("--- 1. 开始处理下载追踪 ---");
 
-    // 获取当前页面 URL 参数
-    const searchParams = new URLSearchParams(window.location.search);
-    const fbclid = searchParams.get('fbclid');
-    const allSearch = window.location.search; 
+        // 触发 FB 像素事件
+        if (typeof fbq !== 'undefined') {
+            fbq('trackCustom', 'Download');
+            console.log("--- 2. FB Pixel 事件已发送 (trackCustom) ---");
+        }
 
-    // 获取 Facebook 广告相关的宏（如果有）
-    const campaign = searchParams.get('adj_campaign') || "{{campaign.name}}";
+        // 获取网页地址栏中的参数
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // 抓取广告信息参数 (兼容 adj_campaign 或 campaign 格式)
+        const campaign = urlParams.get('adj_campaign') || urlParams.get('campaign') || 'Organic_Traffic';
+        const adgroup = urlParams.get('adj_adgroup') || urlParams.get('adgroup') || '';
+        const creative = urlParams.get('adj_creative') || urlParams.get('creative') || '';
+        const fbclid = urlParams.get('fbclid') || '';
 
-    // 1. 触发 Facebook 像素 (改为 trackCustom 以消除警告)
-    if (typeof fbq !== 'undefined') {
-        fbq('trackCustom', 'Download');
-        console.log("--- 2. FB Pixel 事件已发送 (trackCustom) ---");
+        // 新的 Pixel ID 和 Access Token
+        const pixelId = "810992764584239";
+        const accessToken = "EAAYZBZC3ZCKRg4BRbBpk7XX9hy3DrYQevuWRyKPMEXv2wZApbhbh6JZBnuzILAQMQfafjjUaiZAuQB8VJTz7S9uYta88XcejWBmSzxDg2gexI8eEL3jSSpemjPcy1zTqkPQ1ToZAKLxZCZCnfIeJJE8a35AtVoFsx10GsCToxiIsBx7kXbAgcw6AZCKhaFGr7yIbZCE9gZDZD";
+
+        // --- 构造唤起 App 的 Deep Link ---
+        const deepLinkParams = new URLSearchParams();
+        deepLinkParams.set('adj_campaign', campaign);
+        if(adgroup) deepLinkParams.set('adj_adgroup', adgroup);
+        if(creative) deepLinkParams.set('adj_creative', creative);
+        deepLinkParams.set('fb_pixel_id', pixelId);
+        deepLinkParams.set('fb_access_token', accessToken);
+        if(fbclid) deepLinkParams.set('fbclid', fbclid);
+
+        // 把网址里的其余参数也带入 Deep Link
+        for (const [key, value] of urlParams.entries()) {
+            if (!deepLinkParams.has(key)) deepLinkParams.set(key, value);
+        }
+
+        const appScheme = "pictopop://open";
+        const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
+
+        // --- 构造最终发送给 Adjust 的 Go.link ---
+        let finalUrl = `https://pictopop.go.link?adj_t=1zqd1lb7`;
+        finalUrl += `&adj_campaign=${encodeURIComponent(campaign)}`;
+        if(adgroup) finalUrl += `&adj_adgroup=${encodeURIComponent(adgroup)}`;
+        if(creative) finalUrl += `&adj_creative=${encodeURIComponent(creative)}`;
+        finalUrl += `&fb_pixel_id=${pixelId}`;
+        finalUrl += `&fb_access_token=${accessToken}`;
+        
+        // 附加 FB 点击 ID
+        if (fbclid) {
+            finalUrl += `&fbclid=${fbclid}`;
+            console.log("--- 3. 检测到 fbclid 并已附加到根链接:", fbclid);
+        }
+
+        // 附加 Deep Link
+        finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
+
+        console.log("--- 4. 最终生成的跳转链接: ---");
+        console.log(finalUrl);
+
+        // 执行跳转
+        setTimeout(() => {
+            window.location.href = finalUrl;
+        }, 400);
     }
-
-    // 2. 构造内部 Deep Link
-    const appScheme = "pictopop://open";
-    // 确保把当前页面的所有参数带入 App 内部
-    const fullDeepLink = allSearch ? (appScheme + allSearch) : appScheme;
-    // 进行 URL 编码
-    const encodedDeepLink = encodeURIComponent(fullDeepLink);
-
-    // 3. 构造基础 Adjust 链接
-    // 注意：我们将在这里动态拼接参数，不再直接写死超长字符串
-    const trackerToken = "1zqd1lb7";
-    const pixelId = "4348538602056868";
-    
-    // 重新构建，确保逻辑清晰
-    let finalUrl = `https://pictopop.go.link?adj_t=${trackerToken}`;
-    finalUrl += `&adj_campaign=${encodeURIComponent(campaign)}`;
-    finalUrl += `&fb_pixel_id=${pixelId}`;
-    
-    // 关键：透传 fbclid (给 Adjust 服务器)
-    if (fbclid) {
-        finalUrl += `&fbclid=${fbclid}`;
-        console.log("--- 3. 检测到 fbclid 并已附加到根链接:", fbclid);
-    } else {
-        console.warn("--- 3. 警告：未在 URL 中检测到 fbclid，请检查测试链接 ---");
-    }
-
-    // 关键：附加 deep_link (给 App 内部)
-    finalUrl += `&deep_link=${encodedDeepLink}`;
-
-    // 把原始 Token 也带上（如果需要）
-    finalUrl += `&fb_access_token=EAAOIx6UTjK0BRWbkmiLPnZClaObVs5fyu2BDaHg3FOA9BZC9XZBZCeTPbdYWWJQjcyzTngrH8tUKgW6O9WHBS3OKGIOayZCHVP4gCCjtnHNvwvRZCLUcnsWdQudqs2DFZAsHBoHXau8n6xlP3QhvQ0g82UtfVy5XYBuZBuyRAZC5iaZCuZC8zuksgXbcS0jYjuNiZBs4LAZDZD`;
-
-    console.log("--- 4. 最终生成的跳转链接: ---");
-    console.log(finalUrl);
-
-    // 4. 执行跳转 (延迟 400ms)
-    setTimeout(() => {
-        window.location.href = finalUrl;
-    }, 400);
-}
 
         // ==========================================
-        // 2. 自动化演示逻辑
+        // 2. 自动化演示逻辑 (UI部分保持不变)
         // ==========================================
         const cursor = document.getElementById('cursor');
         const mainSlot = document.getElementById('main-slot');
