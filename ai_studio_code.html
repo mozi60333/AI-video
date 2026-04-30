@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spicy Slider App Promo (3.5s)</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #222; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        
+        /* Mobile Screen Container (Green Screen Background) */
+        #video-container { position: relative; width: 380px; height: 676px; background: #00FF00; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+        /* Top TikTok Style Text */
+        .top-text { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.65); color: #FFF; padding: 12px 18px; border-radius: 12px; font-weight: 700; text-align: center; width: 85%; font-size: 17px; line-height: 1.4; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 10; }
+
+        /* Bottom Slider UI */
+        .slider-container { position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; width: 96%; color: white; font-weight: 900; font-size: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); z-index: 10; }
+        .slider-track { flex-grow: 1; height: 14px; background: rgba(255, 255, 255, 0.4); border-radius: 7px; position: relative; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
+        .slider-fill { width: 25%; height: 100%; background: #FFF; border-radius: 7px; box-shadow: 0 0 5px rgba(255,255,255,0.8); }
+        .slider-thumb { position: absolute; top: 50%; left: 25%; transform: translate(-50%, -50%); width: 32px; height: 32px; background: #FFF; border-radius: 50%; box-shadow: 0 0 12px rgba(0,0,0,0.6); }
+        .cursor { position: absolute; top: 25px; left: 25%; transform: translateX(-35%); font-size: 60px; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+
+        /* Stage 1: Warning Screen */
+        #warning-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; justify-content: center; align-items: center; }
+        .warning-box { border: 6px solid #FF0000; background: rgba(255, 0, 0, 0.15); color: #FF0000; padding: 30px 35px; font-size: 30px; font-weight: 900; text-align: center; font-family: 'Impact', sans-serif; letter-spacing: 1px; box-shadow: 0 0 40px rgba(255,0,0,0.5); text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+
+        /* Stage 2: App Download CTA Screen */
+        #cta-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0A0A0C; z-index: 150; flex-direction: column; justify-content: center; align-items: center; animation: fadeIn 0.5s ease-in; }
+        
+        /* App Store Card UI */
+        .app-card { background: #1C1C1E; width: 85%; border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); margin-bottom: 30px; }
+        
+        .app-header { display: flex; align-items: center; width: 100%; gap: 15px; margin-bottom: 20px; }
+        
+        /* App Icon Image */
+        .app-icon-img { width: 80px; height: 80px; border-radius: 18px; object-fit: cover; border: 1px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        
+        .app-title-box { display: flex; flex-direction: column; justify-content: center; }
+        .app-name { color: #FFF; font-size: 22px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; }
+        .app-dev { color: #8E8E93; font-size: 14px; font-weight: 500; }
+
+        /* App Stats (Rating, Age, Downloads) */
+        .app-stats { display: flex; width: 100%; justify-content: space-between; align-items: center; background: #2C2C2E; padding: 12px 15px; border-radius: 12px; box-sizing: border-box; }
+        .stat-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .stat-val { color: #FFF; font-size: 16px; font-weight: 700; }
+        .stat-lbl { color: #8E8E93; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .stat-divider { width: 1px; height: 24px; background: #48484A; }
+
+        /* Pitch Text */
+        .cta-text { color: #FFF; font-size: 20px; font-weight: bold; text-align: center; line-height: 1.5; margin-bottom: 30px; width: 90%; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .cta-text span { color: #fe2c55; /* TikTok Red */ }
+        
+        /* Download Button */
+        .download-btn { background: #fe2c55; color: white; padding: 16px 0; width: 85%; border-radius: 12px; font-size: 20px; font-weight: 800; text-align: center; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(254, 44, 85, 0.4); animation: pulse 1.5s infinite; }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(254, 44, 85, 0.4); }
+            50% { transform: scale(1.04); box-shadow: 0 4px 25px rgba(254, 44, 85, 0.7); }
+            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(254, 44, 85, 0.4); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Start Helper Button */
+        #start-btn { position: absolute; z-index: 200; padding: 15px 40px; font-size: 20px; cursor: pointer; border: none; border-radius: 30px; background: #FFF; color: #000; font-weight: bold; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.2s; }
+        #start-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+    <!-- START BUTTON -->
+    <button id="start-btn">▶ Start Animation (3.5s)</button>
+
+    <div id="video-container">
+        <!-- TOP TEXT -->
+        <div class="top-text" id="top-text">Testing the new 'Spicy' slider on this AI avatar app... 🥵</div>
+
+        <!-- SLIDER UI -->
+        <div class="slider-container" id="slider-ui">
+            <span>[SFW]</span>
+            <div class="slider-track">
+                <div class="slider-fill" id="fill"></div>
+                <div class="slider-thumb" id="thumb"></div>
+                <div class="cursor" id="cursor">👆</div>
+            </div>
+            <span>[🌶️NSFW]</span>
+        </div>
+
+        <!-- STAGE 1: BLACK WARNING SCREEN -->
+        <div id="warning-screen">
+            <div class="warning-box">⚠️ WARNING:<br>CONTENT BLOCKED</div>
+        </div>
+
+        <!-- STAGE 2: APP STORE DOWNLOAD CTA -->
+        <div id="cta-screen">
+            
+            <div class="app-card">
+                <div class="app-header">
+                    <!-- 💡 REPLACE THE 'src' LINK BELOW WITH YOUR OWN APP ICON URL 💡 -->
+                    <img class="app-icon-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=SpicyAI&backgroundColor=1e1e1e" alt="App Icon">
+                    
+                    <div class="app-title-box">
+                        <!-- 💡 EDIT APP NAME HERE 💡 -->
+                        <div class="app-name">Spicy AI Avatar</div>
+                        <div class="app-dev">Official App</div>
+                    </div>
+                </div>
+
+                <div class="app-stats">
+                    <div class="stat-item">
+                        <!-- 💡 EDIT RATING HERE 💡 -->
+                        <div class="stat-val">4.9 ★</div>
+                        <div class="stat-lbl">120K Ratings</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <!-- 💡 EDIT AGE RATING HERE 💡 -->
+                        <div class="stat-val">18+</div>
+                        <div class="stat-lbl">Age</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <!-- 💡 EDIT DOWNLOADS HERE 💡 -->
+                        <div class="stat-val">10M+</div>
+                        <div class="stat-lbl">Downloads</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 💡 EDIT PITCH TEXT HERE 💡 -->
+            <div class="cta-text">
+                Tap the button below to get the app and<br>
+                <span>unlock unseen content 🔞</span>
+            </div>
+
+            <!-- 💡 EDIT BUTTON TEXT HERE 💡 -->
+            <div class="download-btn">⬇ Install Now</div>
+            
+        </div>
+    </div>
+
+    <script>
+        // Audio System for Censor Bleep
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playCensorBleep() {
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sawtooth'; 
+            oscillator.frequency.setValueAtTime(1000, audioCtx.currentTime); 
+            gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime); 
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            
+            // Bleep duration: 0.5 seconds (500ms)
+            setTimeout(() => { oscillator.stop(); }, 500); 
+        }
+
+        document.getElementById('start-btn').addEventListener('click', function() {
+            this.style.display = 'none'; 
+            audioCtx.resume(); 
+
+            let progress = 25; // Starts at 25%
+            const fill = document.getElementById('fill');
+            const thumb = document.getElementById('thumb');
+            const cursor = document.getElementById('cursor');
+            
+            const topText = document.getElementById('top-text');
+            const sliderUi = document.getElementById('slider-ui');
+            const warningScreen = document.getElementById('warning-screen');
+            const ctaScreen = document.getElementById('cta-screen');
+
+            // 💡 滑动时间修改为 3.5 秒 (3500毫秒)
+            const duration = 3500; 
+            const interval = 20; 
+            const step = ((95 - 25) / (duration / interval));
+
+            const timer = setInterval(() => {
+                progress += step;
+                if (progress >= 95) {
+                    clearInterval(timer);
+                    
+                    // Trigger Black Screen + Bleep Sound
+                    warningScreen.style.display = 'flex';
+                    topText.style.display = 'none';
+                    sliderUi.style.display = 'none';
+                    playCensorBleep(); 
+
+                    // Show Warning for 1.2s, then show App Download CTA
+                    setTimeout(() => {
+                        warningScreen.style.display = 'none';
+                        ctaScreen.style.display = 'flex';
+                    }, 1200); 
+
+                } else {
+                    fill.style.width = progress + '%';
+                    thumb.style.left = progress + '%';
+                    cursor.style.left = progress + '%';
+                }
+            }, interval);
+        });
+    </script>
+</body>
+</html>
