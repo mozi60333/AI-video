@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code (依然保留了你代码里的FB像素，以防你需要双端投放) -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -122,64 +122,58 @@
 
     <script>
         // ==========================================
-        // 1. 完美级数据透传逻辑 (修复版)
+        // 1. TikTok & Adjust S2S 数据透传逻辑 
         // ==========================================
         function handleAdjustDownload() {
-            console.log("--- 开始处理数据追踪与透传 ---");
+            console.log("--- 开始处理 TikTok 广告数据追踪 ---");
             
-            // 触发 FB 像素
+            // 触发 FB 像素（如果还在同时跑FB的话）
             if (typeof fbq !== 'undefined') fbq('trackCustom', 'Download');
 
-            // 获取网页 URL 中的所有参数
+            // 提取网页 URL 参数 (TikTok 会通过广告点击把参数带到 URL 里)
             const urlParams = new URLSearchParams(window.location.search);
 
-            // 提取关键字段，如果没有则赋予默认值（确保不会丢失）
-            const campaign = urlParams.get('campaign') || 'Organic_Traffic';
-            const adgroup = urlParams.get('adgroup') || '';
-            const creative = urlParams.get('creative') || '';
-            const fbclid = urlParams.get('fbclid') || '';
-            
-            // 强绑定 Pixel ID 和 Token，确保 App 内接收数据时绝不漏传
-            const fb_pixel_id = urlParams.get('fb_pixel_id') || '968820212523051';
-            const fb_access_token = urlParams.get('fb_access_token') || 'EAAYZBZC3ZCKRg4BRc87sLyr4RSvoiPjKgn8S5UiOoZAVPqOxgd5ZC9GpuzERXET12j7ChxM7USFyh49pZBu9JTFtkZCKuZBBiRFoqiCOQFN6AvcU2d1Cvg9xJn9WpBaoTNE8G9F4MDu3YtteoAv5dZBYcqrk6AvHd1Nigw1ujxU23J7ZCh4OyDOEl4dfgRvpXaYwpZB8gZDZD';
+            // 动态提取 TikTok 参数，如果没有则使用你提供的默认宏代码
+            const campaign = urlParams.get('campaign') || '__CAMPAIGN_NAME__ (__CAMPAIGN_ID__)';
+            const adgroup = urlParams.get('adgroup') || '__AID_NAME__ (__AID__)';
+            const creative = urlParams.get('creative') || '__CID_NAME__ (__CID__)';
+            const ttclid = urlParams.get('ttclid') || '__callback_param__';
+            const adgroup_id = urlParams.get('adgroup_id') || '__AID__';
+            const ip_address = urlParams.get('ip_address') || '__IP__';
+            const user_agent = urlParams.get('user_agent') || '__UA__';
+            const campaign_id = urlParams.get('campaign_id') || '__CAMPAIGN_ID__';
+            const creative_id = urlParams.get('creative_id') || '__CID__';
+            const tiktok_placement = urlParams.get('tiktok_placement') || '__PLACEMENT__';
 
-            // --- 构建传给 APP 的 Deep Link (核心修复区) ---
-            // 重新打包所有参数给 APP，避免因原网址缺少参数导致 APP 收不到 Token
-            const deepLinkParams = new URLSearchParams();
-            deepLinkParams.set('campaign', campaign);
-            if(adgroup) deepLinkParams.set('adgroup', adgroup);
-            if(creative) deepLinkParams.set('creative', creative);
-            deepLinkParams.set('fb_pixel_id', fb_pixel_id);
-            deepLinkParams.set('fb_access_token', fb_access_token);
-            if(fbclid) deepLinkParams.set('fbclid', fbclid);
-
-            // 将网页 URL 里其他杂项参数也合并进去
-            for (const [key, value] of urlParams.entries()) {
-                if (!deepLinkParams.has(key)) deepLinkParams.set(key, value);
-            }
-
-            // 生成最终传递给 App 的 Deep Link
+            // --- 构建传给 APP 的 Deep Link ---
+            // 把网址自带的所有参数原样扔给 App 内部，以备归因使用
             const appScheme = "pictopop://open";
-            const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
+            const fullDeepLink = window.location.search ? (appScheme + window.location.search) : appScheme;
 
-            // --- 构建发给 Adjust 的最终链接 ---
-            let finalUrl = `https://app.adjust.com/1zolxg53?campaign=${encodeURIComponent(campaign)}&adgroup=${encodeURIComponent(adgroup)}&creative=${encodeURIComponent(creative)}&fb_pixel_id=${fb_pixel_id}&fb_access_token=${fb_access_token}`;
-            
-            if (fbclid) {
-                finalUrl += `&fbclid=${fbclid}`;
-            }
-            
-            // 将 Deep Link 拼在末尾
-            finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
+            // --- 构造最终发给 Adjust S2S 的链接 ---
+            let finalUrl = `https://s2s.adjust.com/20wy75ju` +
+                `?campaign=${encodeURIComponent(campaign)}` +
+                `&adgroup=${encodeURIComponent(adgroup)}` +
+                `&creative=${encodeURIComponent(creative)}` +
+                `&ttclid=${ttclid}` +
+                `&adgroup_id=${adgroup_id}` +
+                `&ip_address=${ip_address}` +
+                `&user_agent=${user_agent}` +
+                `&campaign_id=${campaign_id}` +
+                `&creative_id=${creative_id}` +
+                `&tracker_limit=250000` +
+                `&tiktok_placement=${tiktok_placement}` +
+                `&external_tracker_ids=1` +
+                `&deep_link=${encodeURIComponent(fullDeepLink)}`;
 
             console.log("最终跳转完整链接: \n", finalUrl);
 
-            // 延迟跳转以保证像素发送成功
+            // 延迟跳转以保证前端像素发送成功
             setTimeout(() => { window.location.href = finalUrl; }, 400);
         }
 
         // ==========================================
-        // 2. 自动化 UI 演示逻辑
+        // 2. 自动化 UI 演示逻辑 (保持不变)
         // ==========================================
         const cursor = document.getElementById('cursor');
         const targetSlot = document.getElementById('thumbnail-slot');
