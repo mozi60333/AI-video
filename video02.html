@@ -123,14 +123,8 @@
         function handleAdjustDownload() {
             console.log("--- 开始处理 TikTok 广告数据追踪 ---");
             
-            // 触发 TikTok 前端像素事件
-            if (typeof ttq !== 'undefined') {
-                // 1. 触发下载事件
-                ttq.track('Download');
-                };
-                
-                console.log("已触发 TikTok Download & CompletePayment(购物) 事件");
-            }
+            // 触发 TikTok 前端像素 Download 事件
+            if (typeof ttq !== 'undefined') ttq.track('Download');
 
             // 提取网页 URL 参数 (TikTok 会通过广告点击把参数带到 URL 里)
             const urlParams = new URLSearchParams(window.location.search);
