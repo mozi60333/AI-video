@@ -7,25 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Meta Pixel Code (Facebook 像素 - 已更新为最新ID) -->
+    <!-- TikTok Pixel Code -->
     <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    
-    // 初始化新像素 ID
-    fbq('init', '810992764584239'); 
-    fbq('track', 'PageView');
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+      
+      // 初始化 TikTok 像素 ID
+      ttq.load('D7QC7JBC77UAV4MGGLJG');
+      ttq.page();
+    }(window, document, 'ttq');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=810992764584239&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
+    <!-- End TikTok Pixel Code -->
 
     <style>
         body { background-color: #000; color: #fff; font-family: -apple-system, sans-serif; overflow: hidden; margin: 0; }
@@ -91,76 +83,85 @@
     </div>
 
     <script>
-    // ==========================================
-    // 1. 最新下载按钮逻辑 (替换为 go.link 和新 Token)
-    // ==========================================
     function handleAdjustDownload() {
-        console.log("--- 1. 开始处理下载追踪 ---");
+        console.log("--- 1. 开始处理 TikTok 下载与购物追踪 ---");
 
-        // 触发 FB 像素事件
-        if (typeof fbq !== 'undefined') {
-            fbq('trackCustom', 'Download');
-            console.log("--- 2. FB Pixel 事件已发送 (trackCustom) ---");
+        // 1. 触发 TikTok 前端像素事件 (下载 + 购物)
+        if (typeof ttq !== 'undefined') {
+            ttq.track('Download');
+            ttq.track('CompletePayment', {
+                content_type: 'product',
+                content_name: 'App Access',
+                quantity: 1,
+                price: 1.00,
+                value: 1.00,
+                currency: 'USD'
+            });
+            console.log("--- 2. TikTok Download & CompletePayment 事件已发送 ---");
         }
 
-        // 获取网页地址栏中的参数
+        // 2. 抓取网页 URL 中 TikTok 广告传来的参数
         const urlParams = new URLSearchParams(window.location.search);
         
-        // 抓取广告信息参数 (兼容 adj_campaign 或 campaign 格式)
-        const campaign = urlParams.get('adj_campaign') || urlParams.get('campaign') || 'Organic_Traffic';
-        const adgroup = urlParams.get('adj_adgroup') || urlParams.get('adgroup') || '';
-        const creative = urlParams.get('adj_creative') || urlParams.get('creative') || '';
-        const fbclid = urlParams.get('fbclid') || '';
+        const campaign = urlParams.get('campaign') || '__CAMPAIGN_NAME__ (__CAMPAIGN_ID__)';
+        const adgroup = urlParams.get('adgroup') || '__AID_NAME__ (__AID__)';
+        const creative = urlParams.get('creative') || '__CID_NAME__ (__CID__)';
+        const idfa = urlParams.get('idfa') || '__IDFA__';
+        const ttclid = urlParams.get('ttclid') || '__callback_param__';
+        const gps_adid = urlParams.get('gps_adid') || '__GAID__';
+        const adgroup_id = urlParams.get('adgroup_id') || '__AID__';
+        const ip_address = urlParams.get('ip_address') || '__IP__';
+        const user_agent = urlParams.get('user_agent') || '__UA__';
+        const campaign_id = urlParams.get('campaign_id') || '__CAMPAIGN_ID__';
+        const creative_id = urlParams.get('creative_id') || '__CID__';
+        const tiktok_placement = urlParams.get('tiktok_placement') || '__PLACEMENT__';
 
-        // 新的 Pixel ID 和 Access Token
-        const pixelId = "810992764584239";
-        const accessToken = "EAAYZBZC3ZCKRg4BRbBpk7XX9hy3DrYQevuWRyKPMEXv2wZApbhbh6JZBnuzILAQMQfafjjUaiZAuQB8VJTz7S9uYta88XcejWBmSzxDg2gexI8eEL3jSSpemjPcy1zTqkPQ1ToZAKLxZCZCnfIeJJE8a35AtVoFsx10GsCToxiIsBx7kXbAgcw6AZCKhaFGr7yIbZCE9gZDZD";
+        // 核心 Token 与 Pixel 配置
+        const tiktokPixelId = "D7QC7JBC77UAV4MGGLJG";
+        const tiktokAccessToken = "bc684dec1e2552d1a933b59f719002a09adfe54f";
+        const tiktokTestCode = "TEST32259";
 
-        // --- 构造唤起 App 的 Deep Link ---
-        const deepLinkParams = new URLSearchParams();
-        deepLinkParams.set('adj_campaign', campaign);
-        if(adgroup) deepLinkParams.set('adj_adgroup', adgroup);
-        if(creative) deepLinkParams.set('adj_creative', creative);
-        deepLinkParams.set('fb_pixel_id', pixelId);
-        deepLinkParams.set('fb_access_token', accessToken);
-        if(fbclid) deepLinkParams.set('fbclid', fbclid);
-
-        // 把网址里的其余参数也带入 Deep Link
-        for (const [key, value] of urlParams.entries()) {
-            if (!deepLinkParams.has(key)) deepLinkParams.set(key, value);
-        }
+        // 3. 构造传给 App 的 Deep Link (包含 Token 以便 App 发送 CAPI 回传)
+        const deepLinkParams = new URLSearchParams(window.location.search);
+        deepLinkParams.set('tiktok_pixel_id', tiktokPixelId);
+        deepLinkParams.set('tiktok_access_token', tiktokAccessToken);
+        deepLinkParams.set('tiktok_test_code', tiktokTestCode);
 
         const appScheme = "pictopop://open";
         const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
 
-        // --- 构造最终发送给 Adjust 的 Go.link ---
-        let finalUrl = `https://pictopop.go.link?adj_t=1zqd1lb7`;
-        finalUrl += `&adj_campaign=${encodeURIComponent(campaign)}`;
-        if(adgroup) finalUrl += `&adj_adgroup=${encodeURIComponent(adgroup)}`;
-        if(creative) finalUrl += `&adj_creative=${encodeURIComponent(creative)}`;
-        finalUrl += `&fb_pixel_id=${pixelId}`;
-        finalUrl += `&fb_access_token=${accessToken}`;
-        
-        // 附加 FB 点击 ID
-        if (fbclid) {
-            finalUrl += `&fbclid=${fbclid}`;
-            console.log("--- 3. 检测到 fbclid 并已附加到根链接:", fbclid);
-        }
+        // 4. 构造发送给 Adjust 的 S2S 链接
+        let finalUrl = `https://s2s.adjust.com/1zs7eppj` +
+            `?campaign=${encodeURIComponent(campaign)}` +
+            `&adgroup=${encodeURIComponent(adgroup)}` +
+            `&creative=${encodeURIComponent(creative)}` +
+            `&idfa=${idfa}` +
+            `&ttclid=${ttclid}` +
+            `&gps_adid=${gps_adid}` +
+            `&adgroup_id=${adgroup_id}` +
+            `&ip_address=${ip_address}` +
+            `&user_agent=${user_agent}` +
+            `&campaign_id=${campaign_id}` +
+            `&creative_id=${creative_id}` +
+            `&tracker_limit=250000` +
+            `&tiktok_placement=${tiktok_placement}` +
+            `&external_tracker_ids=1` +
+            `&tiktok_pixel_id=${tiktokPixelId}` +
+            `&tiktok_access_token=${tiktokAccessToken}` +
+            `&tiktok_test_code=${tiktokTestCode}` +
+            `&deep_link=${encodeURIComponent(fullDeepLink)}`;
 
-        // 附加 Deep Link
-        finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
-
-        console.log("--- 4. 最终生成的跳转链接: ---");
+        console.log("--- 3. 最终生成的跳转链接: ---");
         console.log(finalUrl);
 
-        // 执行跳转
+        // 5. 执行跳转
         setTimeout(() => {
             window.location.href = finalUrl;
         }, 400);
     }
 
         // ==========================================
-        // 2. 自动化演示逻辑 (UI部分保持不变)
+        // 2. 自动化演示逻辑
         // ==========================================
         const cursor = document.getElementById('cursor');
         const mainSlot = document.getElementById('main-slot');
