@@ -127,16 +127,7 @@
             if (typeof ttq !== 'undefined') {
                 // 1. 触发下载事件
                 ttq.track('Download');
-                
-                // 2. 触发购物/付费事件 (CompletePayment)
-                ttq.track('CompletePayment', {
-                    content_type: 'product',
-                    content_name: 'App VIP Download', // 商品名称
-                    quantity: 1,                      // 数量
-                    price: 1.00,                      // 单价
-                    value: 1.00,                      // 总价值
-                    currency: 'USD'                   // 货币种类（美金）
-                });
+                };
                 
                 console.log("已触发 TikTok Download & CompletePayment(购物) 事件");
             }
