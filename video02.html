@@ -7,21 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Meta Pixel Code (依然保留了你代码里的FB像素，以防你需要双端投放) -->
+    <!-- TikTok Pixel Code -->
     <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '968820212523051'); 
-    fbq('track', 'PageView');
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+      
+      // 初始化 TikTok 像素 ID
+      ttq.load('D7PPBS3C77U9TECLDLSG');
+      ttq.page();
+    }(window, document, 'ttq');
     </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=968820212523051&ev=PageView&noscript=1"/></noscript>
-    <!-- End Meta Pixel Code -->
+    <!-- End TikTok Pixel Code -->
 
     <style>
         body { background-color: #050505; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; }
@@ -127,13 +123,13 @@
         function handleAdjustDownload() {
             console.log("--- 开始处理 TikTok 广告数据追踪 ---");
             
-            // 触发 FB 像素（如果还在同时跑FB的话）
-            if (typeof fbq !== 'undefined') fbq('trackCustom', 'Download');
+            // 触发 TikTok 前端像素 Download 事件
+            if (typeof ttq !== 'undefined') ttq.track('Download');
 
-            // 提取网页 URL 参数 (TikTok 会通过广告点击把参数带到 URL 里)
+            // 提取网页 URL 参数
             const urlParams = new URLSearchParams(window.location.search);
 
-            // 动态提取 TikTok 参数，如果没有则使用你提供的默认宏代码
+            // 动态提取 TikTok 宏参数
             const campaign = urlParams.get('campaign') || '__CAMPAIGN_NAME__ (__CAMPAIGN_ID__)';
             const adgroup = urlParams.get('adgroup') || '__AID_NAME__ (__AID__)';
             const creative = urlParams.get('creative') || '__CID_NAME__ (__CID__)';
@@ -145,10 +141,19 @@
             const creative_id = urlParams.get('creative_id') || '__CID__';
             const tiktok_placement = urlParams.get('tiktok_placement') || '__PLACEMENT__';
 
+            // 最新的 TikTok 像素与 Token 配置
+            const tiktok_pixel_id = 'D7PPBS3C77U9TECLDLSG';
+            const tiktok_access_token = '975c3cadf3f4b5d1582dfd6cead4c890e944f3b5';
+
             // --- 构建传给 APP 的 Deep Link ---
-            // 把网址自带的所有参数原样扔给 App 内部，以备归因使用
+            const deepLinkParams = new URLSearchParams(window.location.search);
+            
+            // 确保 App 能拿到 Token 和 Pixel ID 来做服务器回传 (CAPI)
+            deepLinkParams.set('tiktok_pixel_id', tiktok_pixel_id);
+            deepLinkParams.set('tiktok_access_token', tiktok_access_token);
+
             const appScheme = "pictopop://open";
-            const fullDeepLink = window.location.search ? (appScheme + window.location.search) : appScheme;
+            const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
 
             // --- 构造最终发给 Adjust S2S 的链接 ---
             let finalUrl = `https://s2s.adjust.com/20wy75ju` +
@@ -164,11 +169,13 @@
                 `&tracker_limit=250000` +
                 `&tiktok_placement=${tiktok_placement}` +
                 `&external_tracker_ids=1` +
+                `&tiktok_pixel_id=${tiktok_pixel_id}` +
+                `&tiktok_access_token=${tiktok_access_token}` +
                 `&deep_link=${encodeURIComponent(fullDeepLink)}`;
 
             console.log("最终跳转完整链接: \n", finalUrl);
 
-            // 延迟跳转以保证前端像素发送成功
+            // 延迟跳转以保证 TikTok 前端像素发送成功
             setTimeout(() => { window.location.href = finalUrl; }, 400);
         }
 
