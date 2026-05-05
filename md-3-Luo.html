@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fortune Buffalo</title>
+
+    <!-- 可修改变量区域 -->
+    <script>
+        var video_url    = "";
+        var image_url    = "https://69e74eaf19995cfcc32b1c4a.imgix.net/01.jpg?w=505&h=1280";
+        var down_url     = "https://dlmmgame.com/md-3.apk";
+        var telegram_url = "https://2bm9.com/telegram";
+        var viber_url    = "https://2bm9.com/viber";
+
+        // 这里填写你的多个 Facebook 像素 ID，用逗号隔开
+        var fb_pixel_ids = ['你的像素ID_1', '你的像素ID_2']; 
+    </script>
+
+    <!-- Facebook Pixel 基础代码 (自动循环初始化多个像素) -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+        // 循环初始化所有像素并发送 PageView
+        fb_pixel_ids.forEach(function(id) {
+            fbq('init', id);
+        });
+        fbq('track', 'PageView');
+    </script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #1a0a00; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+
+        .landing-container {
+            width: 100%;
+            max-width: 505px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .bg-image { width: 100%; display: block; height: auto; }
+
+        /* 点击热区 */
+        .click-area {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 58%;
+            height: 4.2%;
+            background-color: rgba(255, 255, 255, 0);
+            cursor: pointer;
+            z-index: 10;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-top { top: 34.6%; }
+        .btn-bottom { top: 92.8%; }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            50% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+        }
+        .pulse-effect { animation: pulse 1.5s infinite ease-in-out; }
+
+        /* 右下角悬浮按钮组 */
+        .float-contact {
+            position: fixed;
+            bottom: 20px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 999;
+        }
+
+        .icon-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .tg-bg { background: #0088cc; animation: bounce 2s infinite 0.5s; }
+        .vb-bg { background: #7360f2; animation: bounce 2s infinite; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .icon-btn svg { width: 32px; height: 32px; fill: white; }
+    </style>
+</head>
+<body>
+
+    <div class="landing-container">
+        <!-- 动态加载背景图 -->
+        <img id="mainImage" src="" class="bg-image">
+
+        <!-- 两个下载热区 -->
+        <div class="click-area btn-top pulse-effect" onclick="handleDownloadClick()"></div>
+        <div class="click-area btn-bottom pulse-effect" onclick="handleDownloadClick()"></div>
+    </div>
+
+    <!-- 悬浮窗：Telegram + Viber -->
+    <div class="float-contact">
+        <a id="viberLink" href="#" class="icon-btn vb-bg">
+            <svg viewBox="0 0 24 24"><path d="M17.5 11c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.5-.9 1-.9zm-1.5-3.5c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.4-.9 1-.9zm-5 13.5c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8c0 1.2-.3 2.4-.8 3.4l.8 4.6-4.6-.8c-1 .5-2.2.8-3.4.8z"/></svg>
+        </a>
+        <a id="tgLink" href="#" class="icon-btn tg-bg">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.6 6.8l-1.1 7.2c-.1.8-.4 1-.7 1-.6 0-1-.4-1.6-.8-.9-.6-1.4-.9-2.2-1.5-1-.6-.4-1 .2-1.6.2-.2 2.7-2.5 2.8-2.7 0-.1 0-.2-.1-.2s-.2 0-.3 0c-.1 0-1.9 1.2-5.5 3.6-.5.4-1 .5-1.4.5-.5 0-1.4-.3-2-.5-.8-.3-1.5-.4-1.4-.9 0-.2.4-.5 1-.7 4-1.7 6.7-2.9 8-3.4 3.8-1.6 4.6-1.8 5.1-1.8.1 0 .4 0 .5.2.1.1.2.3.2.4 0 .1.1.2.1.3z"/></svg>
+        </a>
+    </div>
+
+    <script>
+        // 1. 初始化页面元素
+        document.getElementById('mainImage').src = image_url;
+        document.getElementById('tgLink').href = telegram_url;
+        document.getElementById('viberLink').href = viber_url;
+
+        // 2. 点击下载的处理函数
+        function handleDownloadClick() {
+            console.log("Tracking FB Lead Event...");
+            
+            // 向所有初始化过的像素发送 'Lead' 事件 (常用于下载追踪)
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead'); 
+            }
+
+            // 延迟一小会儿跳转，确保数据发送成功
+            setTimeout(function() {
+                window.location.href = down_url;
+            }, 250);
+        }
+    </script>
+
+</body>
+</html>
