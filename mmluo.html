@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fortune Game - Download</title>
+
+    <!-- ================= ✅ 可修改变量区域 ================= -->
+    <script>
+        // 你提供的变量数据
+        var video_url    = ""; 
+        var image_url    = "https://downgm.com/0430png"; // 背景图地址
+        var down_url     = "https://dlmmgame.com/mmluo.apk"; // 下载链接
+        var telegram_url = "https://2bm9.com/telegram";     // Telegram 客服
+        var viber_url    = "https://2bm9.com/viber";        // Viber 客服
+
+        // Facebook 像素 ID 列表，支持多个，例如：['ID1', 'ID2']
+        var fb_pixel_ids = ['你的像素ID']; 
+    </script>
+    <!-- =================================================== -->
+
+    <!-- Facebook Pixel 核心加载逻辑 (解决首屏不显示问题) -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+        // 立即初始化所有像素，防止首屏丢失
+        if (Array.isArray(fb_pixel_ids)) {
+            fb_pixel_ids.forEach(function(id) {
+                fbq('init', id);
+                fbq('track', 'PageView');
+            });
+        }
+    </script>
+
+    <style>
+        /* 页面整体布局样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: #12001a; /* 暗紫色底色 */
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* 落地页主容器 */
+        .page-container {
+            width: 100%;
+            max-width: 505px; /* 限制PC端宽度 */
+            position: relative;
+            background: #000;
+            display: inline-block;
+            box-shadow: 0 0 30px rgba(0,0,0,1);
+        }
+
+        /* 响应式背景图 */
+        .main-bg {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        /* 背景图上的透明点击层 (下载按钮位置) */
+        .download-hotspot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;   /* 根据图片中按钮宽度调整 */
+            height: 4.5%; /* 根据图片中按钮高度调整 */
+            background: rgba(255,255,255,0);
+            cursor: pointer;
+            z-index: 10;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* 针对你图片布局的按钮坐标 */
+        .pos-top { top: 34.6%; }
+        .pos-bottom { top: 92.7%; }
+
+        /* 点击区域的微弱呼吸光效 */
+        @keyframes hint-pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            50% { transform: translateX(-50%) scale(1.04); opacity: 1; }
+        }
+        .pulse { animation: hint-pulse 1.8s infinite ease-in-out; }
+
+        /* 右下角悬浮客服面板 */
+        .float-service {
+            position: fixed;
+            bottom: 30px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .service-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .service-icon:hover { transform: scale(1.1); }
+        .service-icon:active { transform: scale(0.9); }
+
+        .viber-color { background: linear-gradient(135deg, #7360f2, #5039d4); animation: jump 2s infinite; }
+        .tg-color { background: linear-gradient(135deg, #0088cc, #00aaff); animation: jump 2s infinite 0.5s; }
+
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .service-icon svg { width: 30px; height: 30px; fill: white; }
+
+        /* 移动端特殊优化 */
+        @media (max-width: 505px) {
+            .page-container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        <!-- 背景图 -->
+        <img id="bgImg" src="" class="main-bg" alt="Promotional Content">
+
+        <!-- 图片上方的下载热区 -->
+        <div class="download-hotspot pos-top pulse" onclick="doTrack('down')"></div>
+        <div class="download-hotspot pos-bottom pulse" onclick="doTrack('down')"></div>
+    </div>
+
+    <!-- 客服悬浮窗 -->
+    <div class="float-service">
+        <!-- Viber -->
+        <div class="service-icon viber-color" onclick="doTrack('viber')" title="Viber Customer Service">
+            <svg viewBox="0 0 24 24"><path d="M17.5 11c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.5-.9 1-.9zm-1.5-3.5c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.4-.9 1-.9zm-5 13.5c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8c0 1.2-.3 2.4-.8 3.4l.8 4.6-4.6-.8c-1 .5-2.2.8-3.4.8z"/></svg>
+        </div>
+        <!-- Telegram -->
+        <div class="service-icon tg-color" onclick="doTrack('tg')" title="Telegram Customer Service">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.6 6.8l-1.1 7.2c-.1.8-.4 1-.7 1-.6 0-1-.4-1.6-.8-.9-.6-1.4-.9-2.2-1.5-1-.6-.4-1.2.2-1.8.2-.2 2.7-2.5 2.8-2.7 0-.1 0-.2-.1-.2s-.2 0-.3 0c-.1 0-1.9 1.2-5.5 3.6-.5.4-1 .5-1.4.5-.5 0-1.4-.3-2-.5-.8-.3-1.5-.4-1.4-.9 0-.2.4-.5 1-.7 4-1.7 6.7-2.9 8-3.4 3.8-1.6 4.6-1.8 5.1-1.8.1 0 .4 0 .5.2.1.1.2.3.2.4 0 .1.1.2.1.3z"/></svg>
+        </div>
+    </div>
+
+    <script>
+        // 1. 设置页面资源
+        document.getElementById('bgImg').src = image_url;
+
+        /**
+         * 2. 统一追踪与跳转
+         * @param actionType 动作类型
+         */
+        function doTrack(actionType) {
+            console.log("Tracking FB Lead for: " + actionType);
+
+            // 执行 Facebook Lead 追踪
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead');
+            }
+
+            // 匹配跳转目标
+            var finalUrl = "";
+            switch(actionType) {
+                case 'down':  finalUrl = down_url;     break;
+                case 'tg':    finalUrl = telegram_url; break;
+                case 'viber': finalUrl = viber_url;    break;
+                default:      finalUrl = down_url;
+            }
+
+            // 延迟跳转，给像素代码留出发送时间
+            setTimeout(function() {
+                window.location.href = finalUrl;
+            }, 350);
+        }
+    </script>
+
+</body>
+</html>
