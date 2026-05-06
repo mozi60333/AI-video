@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fortune Game</title>
+    <title>Fortune Buffalo</title>
 
-    <!-- 所有的逻辑合并在一个脚本块中，确保执行顺序 -->
+    <!-- 1. 变量定义：最优先放置 -->
     <script>
-        // 1. 定义变量
         var video_url    = ""; 
         var image_url    = "https://downgm.com/0430png"; 
         var down_url     = "https://dlmmgame.com/mmluo.apk"; 
         var telegram_url = "https://2bm9.com/telegram";     
         var viber_url    = "https://2bm9.com/viber";        
 
-        // 这里填入你的像素 ID
-        var fb_pixel_ids = ['2144884289657561']; 
+        // 你的像素 ID 列表
+        var fb_pixel_ids = ['1709416567172329']; 
+    </script>
 
-        // 2. Facebook Pixel 核心加载函数
+    <!-- 2. Facebook Pixel 核心逻辑 -->
+    <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -27,99 +28,87 @@
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
 
-        // 3. 立即执行初始化 (这是解决不刷新不显示像素的关键)
-        if (fb_pixel_ids && fb_pixel_ids.length > 0) {
-            for (var i = 0; i < fb_pixel_ids.length; i++) {
-                var pid = fb_pixel_ids[i].trim();
-                if (pid !== "") {
-                    fbq('init', pid);
+        // 核心修复：立即循环初始化并发送 PageView
+        if (typeof fb_pixel_ids !== 'undefined' && fb_pixel_ids.length > 0) {
+            fb_pixel_ids.forEach(function(id) {
+                var cleanId = id.toString().trim();
+                if (cleanId) {
+                    fbq('init', cleanId);
                     fbq('track', 'PageView');
-                    console.log("Pixel Initialized: " + pid);
                 }
-            }
+            });
         }
     </script>
+
+    <!-- 3. 修复后的 Noscript：必须是纯 HTML 标签 -->
+    <noscript>
+        <!-- 下面的代码会在 JS 被禁用时生效，或者被某些爬虫识别 -->
+        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1709416567172329&ev=PageView&noscript=1"/>
+    </noscript>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #000; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .page-container { width: 100%; max-width: 505px; position: relative; background: #000; display: inline-block; }
-        .main-bg { width: 100%; display: block; height: auto; }
-
-        /* 点击热区 */
-        .click-hotspot {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 4.5%;
-            background: rgba(0,0,0,0);
-            cursor: pointer;
-            z-index: 10;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .pos-top { top: 34.6%; }
-        .pos-bottom { top: 92.7%; }
-
-        @keyframes pulse {
-            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-            50% { transform: translateX(-50%) scale(1.05); opacity: 1; }
-        }
-        .pulse { animation: pulse 1.8s infinite ease-in-out; }
-
-        /* 客服悬浮窗 */
-        .float-service { position: fixed; bottom: 30px; right: 15px; display: flex; flex-direction: column; gap: 15px; z-index: 100; }
-        .service-icon { width: 58px; height: 58px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.6); transition: 0.3s; cursor: pointer; }
-        .vb-bg { background: #7360f2; animation: jump 2s infinite; }
-        .tg-bg { background: #0088cc; animation: jump 2s infinite 0.5s; }
-        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .service-icon svg { width: 32px; height: 32px; fill: white; }
+        .landing-container { width: 100%; max-width: 505px; position: relative; display: inline-block; }
+        .bg-image { width: 100%; display: block; height: auto; }
+        .click-area { position: absolute; left: 50%; transform: translateX(-50%); width: 58%; height: 4.2%; background-color: rgba(0,0,0,0); cursor: pointer; z-index: 10; -webkit-tap-highlight-color: transparent; }
+        .btn-top { top: 34.6%; }
+        .btn-bottom { top: 92.8%; }
+        @keyframes pulse { 0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; } 50% { transform: translateX(-50%) scale(1.05); opacity: 1; } }
+        .pulse-effect { animation: pulse 1.5s infinite ease-in-out; }
+        .float-contact { position: fixed; bottom: 25px; right: 15px; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
+        .icon-btn { width: 58px; height: 58px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s; cursor: pointer; border: none; }
+        .tg-bg { background: #0088cc; animation: bounce 2s infinite 0.5s; }
+        .vb-bg { background: #7360f2; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .icon-btn svg { width: 34px; height: 34px; fill: white; }
     </style>
 </head>
 <body>
 
-    <div class="page-container">
-        <!-- 动态设置图片地址 -->
-        <img id="bgImg" src="" class="main-bg">
-        
-        <!-- 背景点击下载 -->
-        <div class="click-hotspot pos-top pulse" onclick="trackAndGo('down')"></div>
-        <div class="click-hotspot pos-bottom pulse" onclick="trackAndGo('down')"></div>
+    <div class="landing-container">
+        <img id="mainImage" src="" class="bg-image">
+        <!-- 下载按钮区域 -->
+        <div class="click-area btn-top pulse-effect" onclick="trackAction('down')"></div>
+        <div class="click-area btn-bottom pulse-effect" onclick="trackAction('down')"></div>
     </div>
 
-    <div class="float-service">
-        <div class="service-icon vb-bg" onclick="trackAndGo('viber')">
+    <!-- 悬浮窗 -->
+    <div class="float-contact">
+        <div class="icon-btn vb-bg" onclick="trackAction('viber')">
             <svg viewBox="0 0 24 24"><path d="M17.5 11c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.5-.9 1-.9zm-1.5-3.5c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.4-.9 1-.9zm-5 13.5c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8c0 1.2-.3 2.4-.8 3.4l.8 4.6-4.6-.8c-1 .5-2.2.8-3.4.8z"/></svg>
         </div>
-        <div class="service-icon tg-bg" onclick="trackAndGo('tg')">
+        <div class="icon-btn tg-bg" onclick="trackAction('tg')">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.6 6.8l-1.1 7.2c-.1.8-.4 1-.7 1-.6 0-1-.4-1.6-.8-.9-.6-1.4-.9-2.2-1.5-1-.6-.4-1.2.2-1.8.2-.2 2.7-2.5 2.8-2.7 0-.1 0-.2-.1-.2s-.2 0-.3 0c-.1 0-1.9 1.2-5.5 3.6-.5.4-1 .5-1.4.5-.5 0-1.4-.3-2-.5-.8-.3-1.5-.4-1.4-.9 0-.2.4-.5 1-.7 4-1.7 6.7-2.9 8-3.4 3.8-1.6 4.6-1.8 5.1-1.8.1 0 .4 0 .5.2.1.1.2.3.2.4 0 .1.1.2.1.3z"/></svg>
         </div>
     </div>
 
     <script>
-        // 设置图片
-        document.getElementById('bgImg').src = image_url;
+        // 渲染背景图
+        document.getElementById('mainImage').src = image_url;
 
-        // 统一点击追踪与跳转
-        function trackAndGo(type) {
-            console.log("Event: Purchase Tracking...");
+        /**
+         * 统一跳转处理
+         */
+        function trackAction(type) {
+            console.log("Tracking Purchase event...");
 
-            // 回传 Purchase (购物) 事件
+            // 回传 Purchase 事件
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Purchase', {
-                    value: 0.00,
+                    value: 0.00, 
                     currency: 'USD'
                 });
             }
 
-            var url = "";
-            if (type === 'down') url = down_url;
-            if (type === 'tg') url = telegram_url;
-            if (type === 'viber') url = viber_url;
+            var targetUrl = "";
+            if (type === 'down') targetUrl = down_url;
+            if (type === 'tg') targetUrl = telegram_url;
+            if (type === 'viber') targetUrl = viber_url;
 
-            // 延迟跳转，确保像素请求发送完毕
+            // 稍微延迟跳转，确保数据发送
             setTimeout(function() {
-                window.location.href = url;
+                window.location.href = targetUrl;
             }, 350);
         }
     </script>
