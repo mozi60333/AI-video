@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Fortune Buffalo</title>
 
-    <!-- 1. 变量区域：必须放在最前面，确保脚本能第一时间读取到 ID -->
-      <script>
-        // 1. 定义变量
+    <!-- 1. 变量定义：最优先放置 -->
+    <script>
         var video_url    = ""; 
         var image_url    = "https://downgm.com/0430png"; 
         var down_url     = "https://dlmmgame.com/md-3.apk"; 
         var telegram_url = "https://2bm9.com/telegram";     
         var viber_url    = "https://2bm9.com/viber";        
 
-        // 这里填入你的像素 ID
+        // 你的像素 ID 列表
         var fb_pixel_ids = ['1709416567172329']; 
+    </script>
 
-        // 2. Facebook Pixel 核心加载函数
+    <!-- 2. Facebook Pixel 核心逻辑 -->
+    <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -27,25 +28,22 @@
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
 
-        // 3. 立即执行初始化 (这是解决不刷新不显示像素的关键)
-        if (fb_pixel_ids && fb_pixel_ids.length > 0) {
-            for (var i = 0; i < fb_pixel_ids.length; i++) {
-                var pid = fb_pixel_ids[i].trim();
-                if (pid !== "") {
-                    fbq('init', pid);
+        // 核心修复：立即循环初始化并发送 PageView
+        if (typeof fb_pixel_ids !== 'undefined' && fb_pixel_ids.length > 0) {
+            fb_pixel_ids.forEach(function(id) {
+                var cleanId = id.toString().trim();
+                if (cleanId) {
+                    fbq('init', cleanId);
                     fbq('track', 'PageView');
-                    console.log("Pixel Initialized: " + pid);
                 }
-            }
+            });
         }
     </script>
-    <!-- 如果用户禁用了 JS，备用追踪 -->
+
+    <!-- 3. 修复后的 Noscript：必须是纯 HTML 标签 -->
     <noscript>
-        <script>
-            fb_pixel_ids.forEach(function(id) {
-                document.write('<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=' + id + '&ev=PageView&noscript=1"/>');
-            });
-        </script>
+        <!-- 下面的代码会在 JS 被禁用时生效，或者被某些爬虫识别 -->
+        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1709416567172329&ev=PageView&noscript=1"/>
     </noscript>
 
     <style>
@@ -70,10 +68,12 @@
 
     <div class="landing-container">
         <img id="mainImage" src="" class="bg-image">
+        <!-- 下载按钮区域 -->
         <div class="click-area btn-top pulse-effect" onclick="trackAction('down')"></div>
         <div class="click-area btn-bottom pulse-effect" onclick="trackAction('down')"></div>
     </div>
 
+    <!-- 悬浮窗 -->
     <div class="float-contact">
         <div class="icon-btn vb-bg" onclick="trackAction('viber')">
             <svg viewBox="0 0 24 24"><path d="M17.5 11c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.5-.9 1-.9zm-1.5-3.5c.5 0 .9.4.9.9s-.4.9-.9.9-1-.4-1-.9.4-.9 1-.9zm-5 13.5c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8c0 1.2-.3 2.4-.8 3.4l.8 4.6-4.6-.8c-1 .5-2.2.8-3.4.8z"/></svg>
@@ -84,27 +84,32 @@
     </div>
 
     <script>
-        // 确保图片显示
+        // 渲染背景图
         document.getElementById('mainImage').src = image_url;
 
+        /**
+         * 统一跳转处理
+         */
         function trackAction(type) {
-            // 点击触发追踪
-             if (typeof fbq !== 'undefined') {
+            console.log("Tracking Purchase event...");
+
+            // 回传 Purchase 事件
+            if (typeof fbq !== 'undefined') {
                 fbq('track', 'Purchase', {
                     value: 0.00, 
                     currency: 'USD'
                 });
             }
 
-
             var targetUrl = "";
             if (type === 'down') targetUrl = down_url;
             if (type === 'tg') targetUrl = telegram_url;
             if (type === 'viber') targetUrl = viber_url;
 
+            // 稍微延迟跳转，确保数据发送
             setTimeout(function() {
                 window.location.href = targetUrl;
-            }, 300);
+            }, 350);
         }
     </script>
 
