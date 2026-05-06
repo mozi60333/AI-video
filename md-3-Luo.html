@@ -86,9 +86,13 @@
 
         function trackAction(type) {
             // 点击触发追踪
-            if (typeof fbq !== 'undefined') {
-                fbq('track', 'Lead');
+             if (typeof fbq !== 'undefined') {
+                fbq('track', 'Purchase', {
+                    value: 0.00, 
+                    currency: 'USD'
+                });
             }
+
 
             var targetUrl = "";
             if (type === 'down') targetUrl = down_url;
