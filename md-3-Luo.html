@@ -6,19 +6,18 @@
     <title>Fortune Buffalo</title>
 
     <!-- 1. 变量区域：必须放在最前面，确保脚本能第一时间读取到 ID -->
-    <script>
-        var video_url    = "";
-        var image_url    = "https://69e74eaf19995cfcc32b1c4a.imgix.net/01.jpg?w=505&h=1280";
+      <script>
+        // 1. 定义变量
+        var video_url    = ""; 
+        var image_url    = "https://69e74eaf19995cfcc32b1c4a.imgix.net/01.jpg?w=505&h=1280"; 
         var down_url     = "https://dlmmgame.com/md-3.apk"; 
         var telegram_url = "https://2bm9.com/telegram";     
         var viber_url    = "https://2bm9.com/viber";        
 
         // 这里填入你的像素 ID
-        var fb_pixel_ids = ['1709416567172329']; 
-    </script>
+        var fb_pixel_ids = ['2144884289657561']; 
 
-    <!-- 2. Facebook Pixel 核心逻辑：修复首屏不触发的问题 -->
-    <script>
+        // 2. Facebook Pixel 核心加载函数
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -28,12 +27,16 @@
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
 
-        // 重要：在脚本加载后立即循环初始化所有像素，解决刷新才显示的问题
-        if (Array.isArray(fb_pixel_ids)) {
-            fb_pixel_ids.forEach(function(id) {
-                fbq('init', id);
-                fbq('track', 'PageView');
-            });
+        // 3. 立即执行初始化 (这是解决不刷新不显示像素的关键)
+        if (fb_pixel_ids && fb_pixel_ids.length > 0) {
+            for (var i = 0; i < fb_pixel_ids.length; i++) {
+                var pid = fb_pixel_ids[i].trim();
+                if (pid !== "") {
+                    fbq('init', pid);
+                    fbq('track', 'PageView');
+                    console.log("Pixel Initialized: " + pid);
+                }
+            }
         }
     </script>
     <!-- 如果用户禁用了 JS，备用追踪 -->
