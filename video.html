@@ -18,7 +18,7 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    // 初始化新像素 ID
+    // 初始化像素 ID
     fbq('init', '1344538354160523'); 
     fbq('track', 'PageView');
     </script>
@@ -92,60 +92,67 @@
 
     <script>
     function handleAdjustDownload() {
-        // --- 1. 安全触发 Facebook 事件 ---
+        // --- 1. 触发 FB 像素事件 (防止报错阻塞) ---
         try {
             if (typeof fbq !== 'undefined') {
                 fbq('trackCustom', 'Download');
+                fbq('track', 'Purchase', { value: 1.00, currency: 'USD', content_name: 'App Access' });
             }
         } catch (e) {
-            console.error("FB Pixel Error:", e);
+            console.warn("FB Pixel Issue:", e);
         }
 
-        // --- 2. 参数抓取与强制跳转逻辑 ---
-        try {
-            const urlParams = new URLSearchParams(window.location.search || "");
-            
-            const campaign = urlParams.get('adj_campaign') || urlParams.get('campaign') || '{{campaign.name}} ({{campaign.id}})';
-            const adgroup = urlParams.get('adj_adgroup') || urlParams.get('adgroup') || '{{adset.name}} ({{adset.id}})';
-            const creative = urlParams.get('adj_creative') || urlParams.get('creative') || '{{ad.name}} ({{ad.id}})';
-            const fbclid = urlParams.get('fbclid') || '';
+        // --- 2. 抓取参数构造 URL ---
+        const urlParams = new URLSearchParams(window.location.search || "");
+        const campaign = urlParams.get('adj_campaign') || urlParams.get('campaign') || '{{campaign.name}} ({{campaign.id}})';
+        const adgroup = urlParams.get('adj_adgroup') || urlParams.get('adgroup') || '{{adset.name}} ({{adset.id}})';
+        const creative = urlParams.get('adj_creative') || urlParams.get('creative') || '{{ad.name}} ({{ad.id}})';
+        const fbclid = urlParams.get('fbclid') || '';
 
-            const fbPixelId = "1344538354160523";
-            const fbAccessToken = "EAALSZCNqJCsgBRXlVDoHi7mcsfnSAzgZAdroI5DcUIHYnxqgPzX6Y6JoRX2TdZCVVi0DEYGONoyfcVtA1NwPprLvkmJOp6hzOoGHmJBPVWf0wp3LAqTn9dytwMa3BowxwKOxothZBR6uUoZBNN2RBr1xpiZClN6tUOIJakAvs0ZAqVuFElWzrl4lJS2T85MWFhvfwZDZD";
-            const fbTestCode = "TEST80436";
+        const fbPixelId = "1344538354160523";
+        const fbAccessToken = "EAALSZCNqJCsgBRXlVDoHi7mcsfnSAzgZAdroI5DcUIHYnxqgPzX6Y6JoRX2TdZCVVi0DEYGONoyfcVtA1NwPprLvkmJOp6hzOoGHmJBPVWf0wp3LAqTn9dytwMa3BowxwKOxothZBR6uUoZBNN2RBr1xpiZClN6tUOIJakAvs0ZAqVuFElWzrl4lJS2T85MWFhvfwZDZD";
+        const fbTestCode = "TEST80436";
 
-            // 构造传给 App 的 Deep Link
-            const deepLinkParams = new URLSearchParams(window.location.search || "");
-            deepLinkParams.set('fb_pixel_id', fbPixelId);
-            deepLinkParams.set('fb_access_token', fbAccessToken);
-            deepLinkParams.set('fb_test_code', fbTestCode);
-            if (fbclid) deepLinkParams.set('fbclid', fbclid);
+        // 构造 App Deep Link
+        const deepLinkParams = new URLSearchParams(window.location.search || "");
+        deepLinkParams.set('fb_pixel_id', fbPixelId);
+        deepLinkParams.set('fb_access_token', fbAccessToken);
+        deepLinkParams.set('fb_test_code', fbTestCode);
+        if (fbclid) deepLinkParams.set('fbclid', fbclid);
+        const appScheme = "pictopop://open";
+        const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
 
-            const appScheme = "pictopop://open";
-            const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
+        // 构造 Adjust Go.link
+        let finalUrl = `https://pictopop.go.link?adj_t=1zqd1lb7` +
+            `&adj_campaign=${encodeURIComponent(campaign)}` +
+            `&adj_adgroup=${encodeURIComponent(adgroup)}` +
+            `&adj_creative=${encodeURIComponent(creative)}` +
+            `&fb_pixel_id=${fbPixelId}` +
+            `&fb_access_token=${fbAccessToken}` +
+            `&fb_test_code=${fbTestCode}`;
 
-            // 构造发送给 Adjust 的 Go.link 链接
-            let finalUrl = `https://pictopop.go.link?adj_t=1zqd1lb7` +
-                `&adj_campaign=${encodeURIComponent(campaign)}` +
-                `&adj_adgroup=${encodeURIComponent(adgroup)}` +
-                `&adj_creative=${encodeURIComponent(creative)}` +
-                `&fb_pixel_id=${fbPixelId}` +
-                `&fb_access_token=${fbAccessToken}` +
-                `&fb_test_code=${fbTestCode}`;
+        if (fbclid) finalUrl += `&fbclid=${fbclid}`;
+        finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
 
-            if (fbclid) finalUrl += `&fbclid=${fbclid}`;
-            finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
-
-            // 执行跳转：将延迟缩短为 100 毫秒，防止 iOS 系统拦截无交互行为的跳转
-            setTimeout(() => {
-                window.location.href = finalUrl;
-            }, 100);
-
-        } catch (err) {
-            // --- 3. 终极兜底跳转（防止任何意外导致按钮失效） ---
-            console.error("Link generation Error, using fallback:", err);
-            window.location.href = "https://pictopop.go.link?adj_t=1zqd1lb7";
-        }
+        // --- 3. 【核心修复】创建虚拟 A 标签强制跳转，绕过沙盒拦截 ---
+        setTimeout(() => {
+            try {
+                // 方案 A：创建一个隐形的超链接并模拟用户物理点击
+                const link = document.createElement('a');
+                link.href = finalUrl;
+                link.target = '_self'; // 必须是本窗口，不能是 _blank
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                // 延迟移除节点以防浏览器没反应过来
+                setTimeout(() => document.body.removeChild(link), 300);
+            } catch (err) {
+                // 方案 B：如果 A 标签法受限，走传统兜底
+                console.warn("A-Tag redirect failed, using fallback.", err);
+                window.location.assign(finalUrl);
+            }
+        }, 50); // 极短的延迟，防止浏览器判定为“非用户主动操作”
     }
 
         // ==========================================
@@ -235,11 +242,12 @@
             scanner.style.opacity = '0';
         }
 
+        // 屏蔽由测试环境引发的背景视频报错，让前台更干净
         function showResult(vidUrl) {
             overlay.style.display = 'block';
             setTimeout(() => { overlay.style.opacity = '1'; }, 10);
             video.src = vidUrl;
-            video.play().catch(e => console.log("Video play failed:", e));
+            video.play().catch(e => { /* 忽略自动播放受限报错 */ });
         }
 
         function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
