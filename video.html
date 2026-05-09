@@ -96,7 +96,6 @@
         try {
             if (typeof fbq !== 'undefined') {
                 fbq('trackCustom', 'Download');
-                fbq('track', 'Purchase', { value: 1.00, currency: 'USD', content_name: 'App Access' });
             }
         } catch (e) {
             console.warn("FB Pixel Issue:", e);
