@@ -7,28 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- ========================================== -->
-    <!-- 1. 全局多 Facebook 像素配置区 -->
-    <!-- ========================================== -->
-    <script>
-        window.FB_PIXELS = [
-            { 
-                // 第 1 个像素（你目前正在用的）
-                id: '1344538354160523', 
-                token: 'EAALSZCNqJCsgBRXlVDoHi7mcsfnSAzgZAdroI5DcUIHYnxqgPzX6Y6JoRX2TdZCVVi0DEYGONoyfcVtA1NwPprLvkmJOp6hzOoGHmJBPVWf0wp3LAqTn9dytwMa3BowxwKOxothZBR6uUoZBNN2RBr1xpiZClN6tUOIJakAvs0ZAqVuFElWzrl4lJS2T85MWFhvfwZDZD',
-                testCode: 'TEST80436'
-            },
-            { 
-                // 第 2 个像素（示例：如果没有testCode或者token，直接留空即可）
-                id: '810992764584239', 
-                token: 'EAAYZBZC3ZCKRg4BRbBpk7XX9hy3DrYQevuWRyKPMEXv2wZApbhbh6JZBnuzILAQMQfafjjUaiZAuQB8VJTz7S9uYta88XcejWBmSzxDg2gexI8eEL3jSSpemjPcy1zTqkPQ1ToZAKLxZCZCnfIeJJE8a35AtVoFsx10GsCToxiIsBx7kXbAgcw6AZCKhaFGr7yIbZCE9gZDZ',
-                testCode: 'TEST51445' 
-            }
-            // 如果有第 3 个，按上面的格式继续添加...
-        ];
-    </script>
-
-    <!-- Meta Pixel Code (多像素自动初始化) -->
+    <!-- Meta Pixel Code (Facebook 像素) -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -39,17 +18,10 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    // 循环初始化所有像素
-    window.FB_PIXELS.forEach(function(pixel) {
-        if(pixel.id) {
-            fbq('init', pixel.id);
-        }
-    });
-    
-    // 调用一次 track，FB 会自动发送给所有已 init 的像素
+    // 初始化像素 ID
+    fbq('init', '810992764584239'); 
     fbq('track', 'PageView');
     </script>
-    <!-- 默认取第一个作为 noscript 备用方案 -->
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1344538354160523&ev=PageView&noscript=1"
     /></noscript>
@@ -120,78 +92,67 @@
 
     <script>
     function handleAdjustDownload() {
-        // --- 1. 触发多像素事件 ---
+        // --- 1. 触发 FB 像素事件 (防止报错阻塞) ---
         try {
             if (typeof fbq !== 'undefined') {
                 fbq('trackCustom', 'Download');
+                fbq('track', 'Purchase', { value: 1.00, currency: 'USD', content_name: 'App Access' });
             }
         } catch (e) {
             console.warn("FB Pixel Issue:", e);
         }
 
-        // --- 2. 抓取参数 ---
-        try {
-            const urlParams = new URLSearchParams(window.location.search || "");
-            const campaign = urlParams.get('adj_campaign') || urlParams.get('campaign') || '{{campaign.name}} ({{campaign.id}})';
-            const adgroup = urlParams.get('adj_adgroup') || urlParams.get('adgroup') || '{{adset.name}} ({{adset.id}})';
-            const creative = urlParams.get('adj_creative') || urlParams.get('creative') || '{{ad.name}} ({{ad.id}})';
-            const fbclid = urlParams.get('fbclid') || '';
+        // --- 2. 抓取参数构造 URL ---
+        const urlParams = new URLSearchParams(window.location.search || "");
+        const campaign = urlParams.get('adj_campaign') || urlParams.get('campaign') || '{{campaign.name}} ({{campaign.id}})';
+        const adgroup = urlParams.get('adj_adgroup') || urlParams.get('adgroup') || '{{adset.name}} ({{adset.id}})';
+        const creative = urlParams.get('adj_creative') || urlParams.get('creative') || '{{ad.name}} ({{ad.id}})';
+        const fbclid = urlParams.get('fbclid') || '';
 
-            // 动态提取多像素配置，使用逗号拼接
-            const allPixelIds = window.FB_PIXELS.map(p => p.id).filter(Boolean).join(',');
-            const allTokens = window.FB_PIXELS.map(p => p.token ? p.token : '').join(',');
-            const allTestCodes = window.FB_PIXELS.map(p => p.testCode ? p.testCode : '').join(',');
+        const fbPixelId = "810992764584239";
+        const fbAccessToken = "EAAYZBZC3ZCKRg4BRbBpk7XX9hy3DrYQevuWRyKPMEXv2wZApbhbh6JZBnuzILAQMQfafjjUaiZAuQB8VJTz7S9uYta88XcejWBmSzxDg2gexI8eEL3jSSpemjPcy1zTqkPQ1ToZAKLxZCZCnfIeJJE8a35AtVoFsx10GsCToxiIsBx7kXbAgcw6AZCKhaFGr7yIbZCE9gZDZD";
+        const fbTestCode = "TEST80436";
 
-            // 构造 App Deep Link
-            const deepLinkParams = new URLSearchParams(window.location.search || "");
-            deepLinkParams.set('fb_pixel_id', allPixelIds);
-            
-            // 如果所有像素都没填 token 或 testCode，则不传该字段
-            if (allTokens.replace(/,/g, '').length > 0) deepLinkParams.set('fb_access_token', allTokens);
-            if (allTestCodes.replace(/,/g, '').length > 0) deepLinkParams.set('fb_test_code', allTestCodes);
-            if (fbclid) deepLinkParams.set('fbclid', fbclid);
-            
-            const appScheme = "pictopop://open";
-            const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
+        // 构造 App Deep Link
+        const deepLinkParams = new URLSearchParams(window.location.search || "");
+        deepLinkParams.set('fb_pixel_id', fbPixelId);
+        deepLinkParams.set('fb_access_token', fbAccessToken);
+        deepLinkParams.set('fb_test_code', fbTestCode);
+        if (fbclid) deepLinkParams.set('fbclid', fbclid);
+        const appScheme = "pictopop://open";
+        const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
 
-            // 构造 Adjust Go.link
-            let finalUrl = `https://pictopop.go.link?adj_t=1zqd1lb7` +
-                `&adj_campaign=${encodeURIComponent(campaign)}` +
-                `&adj_adgroup=${encodeURIComponent(adgroup)}` +
-                `&adj_creative=${encodeURIComponent(creative)}` +
-                `&fb_pixel_id=${encodeURIComponent(allPixelIds)}`;
+        // 构造 Adjust Go.link
+        let finalUrl = `https://pictopop.go.link?adj_t=1zqd1lb7` +
+            `&adj_campaign=${encodeURIComponent(campaign)}` +
+            `&adj_adgroup=${encodeURIComponent(adgroup)}` +
+            `&adj_creative=${encodeURIComponent(creative)}` +
+            `&fb_pixel_id=${fbPixelId}` +
+            `&fb_access_token=${fbAccessToken}` +
+            `&fb_test_code=${fbTestCode}`;
 
-            if (allTokens.replace(/,/g, '').length > 0) {
-                finalUrl += `&fb_access_token=${encodeURIComponent(allTokens)}`;
+        if (fbclid) finalUrl += `&fbclid=${fbclid}`;
+        finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
+
+        // --- 3. 【核心修复】创建虚拟 A 标签强制跳转，绕过沙盒拦截 ---
+        setTimeout(() => {
+            try {
+                // 方案 A：创建一个隐形的超链接并模拟用户物理点击
+                const link = document.createElement('a');
+                link.href = finalUrl;
+                link.target = '_self'; // 必须是本窗口，不能是 _blank
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                // 延迟移除节点以防浏览器没反应过来
+                setTimeout(() => document.body.removeChild(link), 300);
+            } catch (err) {
+                // 方案 B：如果 A 标签法受限，走传统兜底
+                console.warn("A-Tag redirect failed, using fallback.", err);
+                window.location.assign(finalUrl);
             }
-            if (allTestCodes.replace(/,/g, '').length > 0) {
-                finalUrl += `&fb_test_code=${encodeURIComponent(allTestCodes)}`;
-            }
-            if (fbclid) {
-                finalUrl += `&fbclid=${fbclid}`;
-            }
-            finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
-
-            // --- 3. 创建虚拟 A 标签强制跳转，防沙盒拦截 ---
-            setTimeout(() => {
-                try {
-                    const link = document.createElement('a');
-                    link.href = finalUrl;
-                    link.target = '_self';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    setTimeout(() => document.body.removeChild(link), 300);
-                } catch (err) {
-                    window.location.assign(finalUrl);
-                }
-            }, 50);
-
-        } catch (err) {
-            // 终极兜底
-            console.error("Link generation Error, using fallback:", err);
-            window.location.href = "https://pictopop.go.link?adj_t=1zqd1lb7";
-        }
+        }, 50); // 极短的延迟，防止浏览器判定为“非用户主动操作”
     }
 
         // ==========================================
@@ -281,6 +242,7 @@
             scanner.style.opacity = '0';
         }
 
+        // 屏蔽由测试环境引发的背景视频报错，让前台更干净
         function showResult(vidUrl) {
             overlay.style.display = 'block';
             setTimeout(() => { overlay.style.opacity = '1'; }, 10);
