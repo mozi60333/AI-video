@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正在安全连接...</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .container { text-align: center; width: 80%; max-width: 400px; }
+        .loader {
+            width: 100%;
+            height: 4px;
+            background-color: #333;
+            border-radius: 2px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #00ff6a; /* 亮绿色，代表安全/成功 */
+            box-shadow: 0 0 10px #00ff6a;
+            transition: width 2s linear; /* 这里控制进度条动画时间 */
+        }
+        .status-text { font-size: 14px; color: #aaa; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h3>Mengarahkan ke halaman tujuan</h3>
+        <div class="loader">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        <p class="status-text" id="status">Mengenkripsi protokol transmisi...</p>
+    </div>
+
+    <script>
+        // 延迟跳转配置（毫秒）
+        const DELAY_TIME = 2500; 
+
+        window.onload = function() {
+            // 1. 启动进度条动画
+            const bar = document.getElementById('progress-bar');
+            setTimeout(() => { bar.style.width = '100%'; }, 100);
+
+            // 2. 状态文字切换（增强用户体验）
+            const status = document.getElementById('status');
+            setTimeout(() => { status.innerText = "正在获取 fbclid 归因信息..."; }, 800);
+            setTimeout(() => { status.innerText = "信息校验完毕，正在跳转..."; }, 1800);
+
+            // 3. 执行参数拼接与跳转
+            setTimeout(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                
+                // 固定基础参数
+                const baseUrl = "http://gold.rajagacor88.cc/";
+                const fixedData = {
+                    p0: "204pbe1p",
+                    fb_pixel_id: "1477797120810224",
+                    fb_access_token: "EAAiYanWrbDMBRb7FgoIX02MjZB9smCH2EP6nBLCmTp4UCZBSJlCWDdZBDKS537GmlVM6S4RzkOY3K1w02MKMsLOIdu9q5k3Mnv43xNtt9cJL9AHyKzOJbJrw5tIZAqQzWYSzOurmyj0ZCbYafggLsP67Acn1ijDCauP2k1qXXsS63b0OL9PBZBveqUQXc2vUEZAhAZDZD"
+                };
+
+                // 动态获取参数（包括 FB 自动生成的 fbclid）
+                const dynamicData = {
+                    p1: urlParams.get('p1') || "",
+                    p2: urlParams.get('p2') || "",
+                    p3: urlParams.get('p3') || "",
+                    p4: urlParams.get('p4') || "",
+                    p5: urlParams.get('p5') || "",
+                    p6: urlParams.get('p6') || "",
+                    fbclid: urlParams.get('fbclid') || "" // 自动捕获 fbclid
+                };
+
+                // 缝合 URL
+                const finalUrl = new URL(baseUrl);
+                Object.entries({...fixedData, ...dynamicData}).forEach(([key, val]) => {
+                    if (val) finalUrl.searchParams.append(key, val);
+                });
+
+                // 跳转
+                window.location.replace(finalUrl.toString());
+            }, DELAY_TIME);
+        };
+    </script>
+</body>
+</html>
