@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pictopop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '2386819282120869');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2386819282120869&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <style>
+        :root {
+            --bg: #050505;
+            --panel: #0d0d0f;
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #f7f7f7;
+            --muted: #a2a2ad;
+            --pink: #ff336d;
+            --mint: #56f0d0;
+            --blue: #566cff;
+            --gold: #ffd166;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100svh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(255, 51, 109, 0.2), transparent 32%),
+                radial-gradient(circle at 82% 8%, rgba(86, 108, 255, 0.18), transparent 31%),
+                radial-gradient(circle at 54% 0%, rgba(86, 240, 208, 0.1), transparent 28%),
+                var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            letter-spacing: 0;
+        }
+
+        button, [role="button"] {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .page {
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px 14px 104px;
+            position: relative;
+        }
+
+        .brand-row {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 0;
+        }
+
+        .brand-mark {
+            width: 32px;
+            height: 32px;
+            display: block;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 8px;
+            background: #000;
+            object-fit: contain;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 28px;
+            padding: 0 10px;
+            border: 1px solid rgba(86, 240, 208, 0.36);
+            border-radius: 8px;
+            color: var(--mint);
+            background: rgba(86, 240, 208, 0.08);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .hero-copy {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto 10px;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1.04;
+            font-weight: 950;
+            letter-spacing: 0;
+        }
+
+        h1 span {
+            color: var(--pink);
+        }
+
+        .subhead {
+            margin: 7px 0 0;
+            color: #d1d1d8;
+            font-size: 14px;
+            line-height: 1.28;
+            font-weight: 650;
+        }
+
+        .preview-card {
+            width: min(100%, 38svh, 360px);
+            aspect-ratio: 9 / 16;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.44);
+            cursor: pointer;
+            flex: none;
+        }
+
+        .preview-shot {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            opacity: 1;
+            background: #000;
+        }
+
+        .preview-vignette {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to top, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.02) 36%, rgba(0, 0, 0, 0.06) 100%);
+            pointer-events: none;
+        }
+
+        .sticky-cta {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 20;
+            padding: 14px 14px calc(14px + env(safe-area-inset-bottom));
+            background: linear-gradient(to top, #050505 76%, rgba(5, 5, 5, 0));
+        }
+
+        .cta-inner {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        .download-btn {
+            width: 100%;
+            height: 58px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 0;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #050505;
+            font-size: 17px;
+            font-weight: 950;
+            box-shadow: 0 14px 36px rgba(86, 108, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .google-play-icon {
+            width: 22px;
+            height: 22px;
+            flex: 0 0 auto;
+            display: block;
+        }
+
+        .download-btn:active,
+        .preview-card:active {
+            transform: translateY(1px);
+        }
+
+        .cta-caption {
+            margin: 9px 0 0;
+            color: #8d8d96;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .spark {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--mint);
+            box-shadow: 0 0 18px var(--mint);
+            opacity: 0;
+            animation: spark 3s infinite;
+        }
+
+        .spark.one { left: 14%; top: 22%; animation-delay: 0.2s; }
+        .spark.two { right: 16%; top: 34%; animation-delay: 1.1s; background: var(--blue); box-shadow: 0 0 18px var(--blue); }
+        .spark.three { right: 28%; bottom: 24%; animation-delay: 1.8s; background: var(--gold); box-shadow: 0 0 18px var(--gold); }
+
+        @keyframes spark {
+            0%, 100% { transform: scale(0.4); opacity: 0; }
+            36% { transform: scale(1); opacity: 0.85; }
+            68% { transform: scale(0.65); opacity: 0.2; }
+        }
+
+        @media (min-width: 520px) {
+            .page { padding-top: 20px; }
+            h1 { font-size: 38px; }
+            .preview-card { width: min(100%, 36svh, 420px); }
+        }
+
+        @media (max-height: 690px) {
+            .page { padding-top: 8px; padding-bottom: 94px; }
+            .brand-row { margin-bottom: 5px; }
+            .brand-mark { width: 27px; height: 27px; }
+            .brand { font-size: 15px; }
+            .status-pill { min-height: 25px; font-size: 10px; }
+            .eyebrow { font-size: 10px; margin-bottom: 4px; }
+            h1 { font-size: 25px; }
+            .subhead { font-size: 12px; margin-top: 5px; line-height: 1.22; }
+            .hero-copy { margin-bottom: 8px; }
+            .preview-card { width: min(100%, 36svh, 320px); }
+            .sticky-cta { padding-top: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+            .download-btn { height: 54px; font-size: 16px; }
+            .cta-caption { margin-top: 7px; font-size: 9px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="brand-row">
+            <div class="brand" aria-label="Pictopop">
+                <img class="brand-mark" src="assets/pictopop-logo.webp" alt="Pictopop logo">
+                <span>Pictopop</span>
+            </div>
+            <div class="status-pill">
+                <i class="fas fa-bolt"></i>
+                Google Play
+            </div>
+        </div>
+
+        <section class="hero-copy" aria-labelledby="hero-title">
+            <div class="eyebrow">AI video maker</div>
+            <h1 id="hero-title">Add a photo. <span>Make it move.</span></h1>
+            <p class="subhead">Download Pictopop from Google Play, upload your image, and create an AI character video.</p>
+        </section>
+
+        <section id="preview-card" class="preview-card" role="button" tabindex="0" aria-label="Download Pictopop from Google Play">
+            <video class="preview-shot" src="assets/veluna-video-preview.mp4" autoplay muted playsinline webkit-playsinline loop preload="auto" aria-label="AI video preview"></video>
+            <div class="preview-vignette"></div>
+            <span class="spark one"></span>
+            <span class="spark two"></span>
+            <span class="spark three"></span>
+        </section>
+    </main>
+
+    <div class="sticky-cta">
+        <div class="cta-inner">
+            <button class="download-btn" type="button" onclick="handleAdjustDownload(event)">
+                <svg class="google-play-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path fill="#00A0FF" d="M3.4 2.1c-.3.3-.4.7-.4 1.3v17.2c0 .6.2 1 .5 1.3l.1.1 9.6-9.6v-.8L3.5 2l-.1.1z"/>
+                    <path fill="#00F076" d="m16.5 8.9-3.3 2.9v.8l3.3 2.9.1-.1 3.9-2.2c1.1-.6 1.1-1.6 0-2.2l-4-2.1z"/>
+                    <path fill="#FFCE00" d="m16.6 15.4-3.4-3.4-9.7 9.7c.5.5 1.2.5 2 .1l11.1-6.4z"/>
+                    <path fill="#FF3A44" d="M16.6 8.6 5.5 2.2c-.8-.5-1.5-.4-2 .1l9.7 9.7 3.4-3.4z"/>
+                </svg>
+                Google Play 下载
+            </button>
+            <p class="cta-caption">Download Pictopop, add your image, generate the video</p>
+        </div>
+    </div>
+
+    <script>
+    function handleAdjustDownload(event) {
+        if (event) event.stopPropagation();
+
+        try {
+            if (typeof fbq !== 'undefined') {
+                fbq('trackCustom', 'Download');
+            }
+        } catch (e) {
+            console.warn("FB Pixel Issue:", e);
+        }
+
+        const urlParams = new URLSearchParams(window.location.search || "");
+        const campaignValue = urlParams.get('adj_campaign') || urlParams.get('campaign');
+        const adgroupValue = urlParams.get('adj_adgroup') || urlParams.get('adgroup');
+        const creativeValue = urlParams.get('adj_creative') || urlParams.get('creative');
+        const campaign = campaignValue ? encodeURIComponent(campaignValue) : '{{campaign.name}}%20%28{{campaign.id}}%29';
+        const adgroup = adgroupValue ? encodeURIComponent(adgroupValue) : '{{adset.name}}%20%28{{adset.id}}%29';
+        const creative = creativeValue ? encodeURIComponent(creativeValue) : '{{ad.name}}%20%28{{ad.id}}%29';
+        const fbclid = urlParams.get('fbclid') || '';
+
+        const fbPixelId = "2386819282120869";
+        const fbAccessToken = "EAAXlki6EGs8BRyeLGQWHtIOdOouTrU7PD1ZAzyOA5mG8o5Nuyc1snEUGqNZCtQAFoe2mMIEJeij6uWvRgTGLqud32TJLN8oT5EujoH9ZCIVzZBXVcYKKMMv2l4A9BTbec9HiCnLrwsOLlMzcZCgVtDT7WGGlp2WgQkacJ1ZBdopUX660SvsN5FRdVx9ZCp69QZDZD";
+        const fbTestCode = "TEST81512";
+
+        const deepLinkParams = new URLSearchParams(window.location.search || "");
+        deepLinkParams.set('fb_pixel_id', fbPixelId);
+        deepLinkParams.set('fb_access_token', fbAccessToken);
+        deepLinkParams.set('fb_test_code', fbTestCode);
+        if (fbclid) deepLinkParams.set('fbclid', fbclid);
+        const appScheme = "pictopop://open";
+        const fullDeepLink = appScheme + "?" + deepLinkParams.toString();
+
+        let finalUrl = `https://pictopopgp.go.link?adj_t=20nm5pci` +
+            `&adj_campaign=${campaign}` +
+            `&adj_adgroup=${adgroup}` +
+            `&adj_creative=${creative}` +
+            `&fb_pixel_id=${fbPixelId}` +
+            `&fb_access_token=${fbAccessToken}` +
+            `&fb_test_code=${fbTestCode}`;
+
+        if (fbclid) finalUrl += `&fbclid=${fbclid}`;
+        finalUrl += `&deep_link=${encodeURIComponent(fullDeepLink)}`;
+
+        setTimeout(() => {
+            try {
+                const link = document.createElement('a');
+                link.href = finalUrl;
+                link.target = '_self';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => document.body.removeChild(link), 300);
+            } catch (err) {
+                console.warn("A-Tag redirect failed, using fallback.", err);
+                window.location.assign(finalUrl);
+            }
+        }, 50);
+    }
+
+    const previewCard = document.getElementById('preview-card');
+    previewCard.addEventListener('click', handleAdjustDownload);
+    previewCard.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleAdjustDownload(event);
+        }
+    });
+
+    </script>
+</body>
+</html>
