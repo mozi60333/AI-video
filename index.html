@@ -75,6 +75,21 @@
             text-transform: uppercase;
         }
 
+        .locale-chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
+            margin: 0 0 18px;
+            padding: 0 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 11px;
+            font-weight: 850;
+            text-transform: uppercase;
+        }
+
         .brand-mark {
             width: 42px;
             height: 42px;
@@ -281,6 +296,16 @@
             to { transform: rotate(360deg); }
         }
 
+        html[dir="rtl"] body {
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        html[dir="rtl"] .brand,
+        html[dir="rtl"] .kicker,
+        html[dir="rtl"] .actions {
+            direction: rtl;
+        }
+
         @media (max-width: 820px) {
             body {
                 overflow-y: auto;
@@ -326,27 +351,28 @@
             <div>
                 <div class="brand">
                     <span class="brand-mark" aria-hidden="true"></span>
-                    <span>AD XJ Growth Network · Blue Whale</span>
+                    <span data-i18n="brand">AD XJ Growth Network · Blue Whale</span>
                 </div>
-                <p class="kicker">Signal lost / route recalculating</p>
-                <h1 id="title">404<span>增长航线偏航</span></h1>
-                <p class="copy">这条路径暂时没有可用落点。蓝鲸网络的增长雷达已经重新扫描全球流量、开发者服务与买量中枢，带你回到 ADXJ.COM。</p>
+                <div id="locale-chip" class="locale-chip">Auto language · EN</div>
+                <p class="kicker" data-i18n="kicker">Signal lost / route recalculating</p>
+                <h1 id="title">404<span data-i18n="headline">Growth route drifted</span></h1>
+                <p class="copy" data-i18n="copy">This route has no available landing point. Blue Whale Network has rescanned global traffic, developer services, and the growth-buying hub to guide you back to ADXJ.COM.</p>
                 <div class="actions">
-                    <a class="btn" href="https://adxj.com/" rel="noopener">前往 ADXJ.COM</a>
-                    <a class="btn secondary" href="https://adxj.com/#contact" rel="noopener">联系合作</a>
+                    <a class="btn" href="https://adxj.com/" rel="noopener" data-i18n="primary">Go to ADXJ.COM</a>
+                    <a class="btn secondary" href="https://adxj.com/#contact" rel="noopener" data-i18n="secondary">Contact partnership</a>
                 </div>
-                <div class="cards" aria-label="ADXJ highlights">
+                <div class="cards" aria-label="ADXJ highlights" data-i18n-aria="cardsLabel">
                     <div class="card">
-                        <b>Elite Community</b>
-                        <span>出海精英交流社群与行业情报。</span>
+                        <b data-i18n="cardCommunityTitle">Elite Community</b>
+                        <span data-i18n="cardCommunity">Global founder communities and market intelligence.</span>
                     </div>
                     <div class="card">
-                        <b>Dev & Tech</b>
-                        <span>开发者、上架、账号与技术服务。</span>
+                        <b data-i18n="cardTechTitle">Dev & Tech</b>
+                        <span data-i18n="cardTech">Developer, store-launch, account, and technical services.</span>
                     </div>
                     <div class="card">
-                        <b>Growth Buying</b>
-                        <span>全球效果营销与全渠道媒体买量。</span>
+                        <b data-i18n="cardGrowthTitle">Growth Buying</b>
+                        <span data-i18n="cardGrowth">Performance marketing and full-channel media buying.</span>
                     </div>
                 </div>
             </div>
@@ -358,5 +384,353 @@
             </div>
         </section>
     </main>
+    <script>
+        const translations = {
+            en: {
+                lang: "en",
+                dir: "ltr",
+                label: "Auto language · EN",
+                brand: "AD XJ Growth Network · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Signal lost / route recalculating",
+                headline: "Growth route drifted",
+                copy: "This route has no available landing point. Blue Whale Network has rescanned global traffic, developer services, and the growth-buying hub to guide you back to ADXJ.COM.",
+                primary: "Go to ADXJ.COM",
+                secondary: "Contact partnership",
+                cardsLabel: "ADXJ highlights",
+                cardCommunityTitle: "Elite Community",
+                cardCommunity: "Global founder communities and market intelligence.",
+                cardTechTitle: "Dev & Tech",
+                cardTech: "Developer, store-launch, account, and technical services.",
+                cardGrowthTitle: "Growth Buying",
+                cardGrowth: "Performance marketing and full-channel media buying."
+            },
+            zh: {
+                lang: "zh-CN",
+                dir: "ltr",
+                label: "自动语言 · 中文",
+                brand: "ADXJ 增长网络 · 蓝鲸",
+                title: "404 | ADXJ 全球效果营销中枢",
+                kicker: "信号丢失 / 正在重算航线",
+                headline: "增长航线偏航",
+                copy: "这条路径暂时没有可用落点。蓝鲸网络的增长雷达已经重新扫描全球流量、开发者服务与买量中枢，带你回到 ADXJ.COM。",
+                primary: "前往 ADXJ.COM",
+                secondary: "联系合作",
+                cardsLabel: "ADXJ 核心能力",
+                cardCommunityTitle: "精英社群",
+                cardCommunity: "出海精英交流社群与行业情报。",
+                cardTechTitle: "开发与技术",
+                cardTech: "开发者、上架、账号与技术服务。",
+                cardGrowthTitle: "买量增长",
+                cardGrowth: "全球效果营销与全渠道媒体买量。"
+            },
+            "zh-hant": {
+                lang: "zh-Hant",
+                dir: "ltr",
+                label: "自動語言 · 繁中",
+                brand: "ADXJ 增長網絡 · 藍鯨",
+                title: "404 | ADXJ 全球成效行銷中樞",
+                kicker: "訊號遺失 / 正在重新計算航線",
+                headline: "增長航線偏航",
+                copy: "這條路徑暫時沒有可用落點。藍鯨網絡的增長雷達已重新掃描全球流量、開發者服務與買量中樞，帶你回到 ADXJ.COM。",
+                primary: "前往 ADXJ.COM",
+                secondary: "聯繫合作",
+                cardsLabel: "ADXJ 核心能力",
+                cardCommunityTitle: "菁英社群",
+                cardCommunity: "出海菁英交流社群與產業情報。",
+                cardTechTitle: "開發與技術",
+                cardTech: "開發者、上架、帳號與技術服務。",
+                cardGrowthTitle: "買量增長",
+                cardGrowth: "全球成效行銷與全通路媒體買量。"
+            },
+            es: {
+                lang: "es",
+                dir: "ltr",
+                label: "Idioma automático · ES",
+                brand: "Red de crecimiento ADXJ · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Señal perdida / recalculando ruta",
+                headline: "La ruta de crecimiento se desvió",
+                copy: "Esta ruta no tiene un punto de llegada disponible. Blue Whale Network ha vuelto a escanear tráfico global, servicios para desarrolladores y el centro de compra de medios para llevarte a ADXJ.COM.",
+                primary: "Ir a ADXJ.COM",
+                secondary: "Contactar cooperación",
+                cardsLabel: "Aspectos clave de ADXJ",
+                cardCommunityTitle: "Comunidad élite",
+                cardCommunity: "Comunidades globales e inteligencia de mercado.",
+                cardTechTitle: "Desarrollo y tecnología",
+                cardTech: "Servicios para desarrolladores, lanzamientos, cuentas y tecnología.",
+                cardGrowthTitle: "Compra de crecimiento",
+                cardGrowth: "Marketing de performance y compra de medios multicanal."
+            },
+            pt: {
+                lang: "pt",
+                dir: "ltr",
+                label: "Idioma automático · PT",
+                brand: "Rede de crescimento ADXJ · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Sinal perdido / recalculando rota",
+                headline: "A rota de crescimento desviou",
+                copy: "Esta rota não tem um ponto de destino disponível. A Blue Whale Network reescaneou tráfego global, serviços para desenvolvedores e o hub de mídia para levar você de volta ao ADXJ.COM.",
+                primary: "Ir para ADXJ.COM",
+                secondary: "Contato comercial",
+                cardsLabel: "Destaques da ADXJ",
+                cardCommunityTitle: "Comunidade elite",
+                cardCommunity: "Comunidades globais e inteligência de mercado.",
+                cardTechTitle: "Dev e tecnologia",
+                cardTech: "Serviços de desenvolvimento, publicação, contas e tecnologia.",
+                cardGrowthTitle: "Compra de crescimento",
+                cardGrowth: "Marketing de performance e compra de mídia multicanal."
+            },
+            fr: {
+                lang: "fr",
+                dir: "ltr",
+                label: "Langue auto · FR",
+                brand: "Réseau de croissance ADXJ · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Signal perdu / recalcul de route",
+                headline: "La route de croissance a dévié",
+                copy: "Cette route n'a pas de point d'arrivée disponible. Blue Whale Network a rescanné le trafic mondial, les services développeurs et le hub d'achat média pour vous ramener vers ADXJ.COM.",
+                primary: "Aller sur ADXJ.COM",
+                secondary: "Contact partenariat",
+                cardsLabel: "Points forts ADXJ",
+                cardCommunityTitle: "Communauté élite",
+                cardCommunity: "Communautés mondiales et intelligence marché.",
+                cardTechTitle: "Dev et technologie",
+                cardTech: "Services développeurs, lancement, comptes et technologie.",
+                cardGrowthTitle: "Achat de croissance",
+                cardGrowth: "Marketing à la performance et achat média omnicanal."
+            },
+            de: {
+                lang: "de",
+                dir: "ltr",
+                label: "Automatische Sprache · DE",
+                brand: "ADXJ Growth Network · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Signal verloren / Route wird neu berechnet",
+                headline: "Die Wachstumsroute ist abgedriftet",
+                copy: "Diese Route hat derzeit keinen Zielpunkt. Blue Whale Network hat globalen Traffic, Developer Services und den Media-Buying-Hub neu gescannt, um dich zurück zu ADXJ.COM zu führen.",
+                primary: "Zu ADXJ.COM",
+                secondary: "Kooperation anfragen",
+                cardsLabel: "ADXJ Highlights",
+                cardCommunityTitle: "Elite-Community",
+                cardCommunity: "Globale Communities und Marktinformationen.",
+                cardTechTitle: "Entwicklung und Technik",
+                cardTech: "Developer-, Launch-, Account- und Tech-Services.",
+                cardGrowthTitle: "Growth Buying",
+                cardGrowth: "Performance-Marketing und kanalübergreifender Media Buying."
+            },
+            ja: {
+                lang: "ja",
+                dir: "ltr",
+                label: "自動言語 · JA",
+                brand: "ADXJ Growth Network · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "信号ロスト / ルート再計算中",
+                headline: "成長ルートが外れました",
+                copy: "このルートには利用できる着地点がありません。Blue Whale Network の成長レーダーが、グローバル流量、開発者サービス、メディアバイイング中枢を再スキャンし、ADXJ.COM へ案内します。",
+                primary: "ADXJ.COM へ",
+                secondary: "提携について相談",
+                cardsLabel: "ADXJ の主な機能",
+                cardCommunityTitle: "エリートコミュニティ",
+                cardCommunity: "海外展開コミュニティと市場インテリジェンス。",
+                cardTechTitle: "開発と技術",
+                cardTech: "開発者、ストア公開、アカウント、技術サービス。",
+                cardGrowthTitle: "成長メディア買付",
+                cardGrowth: "成果報酬型マーケティングと全チャネル買付。"
+            },
+            ko: {
+                lang: "ko",
+                dir: "ltr",
+                label: "자동 언어 · KO",
+                brand: "ADXJ Growth Network · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "신호 손실 / 경로 재계산 중",
+                headline: "성장 경로가 벗어났습니다",
+                copy: "이 경로에는 사용 가능한 목적지가 없습니다. Blue Whale Network의 성장 레이더가 글로벌 트래픽, 개발자 서비스, 미디어 바잉 허브를 다시 스캔해 ADXJ.COM으로 안내합니다.",
+                primary: "ADXJ.COM으로 이동",
+                secondary: "제휴 문의",
+                cardsLabel: "ADXJ 핵심 역량",
+                cardCommunityTitle: "엘리트 커뮤니티",
+                cardCommunity: "글로벌 커뮤니티와 시장 인텔리전스.",
+                cardTechTitle: "개발 및 기술",
+                cardTech: "개발자, 출시, 계정 및 기술 서비스.",
+                cardGrowthTitle: "성장 미디어 바잉",
+                cardGrowth: "퍼포먼스 마케팅과 전 채널 미디어 바잉."
+            },
+            ru: {
+                lang: "ru",
+                dir: "ltr",
+                label: "Автоязык · RU",
+                brand: "Сеть роста ADXJ · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Сигнал потерян / маршрут пересчитывается",
+                headline: "Маршрут роста сбился",
+                copy: "У этого маршрута сейчас нет доступной точки назначения. Blue Whale Network заново сканирует глобальный трафик, сервисы для разработчиков и центр закупки медиа, чтобы вернуть вас на ADXJ.COM.",
+                primary: "Перейти на ADXJ.COM",
+                secondary: "Связаться по партнерству",
+                cardsLabel: "Ключевые направления ADXJ",
+                cardCommunityTitle: "Элитное сообщество",
+                cardCommunity: "Глобальные сообщества и рыночная аналитика.",
+                cardTechTitle: "Разработка и технологии",
+                cardTech: "Сервисы для разработчиков, запуска, аккаунтов и технологий.",
+                cardGrowthTitle: "Закупка роста",
+                cardGrowth: "Performance-маркетинг и закупка медиа по всем каналам."
+            },
+            ar: {
+                lang: "ar",
+                dir: "rtl",
+                label: "لغة تلقائية · AR",
+                brand: "شبكة نمو ADXJ · Blue Whale",
+                title: "404 | شبكة نمو ADXJ",
+                kicker: "فقدان الإشارة / جارٍ إعادة حساب المسار",
+                headline: "انحرف مسار النمو",
+                copy: "لا توجد نقطة هبوط متاحة لهذا المسار حاليًا. أعادت Blue Whale Network فحص الزيارات العالمية وخدمات المطورين ومركز شراء الإعلانات لإعادتك إلى ADXJ.COM.",
+                primary: "الانتقال إلى ADXJ.COM",
+                secondary: "تواصل للشراكة",
+                cardsLabel: "أبرز قدرات ADXJ",
+                cardCommunityTitle: "مجتمع النخبة",
+                cardCommunity: "مجتمعات عالمية ومعلومات سوقية.",
+                cardTechTitle: "التطوير والتقنية",
+                cardTech: "خدمات المطورين والإطلاق والحسابات والتقنية.",
+                cardGrowthTitle: "شراء النمو",
+                cardGrowth: "تسويق الأداء وشراء الوسائط عبر القنوات."
+            },
+            id: {
+                lang: "id",
+                dir: "ltr",
+                label: "Bahasa otomatis · ID",
+                brand: "Jaringan pertumbuhan ADXJ · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Sinyal hilang / rute dihitung ulang",
+                headline: "Rute pertumbuhan melenceng",
+                copy: "Rute ini belum memiliki titik tujuan. Blue Whale Network memindai ulang trafik global, layanan developer, dan pusat pembelian media untuk membawamu kembali ke ADXJ.COM.",
+                primary: "Buka ADXJ.COM",
+                secondary: "Hubungi kerja sama",
+                cardsLabel: "Sorotan ADXJ",
+                cardCommunityTitle: "Komunitas elite",
+                cardCommunity: "Komunitas global dan intelijen pasar.",
+                cardTechTitle: "Dev dan teknologi",
+                cardTech: "Layanan developer, peluncuran, akun, dan teknologi.",
+                cardGrowthTitle: "Pembelian pertumbuhan",
+                cardGrowth: "Performance marketing dan pembelian media lintas kanal."
+            },
+            vi: {
+                lang: "vi",
+                dir: "ltr",
+                label: "Ngôn ngữ tự động · VI",
+                brand: "Mạng tăng trưởng ADXJ · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Mất tín hiệu / đang tính lại lộ trình",
+                headline: "Lộ trình tăng trưởng bị lệch",
+                copy: "Tuyến này hiện chưa có điểm đến khả dụng. Blue Whale Network đã quét lại lưu lượng toàn cầu, dịch vụ nhà phát triển và trung tâm mua media để đưa bạn về ADXJ.COM.",
+                primary: "Đến ADXJ.COM",
+                secondary: "Liên hệ hợp tác",
+                cardsLabel: "Điểm nổi bật ADXJ",
+                cardCommunityTitle: "Cộng đồng tinh hoa",
+                cardCommunity: "Cộng đồng toàn cầu và thông tin thị trường.",
+                cardTechTitle: "Phát triển và công nghệ",
+                cardTech: "Dịch vụ nhà phát triển, phát hành, tài khoản và kỹ thuật.",
+                cardGrowthTitle: "Mua tăng trưởng",
+                cardGrowth: "Performance marketing và mua media đa kênh."
+            },
+            th: {
+                lang: "th",
+                dir: "ltr",
+                label: "ภาษาอัตโนมัติ · TH",
+                brand: "เครือข่ายการเติบโต ADXJ · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "สัญญาณหาย / กำลังคำนวณเส้นทางใหม่",
+                headline: "เส้นทางการเติบโตคลาดเคลื่อน",
+                copy: "เส้นทางนี้ยังไม่มีปลายทางที่พร้อมใช้งาน Blue Whale Network ได้สแกนทราฟฟิกทั่วโลก บริการนักพัฒนา และศูนย์ซื้อสื่ออีกครั้ง เพื่อนำคุณกลับไปยัง ADXJ.COM",
+                primary: "ไปที่ ADXJ.COM",
+                secondary: "ติดต่อความร่วมมือ",
+                cardsLabel: "จุดเด่นของ ADXJ",
+                cardCommunityTitle: "คอมมูนิตี้ชั้นนำ",
+                cardCommunity: "คอมมูนิตี้ระดับโลกและข้อมูลตลาด.",
+                cardTechTitle: "นักพัฒนาและเทคโนโลยี",
+                cardTech: "บริการนักพัฒนา การเผยแพร่ บัญชี และเทคโนโลยี.",
+                cardGrowthTitle: "การซื้อเพื่อการเติบโต",
+                cardGrowth: "การตลาดแบบวัดผลและการซื้อสื่อทุกช่องทาง."
+            },
+            hi: {
+                lang: "hi",
+                dir: "ltr",
+                label: "स्वचालित भाषा · HI",
+                brand: "ADXJ ग्रोथ नेटवर्क · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "सिग्नल खो गया / मार्ग फिर से गणना हो रहा है",
+                headline: "ग्रोथ रूट भटक गया",
+                copy: "इस मार्ग पर अभी कोई उपलब्ध लैंडिंग पॉइंट नहीं है। Blue Whale Network ने वैश्विक ट्रैफिक, डेवलपर सेवाओं और मीडिया-बाइंग हब को फिर से स्कैन किया है ताकि आपको ADXJ.COM पर वापस ले जा सके।",
+                primary: "ADXJ.COM पर जाएं",
+                secondary: "सहयोग के लिए संपर्क करें",
+                cardsLabel: "ADXJ की मुख्य क्षमताएं",
+                cardCommunityTitle: "एलीट कम्युनिटी",
+                cardCommunity: "वैश्विक समुदाय और बाजार इंटेलिजेंस.",
+                cardTechTitle: "डेव और टेक",
+                cardTech: "डेवलपर, लॉन्च, अकाउंट और तकनीकी सेवाएं.",
+                cardGrowthTitle: "ग्रोथ बाइंग",
+                cardGrowth: "परफॉर्मेंस मार्केटिंग और सभी चैनलों में मीडिया बाइंग."
+            },
+            tr: {
+                lang: "tr",
+                dir: "ltr",
+                label: "Otomatik dil · TR",
+                brand: "ADXJ büyüme ağı · Blue Whale",
+                title: "404 | ADXJ Growth Network",
+                kicker: "Sinyal kayboldu / rota yeniden hesaplanıyor",
+                headline: "Büyüme rotası saptı",
+                copy: "Bu rota için kullanılabilir bir varış noktası yok. Blue Whale Network, sizi ADXJ.COM'a geri götürmek için küresel trafiği, geliştirici hizmetlerini ve medya satın alma merkezini yeniden taradı.",
+                primary: "ADXJ.COM'a git",
+                secondary: "İş birliği için iletişim",
+                cardsLabel: "ADXJ öne çıkanlar",
+                cardCommunityTitle: "Elit topluluk",
+                cardCommunity: "Global topluluklar ve pazar istihbaratı.",
+                cardTechTitle: "Geliştirme ve teknoloji",
+                cardTech: "Geliştirici, yayınlama, hesap ve teknik hizmetler.",
+                cardGrowthTitle: "Büyüme satın alımı",
+                cardGrowth: "Performans pazarlaması ve tüm kanallarda medya satın alma."
+            }
+        };
+
+        const aliases = {
+            "zh-cn": "zh",
+            "zh-sg": "zh",
+            "zh-hans": "zh",
+            "zh-tw": "zh-hant",
+            "zh-hk": "zh-hant",
+            "zh-mo": "zh-hant",
+            "pt-br": "pt",
+            "pt-pt": "pt"
+        };
+
+        function pickLocale() {
+            const candidates = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
+            for (const candidate of candidates) {
+                const normalized = candidate.toLowerCase();
+                const aliased = aliases[normalized] || normalized;
+                const base = aliased.split("-")[0];
+                if (translations[aliased]) return translations[aliased];
+                if (translations[base]) return translations[base];
+            }
+            return translations.en;
+        }
+
+        function applyLocale(locale) {
+            document.documentElement.lang = locale.lang;
+            document.documentElement.dir = locale.dir;
+            document.title = locale.title;
+            document.getElementById("locale-chip").textContent = locale.label;
+            document.querySelectorAll("[data-i18n]").forEach((node) => {
+                const key = node.getAttribute("data-i18n");
+                if (locale[key]) node.textContent = locale[key];
+            });
+            document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
+                const key = node.getAttribute("data-i18n-aria");
+                if (locale[key]) node.setAttribute("aria-label", locale[key]);
+            });
+        }
+
+        applyLocale(pickLocale());
+    </script>
 </body>
 </html>

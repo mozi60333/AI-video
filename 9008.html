@@ -46,6 +46,45 @@
         <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1709416567172329&ev=PageView&noscript=1"/>
     </noscript>
 
+    <!-- 4. TikTok Pixel 核心逻辑 -->
+    <script>
+        !function (w, d, t) {
+            w.TiktokAnalyticsObject = t;
+            var ttq = w[t] = w[t] || [];
+            ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie"];
+            ttq.setAndDefer = function(t, e) {
+                t[e] = function() {
+                    t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+                };
+            };
+            for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
+            ttq.instance = function(t) {
+                var e = (ttq._i && ttq._i[t]) || [];
+                for (var n = 0; n < ttq.methods.length; n++) ttq.setAndDefer(e, ttq.methods[n]);
+                return e;
+            };
+            ttq.load = function(e, n) {
+                var r = "https://analytics.tiktok.com/i18n/pixel/events.js";
+                ttq._i = ttq._i || {};
+                ttq._i[e] = [];
+                ttq._i[e]._u = r;
+                ttq._t = ttq._t || {};
+                ttq._t[e] = +new Date;
+                ttq._o = ttq._o || {};
+                ttq._o[e] = n || {};
+                var s = d.createElement("script");
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = r + "?sdkid=" + e + "&lib=" + t;
+                var a = d.getElementsByTagName("script")[0];
+                a.parentNode.insertBefore(s, a);
+            };
+
+            ttq.load("D8T5K2RC77U9SPNILBLG");
+            ttq.page();
+        }(window, document, "ttq");
+    </script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #000; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
@@ -99,6 +138,10 @@
                     value: 0.00, 
                     currency: 'USD'
                 });
+            }
+
+            if (typeof ttq !== 'undefined') {
+                ttq.track('Download');
             }
 
             var targetUrl = "";
