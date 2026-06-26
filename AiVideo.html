@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -80,7 +80,6 @@
             background: rgba(86, 240, 208, 0.08);
             font-size: 11px;
             font-weight: 800;
-            text-transform: uppercase;
         }
 
         .hero-copy {
@@ -93,7 +92,6 @@
             color: var(--gold);
             font-size: 11px;
             font-weight: 900;
-            text-transform: uppercase;
             margin-bottom: 5px;
         }
 
@@ -107,6 +105,10 @@
 
         h1 span {
             color: var(--pink);
+        }
+
+        h1 .headline-lead {
+            color: var(--text);
         }
 
         .subhead {
@@ -204,7 +206,6 @@
             text-align: center;
             font-size: 10px;
             font-weight: 800;
-            text-transform: uppercase;
         }
 
         .spark {
@@ -226,6 +227,16 @@
             0%, 100% { transform: scale(0.4); opacity: 0; }
             36% { transform: scale(1); opacity: 0.85; }
             68% { transform: scale(0.65); opacity: 0.2; }
+        }
+
+        html[dir="rtl"] body {
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        html[dir="rtl"] .brand-row,
+        html[dir="rtl"] .hero-copy,
+        html[dir="rtl"] .cta-inner {
+            direction: rtl;
         }
 
         @media (min-width: 520px) {
@@ -263,13 +274,13 @@
         </div>
 
         <section class="hero-copy" aria-labelledby="hero-title">
-            <div class="eyebrow">AI VIDEO FROM YOUR PHOTO</div>
-            <h1 id="hero-title">Turn any photo into an AI video. <span>Start in seconds.</span></h1>
-            <p class="subhead">Upload a photo, choose the vibe, and create a moving AI scene instantly with AiVideo.</p>
+            <div class="eyebrow" data-i18n="eyebrow">AI video from your photo</div>
+            <h1 id="hero-title"><span class="headline-lead" data-i18n="headlineLead">Turn any photo into an AI video.</span> <span data-i18n="headlineAccent">Start in seconds.</span></h1>
+            <p class="subhead" data-i18n="subhead">Upload a photo, choose the vibe, and create a moving AI scene instantly with AiVideo.</p>
         </section>
 
-        <section id="preview-card" class="preview-card" role="button" tabindex="0" aria-label="Start AiVideo">
-            <video class="preview-shot" src="assets/veluna-video-preview.mp4" autoplay muted playsinline webkit-playsinline loop preload="auto" aria-label="AI video preview"></video>
+        <section id="preview-card" class="preview-card" role="button" tabindex="0" aria-label="Start AiVideo" data-i18n-aria="previewAria">
+            <video class="preview-shot" src="assets/veluna-video-preview.mp4" autoplay muted playsinline webkit-playsinline loop preload="auto" aria-label="AI video preview" data-i18n-aria="videoAria"></video>
             <div class="preview-vignette"></div>
             <span class="spark one"></span>
             <span class="spark two"></span>
@@ -292,6 +303,516 @@
     const IOS_ADJUST_BASE = "https://s2s.adjust.com/1zs7eppj";
     const WEB_BASE = "https://pixpop.ai/start?source=tiktok&ttPixelID=D7ST7RBC77U1G0JPNAQ0";
     const FALLBACK_DELAY_MS = 1200;
+    const translations = {
+        en: {
+            lang: "en",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "AI video from your photo",
+            headlineLead: "Turn any photo into an AI video.",
+            headlineAccent: "Start in seconds.",
+            subhead: "Upload a photo, choose the vibe, and create a moving AI scene instantly with AiVideo.",
+            videoAria: "AI video preview",
+            previewAria: "Start AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Get AiVideo on Google Play",
+                    caption: "Install the app, upload a photo, and start creating.",
+                    aria: "Get AiVideo on Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "Get AiVideo on the App Store",
+                    caption: "Install the app, upload a photo, and start creating.",
+                    aria: "Get AiVideo on the App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Create My AI Video",
+                    caption: "Start online now. No install needed.",
+                    aria: "Create an AI video on the web"
+                }
+            }
+        },
+        zh: {
+            lang: "zh-CN",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "用照片生成 AI 视频",
+            headlineLead: "把任意照片变成 AI 视频。",
+            headlineAccent: "几秒开始创作。",
+            subhead: "上传照片，选择你想要的氛围，立即用 AiVideo 生成会动的 AI 场景。",
+            videoAria: "AI 视频预览",
+            previewAria: "开始使用 AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "在 Google Play 获取 AiVideo",
+                    caption: "安装应用，上传照片，马上开始创作。",
+                    aria: "在 Google Play 获取 AiVideo"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "在 App Store 获取 AiVideo",
+                    caption: "安装应用，上传照片，马上开始创作。",
+                    aria: "在 App Store 获取 AiVideo"
+                },
+                web: {
+                    status: "网页版",
+                    cta: "创建我的 AI 视频",
+                    caption: "在线立即开始，无需安装。",
+                    aria: "在网页上创建 AI 视频"
+                }
+            }
+        },
+        "zh-hant": {
+            lang: "zh-Hant",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "用照片生成 AI 影片",
+            headlineLead: "把任意照片變成 AI 影片。",
+            headlineAccent: "幾秒開始創作。",
+            subhead: "上傳照片，選擇你想要的氛圍，立即用 AiVideo 生成會動的 AI 場景。",
+            videoAria: "AI 影片預覽",
+            previewAria: "開始使用 AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "在 Google Play 取得 AiVideo",
+                    caption: "安裝 App，上傳照片，馬上開始創作。",
+                    aria: "在 Google Play 取得 AiVideo"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "在 App Store 取得 AiVideo",
+                    caption: "安裝 App，上傳照片，馬上開始創作。",
+                    aria: "在 App Store 取得 AiVideo"
+                },
+                web: {
+                    status: "網頁版",
+                    cta: "建立我的 AI 影片",
+                    caption: "線上立即開始，無需安裝。",
+                    aria: "在網頁上建立 AI 影片"
+                }
+            }
+        },
+        es: {
+            lang: "es",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "Video IA desde tu foto",
+            headlineLead: "Convierte cualquier foto en un video IA.",
+            headlineAccent: "Empieza en segundos.",
+            subhead: "Sube una foto, elige el estilo y crea al instante una escena animada con AiVideo.",
+            videoAria: "Vista previa de video IA",
+            previewAria: "Iniciar AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Obtener AiVideo en Google Play",
+                    caption: "Instala la app, sube una foto y empieza a crear.",
+                    aria: "Obtener AiVideo en Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "Obtener AiVideo en App Store",
+                    caption: "Instala la app, sube una foto y empieza a crear.",
+                    aria: "Obtener AiVideo en App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Crear mi video IA",
+                    caption: "Empieza online ahora. Sin instalación.",
+                    aria: "Crear un video IA en la web"
+                }
+            }
+        },
+        pt: {
+            lang: "pt",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "Video com IA a partir da sua foto",
+            headlineLead: "Transforme qualquer foto em um video com IA.",
+            headlineAccent: "Comece em segundos.",
+            subhead: "Envie uma foto, escolha o estilo e crie uma cena em movimento instantaneamente com AiVideo.",
+            videoAria: "Previa de video com IA",
+            previewAria: "Iniciar AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Baixar AiVideo no Google Play",
+                    caption: "Instale o app, envie uma foto e comece a criar.",
+                    aria: "Baixar AiVideo no Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "Baixar AiVideo na App Store",
+                    caption: "Instale o app, envie uma foto e comece a criar.",
+                    aria: "Baixar AiVideo na App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Criar meu video IA",
+                    caption: "Comece online agora. Sem instalar.",
+                    aria: "Criar um video IA na web"
+                }
+            }
+        },
+        fr: {
+            lang: "fr",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "Video IA a partir de votre photo",
+            headlineLead: "Transformez n'importe quelle photo en video IA.",
+            headlineAccent: "Commencez en quelques secondes.",
+            subhead: "Importez une photo, choisissez l'ambiance et creez instantanement une scene animee avec AiVideo.",
+            videoAria: "Apercu video IA",
+            previewAria: "Demarrer AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Obtenir AiVideo sur Google Play",
+                    caption: "Installez l'app, importez une photo et commencez a creer.",
+                    aria: "Obtenir AiVideo sur Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "Obtenir AiVideo sur l'App Store",
+                    caption: "Installez l'app, importez une photo et commencez a creer.",
+                    aria: "Obtenir AiVideo sur l'App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Creer ma video IA",
+                    caption: "Commencez en ligne maintenant. Aucune installation.",
+                    aria: "Creer une video IA sur le web"
+                }
+            }
+        },
+        de: {
+            lang: "de",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "KI-Video aus deinem Foto",
+            headlineLead: "Verwandle jedes Foto in ein KI-Video.",
+            headlineAccent: "Starte in Sekunden.",
+            subhead: "Lade ein Foto hoch, wahle den Stil und erstelle sofort eine bewegte Szene mit AiVideo.",
+            videoAria: "KI-Video Vorschau",
+            previewAria: "AiVideo starten",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "AiVideo bei Google Play holen",
+                    caption: "App installieren, Foto hochladen und direkt loslegen.",
+                    aria: "AiVideo bei Google Play holen"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "AiVideo im App Store holen",
+                    caption: "App installieren, Foto hochladen und direkt loslegen.",
+                    aria: "AiVideo im App Store holen"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Mein KI-Video erstellen",
+                    caption: "Jetzt online starten. Keine Installation notig.",
+                    aria: "Ein KI-Video im Web erstellen"
+                }
+            }
+        },
+        ja: {
+            lang: "ja",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "写真からAI動画へ",
+            headlineLead: "どんな写真もAI動画に。",
+            headlineAccent: "数秒でスタート。",
+            subhead: "写真をアップロードし、雰囲気を選ぶだけで、AiVideoが動きのあるAIシーンをすぐに生成します。",
+            videoAria: "AI動画プレビュー",
+            previewAria: "AiVideoを開始",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Google PlayでAiVideoを入手",
+                    caption: "アプリをインストールし、写真をアップロードして作成を開始。",
+                    aria: "Google PlayでAiVideoを入手"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "App StoreでAiVideoを入手",
+                    caption: "アプリをインストールし、写真をアップロードして作成を開始。",
+                    aria: "App StoreでAiVideoを入手"
+                },
+                web: {
+                    status: "Web",
+                    cta: "AI動画を作成",
+                    caption: "オンラインですぐ開始。インストール不要。",
+                    aria: "WebでAI動画を作成"
+                }
+            }
+        },
+        ko: {
+            lang: "ko",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "사진으로 만드는 AI 비디오",
+            headlineLead: "어떤 사진이든 AI 비디오로 바꾸세요.",
+            headlineAccent: "몇 초 만에 시작하세요.",
+            subhead: "사진을 업로드하고 분위기를 선택하면 AiVideo가 움직이는 AI 장면을 즉시 만들어 줍니다.",
+            videoAria: "AI 비디오 미리보기",
+            previewAria: "AiVideo 시작",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Google Play에서 AiVideo 받기",
+                    caption: "앱을 설치하고 사진을 업로드해 바로 만들어 보세요.",
+                    aria: "Google Play에서 AiVideo 받기"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "App Store에서 AiVideo 받기",
+                    caption: "앱을 설치하고 사진을 업로드해 바로 만들어 보세요.",
+                    aria: "App Store에서 AiVideo 받기"
+                },
+                web: {
+                    status: "Web",
+                    cta: "내 AI 비디오 만들기",
+                    caption: "온라인에서 바로 시작하세요. 설치가 필요 없습니다.",
+                    aria: "웹에서 AI 비디오 만들기"
+                }
+            }
+        },
+        ru: {
+            lang: "ru",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "AI-видео из вашего фото",
+            headlineLead: "Превратите любое фото в AI-видео.",
+            headlineAccent: "Старт за секунды.",
+            subhead: "Загрузите фото, выберите настроение и мгновенно создайте движущуюся AI-сцену с AiVideo.",
+            videoAria: "Предпросмотр AI-видео",
+            previewAria: "Запустить AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Получить AiVideo в Google Play",
+                    caption: "Установите приложение, загрузите фото и начните создавать.",
+                    aria: "Получить AiVideo в Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "Получить AiVideo в App Store",
+                    caption: "Установите приложение, загрузите фото и начните создавать.",
+                    aria: "Получить AiVideo в App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Создать мое AI-видео",
+                    caption: "Начните онлайн прямо сейчас. Установка не нужна.",
+                    aria: "Создать AI-видео в браузере"
+                }
+            }
+        },
+        ar: {
+            lang: "ar",
+            dir: "rtl",
+            title: "AiVideo",
+            eyebrow: "فيديو بالذكاء الاصطناعي من صورتك",
+            headlineLead: "حوّل أي صورة إلى فيديو بالذكاء الاصطناعي.",
+            headlineAccent: "ابدأ خلال ثوانٍ.",
+            subhead: "ارفع صورة، اختر الأجواء، وأنشئ مشهدًا متحركًا فورًا مع AiVideo.",
+            videoAria: "معاينة فيديو بالذكاء الاصطناعي",
+            previewAria: "بدء AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "احصل على AiVideo من Google Play",
+                    caption: "ثبّت التطبيق، ارفع صورة، وابدأ الإنشاء.",
+                    aria: "احصل على AiVideo من Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "احصل على AiVideo من App Store",
+                    caption: "ثبّت التطبيق، ارفع صورة، وابدأ الإنشاء.",
+                    aria: "احصل على AiVideo من App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "أنشئ فيديو AI الخاص بي",
+                    caption: "ابدأ عبر الإنترنت الآن. لا حاجة للتثبيت.",
+                    aria: "أنشئ فيديو AI عبر الويب"
+                }
+            }
+        },
+        id: {
+            lang: "id",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "Video AI dari fotomu",
+            headlineLead: "Ubah foto apa pun menjadi video AI.",
+            headlineAccent: "Mulai dalam hitungan detik.",
+            subhead: "Unggah foto, pilih suasana, dan buat adegan AI bergerak secara instan dengan AiVideo.",
+            videoAria: "Pratinjau video AI",
+            previewAria: "Mulai AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Dapatkan AiVideo di Google Play",
+                    caption: "Instal aplikasi, unggah foto, lalu mulai membuat.",
+                    aria: "Dapatkan AiVideo di Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "Dapatkan AiVideo di App Store",
+                    caption: "Instal aplikasi, unggah foto, lalu mulai membuat.",
+                    aria: "Dapatkan AiVideo di App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Buat Video AI Saya",
+                    caption: "Mulai online sekarang. Tidak perlu instal.",
+                    aria: "Buat video AI di web"
+                }
+            }
+        },
+        vi: {
+            lang: "vi",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "Video AI từ ảnh của bạn",
+            headlineLead: "Biến bất kỳ ảnh nào thành video AI.",
+            headlineAccent: "Bắt đầu trong vài giây.",
+            subhead: "Tải ảnh lên, chọn phong cách và tạo ngay một cảnh AI chuyển động với AiVideo.",
+            videoAria: "Xem trước video AI",
+            previewAria: "Bắt đầu AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Tải AiVideo trên Google Play",
+                    caption: "Cài ứng dụng, tải ảnh lên và bắt đầu sáng tạo.",
+                    aria: "Tải AiVideo trên Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "Tải AiVideo trên App Store",
+                    caption: "Cài ứng dụng, tải ảnh lên và bắt đầu sáng tạo.",
+                    aria: "Tải AiVideo trên App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "Tạo Video AI của tôi",
+                    caption: "Bắt đầu trực tuyến ngay. Không cần cài đặt.",
+                    aria: "Tạo video AI trên web"
+                }
+            }
+        },
+        th: {
+            lang: "th",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "วิดีโอ AI จากรูปของคุณ",
+            headlineLead: "เปลี่ยนรูปภาพให้เป็นวิดีโอ AI",
+            headlineAccent: "เริ่มได้ในไม่กี่วินาที",
+            subhead: "อัปโหลดรูป เลือกสไตล์ แล้วสร้างฉาก AI แบบเคลื่อนไหวได้ทันทีด้วย AiVideo",
+            videoAria: "ตัวอย่างวิดีโอ AI",
+            previewAria: "เริ่มใช้ AiVideo",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "รับ AiVideo บน Google Play",
+                    caption: "ติดตั้งแอป อัปโหลดรูป แล้วเริ่มสร้างได้เลย",
+                    aria: "รับ AiVideo บน Google Play"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "รับ AiVideo บน App Store",
+                    caption: "ติดตั้งแอป อัปโหลดรูป แล้วเริ่มสร้างได้เลย",
+                    aria: "รับ AiVideo บน App Store"
+                },
+                web: {
+                    status: "Web",
+                    cta: "สร้างวิดีโอ AI ของฉัน",
+                    caption: "เริ่มออนไลน์ได้ทันที ไม่ต้องติดตั้ง",
+                    aria: "สร้างวิดีโอ AI บนเว็บ"
+                }
+            }
+        },
+        hi: {
+            lang: "hi",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "आपकी फोटो से AI वीडियो",
+            headlineLead: "किसी भी फोटो को AI वीडियो में बदलें।",
+            headlineAccent: "कुछ सेकंड में शुरू करें।",
+            subhead: "फोटो अपलोड करें, स्टाइल चुनें, और AiVideo के साथ तुरंत मूविंग AI सीन बनाएं।",
+            videoAria: "AI वीडियो प्रीव्यू",
+            previewAria: "AiVideo शुरू करें",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "Google Play पर AiVideo पाएं",
+                    caption: "ऐप इंस्टॉल करें, फोटो अपलोड करें, और बनाना शुरू करें।",
+                    aria: "Google Play पर AiVideo पाएं"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "App Store पर AiVideo पाएं",
+                    caption: "ऐप इंस्टॉल करें, फोटो अपलोड करें, और बनाना शुरू करें।",
+                    aria: "App Store पर AiVideo पाएं"
+                },
+                web: {
+                    status: "Web",
+                    cta: "मेरा AI वीडियो बनाएं",
+                    caption: "अभी ऑनलाइन शुरू करें। इंस्टॉल की जरूरत नहीं।",
+                    aria: "वेब पर AI वीडियो बनाएं"
+                }
+            }
+        },
+        tr: {
+            lang: "tr",
+            dir: "ltr",
+            title: "AiVideo",
+            eyebrow: "Fotografinizdan AI video",
+            headlineLead: "Her fotografi AI videoya donusturun.",
+            headlineAccent: "Saniyeler icinde baslayin.",
+            subhead: "Bir fotograf yukleyin, havayi secin ve AiVideo ile aninda hareketli bir AI sahnesi olusturun.",
+            videoAria: "AI video onizleme",
+            previewAria: "AiVideo'yu baslat",
+            platform: {
+                android: {
+                    status: "Google Play",
+                    cta: "AiVideo'yu Google Play'den al",
+                    caption: "Uygulamayi yukleyin, fotograf ekleyin ve olusturmaya baslayin.",
+                    aria: "AiVideo'yu Google Play'den al"
+                },
+                ios: {
+                    status: "App Store",
+                    cta: "AiVideo'yu App Store'dan al",
+                    caption: "Uygulamayi yukleyin, fotograf ekleyin ve olusturmaya baslayin.",
+                    aria: "AiVideo'yu App Store'dan al"
+                },
+                web: {
+                    status: "Web",
+                    cta: "AI Videomu Olustur",
+                    caption: "Hemen web'de baslayin. Kurulum gerekmez.",
+                    aria: "Web'de AI video olustur"
+                }
+            }
+        }
+    };
+
+    const localeAliases = {
+        "zh-cn": "zh",
+        "zh-sg": "zh",
+        "zh-hans": "zh",
+        "zh-tw": "zh-hant",
+        "zh-hk": "zh-hant",
+        "zh-mo": "zh-hant",
+        "pt-br": "pt",
+        "pt-pt": "pt"
+    };
+    let currentLocale = translations.en;
 
     function getParamBag(source) {
         if (source instanceof URLSearchParams) return source;
@@ -375,39 +896,68 @@
         return buildWebUrl(sourceParams);
     }
 
-    function getPlatformConfig(platform) {
+    function pickLocale() {
+        const candidates = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
+        for (const candidate of candidates) {
+            const normalized = candidate.toLowerCase();
+            const aliased = localeAliases[normalized] || normalized;
+            const base = aliased.split("-")[0];
+            if (translations[aliased]) return translations[aliased];
+            if (translations[base]) return translations[base];
+        }
+        return translations.en;
+    }
+
+    function applyLocale(locale) {
+        currentLocale = locale || translations.en;
+        document.documentElement.lang = currentLocale.lang;
+        document.documentElement.dir = currentLocale.dir;
+        document.title = currentLocale.title;
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+            const key = node.getAttribute("data-i18n");
+            if (currentLocale[key]) node.textContent = currentLocale[key];
+        });
+        document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
+            const key = node.getAttribute("data-i18n-aria");
+            if (currentLocale[key]) node.setAttribute("aria-label", currentLocale[key]);
+        });
+    }
+
+    function getPlatformConfig(platform, locale) {
+        const copy = locale || currentLocale || translations.en;
         if (platform === "android") {
             return {
-                status: "Google Play",
-                cta: "Get AiVideo on Google Play",
-                caption: "Install the app, upload a photo, and start creating.",
+                status: copy.platform.android.status,
+                cta: copy.platform.android.cta,
+                caption: copy.platform.android.caption,
                 iconClass: "store-icon fab fa-google-play",
-                aria: "Get AiVideo on Google Play"
+                aria: copy.platform.android.aria
             };
         }
 
         if (platform === "ios") {
             return {
-                status: "App Store",
-                cta: "Get AiVideo on the App Store",
-                caption: "Install the app, upload a photo, and start creating.",
+                status: copy.platform.ios.status,
+                cta: copy.platform.ios.cta,
+                caption: copy.platform.ios.caption,
                 iconClass: "store-icon fab fa-apple",
-                aria: "Get AiVideo on the App Store"
+                aria: copy.platform.ios.aria
             };
         }
 
         return {
-            status: "Web",
-            cta: "Create My AI Video",
-            caption: "Start online now. No install needed.",
+            status: copy.platform.web.status,
+            cta: copy.platform.web.cta,
+            caption: copy.platform.web.caption,
             iconClass: "store-icon fas fa-globe",
-            aria: "Create an AI video on the web"
+            aria: copy.platform.web.aria
         };
     }
 
     function updateUiForPlatform() {
+        applyLocale(pickLocale());
         const platform = detectPlatform();
-        const config = getPlatformConfig(platform);
+        const config = getPlatformConfig(platform, currentLocale);
         document.documentElement.dataset.platform = platform;
         document.getElementById("status-label").textContent = config.status;
         document.getElementById("status-icon").className = config.iconClass.replace("store-icon ", "");
@@ -477,7 +1027,10 @@
         buildAdjustUrl,
         buildStoreUrl,
         buildWebUrl,
-        getPlatformConfig
+        getPlatformConfig,
+        pickLocale,
+        applyLocale,
+        translations
     };
     </script>
 </body>
