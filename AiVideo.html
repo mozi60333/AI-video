@@ -302,7 +302,7 @@
     const ANDROID_ADJUST_BASE = "https://s2s.adjust.com/20wx005j";
     const IOS_ADJUST_BASE = "https://s2s.adjust.com/1zs7eppj";
     const WEB_BASE = "https://pixpop.ai/start?source=tiktok&ttPixelID=D7ST7RBC77U1G0JPNAQ0";
-    const FALLBACK_DELAY_MS = 1200;
+    const EXTERNAL_BROWSER_FALLBACK_MS = 900;
     const translations = {
         en: {
             lang: "en",
@@ -896,6 +896,60 @@
         return buildWebUrl(sourceParams);
     }
 
+    function buildAndroidIntentUrl(targetUrl) {
+        try {
+            const url = new URL(targetUrl);
+            const scheme = url.protocol.replace(":", "");
+            const targetPath = `${url.host}${url.pathname}${url.search}`;
+            return `intent://${targetPath}#Intent;scheme=${scheme};action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url=${encodeURIComponent(targetUrl)};end`;
+        } catch (err) {
+            console.warn("Android intent URL build failed.", err);
+            return targetUrl;
+        }
+    }
+
+    function buildIosSafariUrl(targetUrl) {
+        if (/^https:\/\//i.test(targetUrl)) return targetUrl.replace(/^https:\/\//i, "x-safari-https://");
+        if (/^http:\/\//i.test(targetUrl)) return targetUrl.replace(/^http:\/\//i, "x-safari-http://");
+        return targetUrl;
+    }
+
+    function buildExternalBrowserUrl(targetUrl, platform) {
+        if (platform === "android") return buildAndroidIntentUrl(targetUrl);
+        if (platform === "ios") return buildIosSafariUrl(targetUrl);
+        return targetUrl;
+    }
+
+    function assignExternalUrl(targetUrl, platform, fallbackTargetUrl) {
+        const externalUrl = buildExternalBrowserUrl(targetUrl, platform);
+        const fallbackUrl = fallbackTargetUrl || targetUrl;
+        const fallbackExternalUrl = buildExternalBrowserUrl(fallbackUrl, platform);
+
+        if (externalUrl !== targetUrl) {
+            let fallbackTimer = window.setTimeout(() => {
+                if (document.hidden) return;
+                window.location.assign(fallbackExternalUrl);
+                window.setTimeout(() => {
+                    if (!document.hidden) window.location.assign(fallbackUrl);
+                }, EXTERNAL_BROWSER_FALLBACK_MS);
+            }, EXTERNAL_BROWSER_FALLBACK_MS);
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    window.clearTimeout(fallbackTimer);
+                    fallbackTimer = null;
+                }
+            }, { once: true });
+        }
+
+        try {
+            window.location.assign(externalUrl);
+        } catch (err) {
+            console.warn("External browser redirect failed, using fallback.", err);
+            window.location.assign(fallbackUrl);
+        }
+    }
+
     function pickLocale() {
         const candidates = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
         for (const candidate of candidates) {
@@ -983,33 +1037,12 @@
         const webUrl = buildWebUrl(params);
 
         if (platform === "web") {
-            window.location.assign(webUrl);
+            assignExternalUrl(webUrl, platform);
             return;
         }
 
         const storeUrl = buildStoreUrl(platform, params);
-        let openedWindow = null;
-
-        try {
-            openedWindow = window.open(storeUrl, "_blank");
-        } catch (err) {
-            openedWindow = null;
-        }
-
-        if (!openedWindow) {
-            window.location.assign(webUrl);
-            return;
-        }
-
-        try {
-            openedWindow.opener = null;
-        } catch (err) {
-            console.warn("Unable to clear opener for store window.", err);
-        }
-
-        window.setTimeout(() => {
-            window.location.assign(webUrl);
-        }, FALLBACK_DELAY_MS);
+        assignExternalUrl(storeUrl, platform, webUrl);
     }
 
     const previewCard = document.getElementById("preview-card");
@@ -1027,6 +1060,9 @@
         buildAdjustUrl,
         buildStoreUrl,
         buildWebUrl,
+        buildAndroidIntentUrl,
+        buildIosSafariUrl,
+        buildExternalBrowserUrl,
         getPlatformConfig,
         pickLocale,
         applyLocale,
