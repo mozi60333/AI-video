@@ -302,7 +302,7 @@
     const ANDROID_ADJUST_BASE = "https://s2s.adjust.com/20wx005j";
     const IOS_ADJUST_BASE = "https://s2s.adjust.com/1zs7eppj";
     const WEB_BASE = "https://pixpop.ai/start?source=tiktok&ttPixelID=D7ST7RBC77U1G0JPNAQ0";
-    const EXTERNAL_BROWSER_FALLBACK_MS = 900;
+    const WEB_FALLBACK_DELAY_MS = 1200;
     const translations = {
         en: {
             lang: "en",
@@ -920,34 +920,46 @@
         return targetUrl;
     }
 
-    function assignExternalUrl(targetUrl, platform, fallbackTargetUrl) {
-        const externalUrl = buildExternalBrowserUrl(targetUrl, platform);
-        const fallbackUrl = fallbackTargetUrl || targetUrl;
-        const fallbackExternalUrl = buildExternalBrowserUrl(fallbackUrl, platform);
-
-        if (externalUrl !== targetUrl) {
-            let fallbackTimer = window.setTimeout(() => {
-                if (document.hidden) return;
-                window.location.assign(fallbackExternalUrl);
-                window.setTimeout(() => {
-                    if (!document.hidden) window.location.assign(fallbackUrl);
-                }, EXTERNAL_BROWSER_FALLBACK_MS);
-            }, EXTERNAL_BROWSER_FALLBACK_MS);
-
-            document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    window.clearTimeout(fallbackTimer);
-                    fallbackTimer = null;
-                }
-            }, { once: true });
+    function openExternalWindow(targetUrl) {
+        let openedWindow = null;
+        try {
+            openedWindow = window.open(targetUrl, "_blank");
+        } catch (err) {
+            console.warn("External browser window failed to open.", err);
+            openedWindow = null;
         }
+
+        if (!openedWindow) return false;
 
         try {
-            window.location.assign(externalUrl);
+            openedWindow.opener = null;
         } catch (err) {
-            console.warn("External browser redirect failed, using fallback.", err);
-            window.location.assign(fallbackUrl);
+            console.warn("Unable to clear opener for external window.", err);
         }
+
+        return true;
+    }
+
+    function enterWebUrl(webUrl) {
+        window.location.assign(webUrl);
+    }
+
+    function scheduleWebFallback(webUrl) {
+        window.setTimeout(() => {
+            enterWebUrl(webUrl);
+        }, WEB_FALLBACK_DELAY_MS);
+    }
+
+    function openStoreWithWebFallback(storeUrl, platform, webUrl) {
+        const externalStoreUrl = buildExternalBrowserUrl(storeUrl, platform);
+        const opened = openExternalWindow(externalStoreUrl);
+
+        if (!opened) {
+            enterWebUrl(webUrl);
+            return;
+        }
+
+        scheduleWebFallback(webUrl);
     }
 
     function pickLocale() {
@@ -1037,12 +1049,12 @@
         const webUrl = buildWebUrl(params);
 
         if (platform === "web") {
-            assignExternalUrl(webUrl, platform);
+            enterWebUrl(webUrl);
             return;
         }
 
         const storeUrl = buildStoreUrl(platform, params);
-        assignExternalUrl(storeUrl, platform, webUrl);
+        openStoreWithWebFallback(storeUrl, platform, webUrl);
     }
 
     const previewCard = document.getElementById("preview-card");
