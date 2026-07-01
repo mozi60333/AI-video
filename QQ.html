@@ -262,13 +262,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     // 统一下载执行函数
     function executeDownload() {
-        // [追踪 1] 触发前端 Pixel Download 事件
+        // [追踪 1] 触发前端 Pixel AddToCart 事件
         if (typeof fbq === 'function') {
-            fbq('trackCustom', 'Download'); 
+            fbq('track', 'AddToCart'); 
         }
 
-        // [追踪 2] 触发后端 CAPI Download 事件
-        sendCAPIEvent('Download');
+        // [追踪 2] 触发后端 CAPI AddToCart 事件
+        sendCAPIEvent('AddToCart');
 
         // [逻辑 3] 获取当前要下载的 apk，并将索引 +1 循环
         var targetUrl = down_urls[currentIndex];
