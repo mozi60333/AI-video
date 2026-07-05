@@ -48,12 +48,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     var video_url    = "";
     var image_url    = "https://downgm.com/0430png"; // 背景图地址
     
-    // 将单一的 down_url 改为4个链接的数组，用于轮询
+    // 将单一的 down_url 改为多个链接的数组，用于轮询
     var down_urls    = [
         "https://dlmmgame.com/10008.apk",
         "https://dlmmgame.com/10005.apk",
         "https://dlmmgame.com/10003.apk",
-        "https://dlmmgame.com/10006.apk"
+        "https://dlmmgame.com/10006.apk",
+        "https://dlmmgame.com/10004.apk",
+        "https://dlmmgame.com/10007.apk"
     ]; 
     
     var telegram_url = "https://2bm9.com/telegram";     // Telegram 客服
@@ -272,7 +274,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         // [逻辑 3] 获取当前要下载的 apk，并将索引 +1 循环
         var targetUrl = down_urls[currentIndex];
-        currentIndex = (currentIndex + 1) % down_urls.length; // 巧妙利用求余，逢4变0
+        currentIndex = (currentIndex + 1) % down_urls.length; // 巧妙利用求余，到末尾后回到0
 
         // [逻辑 4] 延迟 300 毫秒后跳转，防止跳转太快打断 Facebook 发送
         setTimeout(function() {
