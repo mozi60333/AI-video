@@ -53,6 +53,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         "https://dlmmgame.com/10008.apk",
         "https://dlmmgame.com/10007.apk"
     ]; 
+
+    var ios_h5_urls  = [
+        "https://ll99.short.gy/mm9015",
+        "https://ll99.short.gy/mm10008"
+    ];
     
     var telegram_url = "https://2bm9.com/telegram";     // Telegram 客服
     var viber_url    = "https://2bm9.com/viber";        // Viber 客服
@@ -228,6 +233,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
     // 初始化当前轮询索引
     var currentIndex = 0;
+    var iosCurrentIndex = 0;
+    var iosRotationKey = "aisi_ios_h5_index";
+
+    function isAppleMobileUser() {
+        var ua = navigator.userAgent || "";
+        var platform = navigator.platform || "";
+        return /iPhone|iPad|iPod/i.test(ua) || (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function getIosH5Url() {
+        var index = iosCurrentIndex;
+        try {
+            var savedIndex = parseInt(localStorage.getItem(iosRotationKey), 10);
+            if (!isNaN(savedIndex) && savedIndex >= 0) {
+                index = savedIndex % ios_h5_urls.length;
+            }
+            localStorage.setItem(iosRotationKey, String((index + 1) % ios_h5_urls.length));
+        } catch (e) {
+            iosCurrentIndex = (iosCurrentIndex + 1) % ios_h5_urls.length;
+        }
+        return ios_h5_urls[index];
+    }
 
     // Facebook CAPI 发送函数
     function sendCAPIEvent(eventName) {
@@ -268,9 +295,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         // [追踪 2] 触发后端 CAPI AddToCart 事件
         sendCAPIEvent('AddToCart');
 
-        // [逻辑 3] 获取当前要下载的 apk，并将索引 +1 循环
-        var targetUrl = down_urls[currentIndex];
-        currentIndex = (currentIndex + 1) % down_urls.length; // 巧妙利用求余，到末尾后回到0
+        // [逻辑 3] 苹果移动端跳转 H5 轮询链接，其它用户继续下载 apk 轮询
+        var targetUrl;
+        if (isAppleMobileUser()) {
+            targetUrl = getIosH5Url();
+        } else {
+            targetUrl = down_urls[currentIndex];
+            currentIndex = (currentIndex + 1) % down_urls.length; // 巧妙利用求余，到末尾后回到0
+        }
 
         // [逻辑 4] 延迟 300 毫秒后跳转，防止跳转太快打断 Facebook 发送
         setTimeout(function() {
