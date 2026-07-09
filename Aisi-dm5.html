@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-T3FK9JSS');</script>
+<!-- End Google Tag Manager -->
+
+  <!-- ========== Meta Pixel Code (Facebook 基础像素) ========== -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    // 初始化你的 Pixel ID
+    fbq('init', '1020170417090230');
+    // 记录页面浏览
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1020170417090230&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- ========== End Meta Pixel Code ========== -->
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="MSThemeCompatible" content="no">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>10008</title>
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <link rel="stylesheet" href="https://www.uploadpi.com/js/style.css">
+  <link rel="stylesheet" href="https://www.uploadpi.com/js/swiper.min.css">
+
+  <script>
+    // ========== ✅ 可修改变量区域 ==========
+    var video_url    = "";
+    var image_url    = "https://downgm.com/0430png"; // 背景图地址
+    
+    var down_url     = "https://dlmmgame.com/10007.apk";
+
+    var ios_h5_urls  = [
+        "https://ll99.short.gy/mm9015",
+        "https://ll99.short.gy/mm10008"
+    ];
+    
+    var telegram_url = "https://2bm9.com/telegram";     // Telegram 客服
+    var viber_url    = "https://2bm9.com/viber";        // Viber 客服
+    
+    // Facebook CAPI 变量配置
+    var fbPixelId = "1020170417090230";
+    var fbAccessToken = "EAAYZBZC3ZCKRg4BR5SRB2g7ZB2YAyhnc1qfzPmgxvX0QOKL4mv7jz3tE9nzriPsyZBtssBeU194OiMsSPoO5UTbGfyhxZC6Em9o4CyklIKyytHODcpOw4sZCpjSoTMJitffGTlelc3WW0liWlZAwtc4H5L2cmmFCd5V8oAT7aXvHW5zDuR5bZBl127QmHRoKCWD5ALgZDZD";
+    var fbTestCode = "TEST35072";
+    // ======================================
+  </script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background-color: #000;
+      overflow-x: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    /* 视频区域 */
+    .video-section {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 背景图区域 */
+    .bg-section {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    .bg-section img {
+      width: 100%;
+      display: block;
+      cursor: pointer; /* 增加小手提示，引导点击 */
+    }
+
+    /* 下载按钮 (隐形触发区) */
+    .down_load {
+      position: absolute;
+      cursor: pointer;
+      z-index: 10; /* 确保在图片上层可以被点击 */
+    }
+
+    #down_load1 {
+      top: 70%;
+      width: 90%;
+      left: 5%;
+      height: 5%;
+    }
+
+    #down_load2 {
+      bottom: 5%;
+      width: 90%;
+      left: 5%;
+      height: 5%;
+    }
+
+    /* 客服按钮区 */
+    .customer-buttons {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 999;
+    }
+
+    .customer-buttons a {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background-color: #ffffffdd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      transition: all 0.25s;
+    }
+
+    .customer-buttons a:hover {
+      transform: scale(1.1);
+    }
+
+    .customer-buttons img {
+      width: 32px;
+      height: 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T3FK9JSS"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="container" id="all_down_load">
+
+    <!-- 视频部分（默认隐藏，如果有视频才显示） -->
+    <div class="video-section" id="videoSection" style="display:none;">
+      <video id="myVideo" playsinline webkit-playsinline muted autoplay preload="auto" loop>
+        <source id="videoSource" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- 背景图 -->
+    <div class="bg-section">
+      <img id="bgImage" alt="background">
+    </div>
+
+    <!-- 按钮1 (隐形点击区) -->
+    <div id="down_load1" class="down_load"></div>
+    <!-- 按钮2 (隐形点击区) -->
+    <div id="down_load2" class="down_load"></div>
+
+    <!-- 客服按钮 -->
+    <div class="customer-buttons">
+      <a href="#" target="_blank" id="telegramBtn" title="Telegram cs">
+        <img src="https://pngmm.oss-ap-southeast-7.aliyuncs.com/png/Telegram.png" alt="Telegram">
+      </a>
+      <a href="#" id="viberBtn" title="Viber">
+        <img src="https://pngmm.oss-ap-southeast-7.aliyuncs.com/png/viber.png" alt="Viber">
+      </a>
+    </div>
+
+  </div>
+
+  <script src="https://www.uploadpi.com/js/jquery-1.7.2.min.js"></script>
+  <script>
+    // 1. 设置资源链接
+    document.getElementById("bgImage").src = image_url;
+    document.getElementById("telegramBtn").href = telegram_url;
+    document.getElementById("viberBtn").href = viber_url;
+
+    // 2. 检查是否有视频
+    if (video_url && video_url.trim() !== "") {
+      document.getElementById("videoSection").style.display = "block";
+      document.getElementById("videoSource").src = video_url;
+      var myVideo = document.getElementById("myVideo");
+      myVideo.load();
+      myVideo.addEventListener("ended", function() {
+        myVideo.play();
+      });
+    } else {
+      var bg = document.querySelector(".bg-section");
+      document.getElementById("all_down_load").prepend(bg);
+    }
+
+    // ==========================================
+    // 核心追踪与轮询下载逻辑 (新增)
+    // ==========================================
+    
+    // 初始化当前轮询索引
+    var iosCurrentIndex = 0;
+    var iosRotationKey = "aisi_ios_h5_index";
+
+    function isAppleMobileUser() {
+        var ua = navigator.userAgent || "";
+        var platform = navigator.platform || "";
+        return /iPhone|iPad|iPod/i.test(ua) || (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function getIosH5Url() {
+        var index = iosCurrentIndex;
+        try {
+            var savedIndex = parseInt(localStorage.getItem(iosRotationKey), 10);
+            if (!isNaN(savedIndex) && savedIndex >= 0) {
+                index = savedIndex % ios_h5_urls.length;
+            }
+            localStorage.setItem(iosRotationKey, String((index + 1) % ios_h5_urls.length));
+        } catch (e) {
+            iosCurrentIndex = (iosCurrentIndex + 1) % ios_h5_urls.length;
+        }
+        return ios_h5_urls[index];
+    }
+
+    // Facebook CAPI 发送函数
+    function sendCAPIEvent(eventName) {
+        var url = "https://graph.facebook.com/v19.0/" + fbPixelId + "/events?access_token=" + fbAccessToken;
+        var payload = {
+            data: [
+                {
+                    event_name: eventName,
+                    event_time: Math.floor(Date.now() / 1000),
+                    action_source: "website",
+                    event_source_url: window.location.href,
+                    user_data: {
+                        client_user_agent: navigator.userAgent
+                    }
+                }
+            ],
+            test_event_code: fbTestCode // 用于在 FB 事件管理工具里测试，测试完可删除
+        };
+
+        // 使用 fetch 发送 CAPI 请求，keepalive 确保跳转不断开
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload),
+            keepalive: true
+        }).catch(function(e) { console.error("CAPI error:", e); });
+    }
+
+    // 统一下载执行函数
+    function executeDownload() {
+        // [追踪 1] 触发前端 Pixel AddToCart 事件
+        if (typeof fbq === 'function') {
+            fbq('track', 'AddToCart'); 
+        }
+
+        // [追踪 2] 触发后端 CAPI AddToCart 事件
+        sendCAPIEvent('AddToCart');
+
+        // [逻辑 3] 苹果移动端跳转 H5 轮询链接，其它用户下载固定 apk
+        var targetUrl;
+        if (isAppleMobileUser()) {
+            targetUrl = getIosH5Url();
+        } else {
+            targetUrl = down_url;
+        }
+
+        // [逻辑 4] 延迟 300 毫秒后跳转，防止跳转太快打断 Facebook 发送
+        setTimeout(function() {
+            window.location.href = targetUrl;
+        }, 300);
+    }
+
+    // 绑定点击事件：不管是点击整张背景图，还是点击透明的 down_load1/down_load2 区域，都触发轮询和追踪
+    $('#bgImage, .down_load').click(function(){
+        executeDownload();
+    });
+
+  </script>
+</body>
+</html>
