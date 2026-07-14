@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="origin">
+    <meta name="theme-color" content="#0f8f68">
+    <title>正在跳转</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f8faf9;
+        --text: #202124;
+        --muted: #5f6368;
+        --line: #dde3df;
+        --accent: #0f8f68;
+        --accent-dark: #0b7556;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        margin: 0;
+        place-items: center;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      main {
+        width: min(420px, calc(100% - 32px));
+        padding: 28px 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        text-align: center;
+      }
+
+      .loader {
+        width: 42px;
+        height: 42px;
+        margin: 0 auto 18px;
+        border: 4px solid #d8ebe4;
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        line-height: 1.3;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .home-link {
+        display: flex;
+        width: fit-content;
+        min-height: 40px;
+        margin: 22px auto 0;
+        padding: 0 16px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: inherit;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .home-link:hover {
+        border-color: var(--accent);
+        color: var(--accent-dark);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script>
+      const ANDROID_URL = "https://slots77.xin/";
+      const ADJUST_URL = "https://app.adjust.com/22jt7yhg";
+      const HOME_URL = "https://slots77.xin/";
+      const REDIRECT_DELAY = 300;
+      const ANDROID_FIXED_PARAMS = {
+        adid: "20024",
+        channel_id: "20024"
+      };
+      const TRACKING_FIELDS = [
+        "campaign_id",
+        "campaign_name",
+        "adset_id",
+        "adset_name",
+        "ad_id",
+        "ad_name",
+        "pixel_id",
+        "token",
+        "fbclid"
+      ];
+      const ADJUST_DCP_FIELDS = {
+        campaign_id: "fb_campaign_id",
+        campaign_name: "fb_campaign_name",
+        adset_id: "fb_adset_id",
+        adset_name: "fb_adset_name",
+        ad_id: "fb_ad_id",
+        ad_name: "fb_ad_name",
+        pixel_id: "fb_pixel_id",
+        token: "fb_token"
+      };
+
+      function getTrackingParams() {
+        const source = new URLSearchParams(window.location.search);
+        const tracking = {};
+
+        TRACKING_FIELDS.forEach((field) => {
+          const value = source.get(field);
+          if (value) tracking[field] = value;
+        });
+
+        return tracking;
+      }
+
+      function appendParams(url, params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value) url.searchParams.set(key, value);
+        });
+        return url;
+      }
+
+      function formatAdjustLevel(name, id) {
+        if (name && id) return `${name} (${id})`;
+        if (name) return name;
+        return id ? `(${id})` : "";
+      }
+
+      function buildAndroidUrl(tracking) {
+        const target = new URL(ANDROID_URL);
+        appendParams(target, ANDROID_FIXED_PARAMS);
+        return appendParams(target, tracking).toString();
+      }
+
+      function buildAdjustUrl(tracking) {
+        const target = new URL(ADJUST_URL);
+        appendParams(target, {
+          campaign: formatAdjustLevel(tracking.campaign_name, tracking.campaign_id),
+          adgroup: formatAdjustLevel(tracking.adset_name, tracking.adset_id),
+          creative: formatAdjustLevel(tracking.ad_name, tracking.ad_id)
+        });
+
+        Object.entries(ADJUST_DCP_FIELDS).forEach(([sourceField, adjustField]) => {
+          const value = tracking[sourceField];
+          if (value) target.searchParams.set(adjustField, value);
+        });
+
+        if (tracking.fbclid) target.searchParams.set("fbclid", tracking.fbclid);
+        return target.toString();
+      }
+
+      function detectDevice() {
+        const forcedDevice = new URLSearchParams(window.location.search).get("device");
+        if (forcedDevice === "android") return "android";
+        if (forcedDevice === "ios" || forcedDevice === "apple") return "apple";
+        if (forcedDevice === "other") return "other";
+
+        const ua = navigator.userAgent || "";
+        const platform = navigator.platform || "";
+        const isAndroid = /android/i.test(ua);
+        const isIOS = /iphone|ipad|ipod/i.test(ua);
+        const isIPadOS = platform === "MacIntel" && navigator.maxTouchPoints > 1;
+        const isMac = /macintosh|mac os x/i.test(ua) && !isAndroid;
+
+        if (isAndroid) return "android";
+        if (isIOS || isIPadOS || isMac) return "apple";
+        return "other";
+      }
+
+      function showHomeEntry(messageText) {
+        const message = document.getElementById("message");
+        const homeLink = document.getElementById("home-link");
+
+        if (message) message.textContent = messageText;
+        if (homeLink) {
+          homeLink.href = HOME_URL;
+          homeLink.hidden = false;
+        }
+      }
+
+      function redirect() {
+        const tracking = getTrackingParams();
+        if (!tracking.fbclid) {
+          document.documentElement.dataset.device = "waiting";
+          showHomeEntry("正在加载...");
+          return;
+        }
+
+        const device = detectDevice();
+        const androidTarget = buildAndroidUrl(tracking);
+        const appleTarget = buildAdjustUrl(tracking);
+        const target = device === "android" ? androidTarget : device === "apple" ? appleTarget : "";
+
+        document.documentElement.dataset.device = device;
+
+        if (target) {
+          const message = document.getElementById("message");
+          if (message) message.textContent = device === "android" ? "检测到安卓设备，正在跳转..." : "检测到苹果设备，正在跳转...";
+          window.setTimeout(() => window.location.replace(target), REDIRECT_DELAY);
+          return;
+        }
+
+        showHomeEntry("暂不支持当前设备，请返回首页。");
+      }
+
+      window.addEventListener("DOMContentLoaded", redirect);
+    </script>
+  </head>
+  <body>
+    <main>
+      <div class="loader" aria-hidden="true"></div>
+      <h1>正在识别设备</h1>
+      <p id="message" aria-live="polite">正在加载...</p>
+      <a class="home-link" id="home-link" href="https://slots77.xin/" hidden>返回首页</a>
+    </main>
+  </body>
+</html>
