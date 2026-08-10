@@ -404,7 +404,7 @@
 
     .game-list {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -430,10 +430,6 @@
 
     .game-item:nth-child(2)::before {
       background-position: 37% 71%;
-    }
-
-    .game-item:nth-child(3)::before {
-      background-position: 63% 77%;
     }
 
     .game-item::after {
@@ -465,6 +461,16 @@
       margin-top: 3px;
       color: var(--gold-strong);
       font-size: 11px;
+    }
+
+    .game-label .promo-amount {
+      margin-bottom: 7px;
+      color: var(--gold-strong);
+      font-family: Arial, sans-serif;
+      font-size: clamp(22px, 3.2vw, 34px);
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     .responsible {
@@ -519,13 +525,6 @@
       color: var(--muted);
       font-family: Arial, sans-serif;
       font-size: 11px;
-    }
-
-    .sticky-copy strong [data-bonus-amount] {
-      display: inline;
-      color: var(--gold-strong);
-      font-family: Arial, sans-serif;
-      white-space: nowrap;
     }
 
     .sticky-action .primary-cta {
@@ -676,6 +675,18 @@
       }
     }
 
+    @media (max-width: 390px) and (max-height: 720px) {
+      .hero-copy {
+        padding-top: 22px;
+      }
+    }
+
+    @media (max-width: 390px) and (max-height: 660px) {
+      .hero-copy {
+        padding-top: 4px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html {
         scroll-behavior: auto;
@@ -705,17 +716,17 @@
         <div class="hero-copy">
           <p class="eyebrow">Register · Deposit · Claim</p>
           <h1 id="hero-title">
-            ចុះឈ្មោះ និងទទួលបានបូណឹសស្វាគមន៍
-            <span class="headline-sub">FIRST DEPOSIT BONUS</span>
+            ដាក់ប្រាក់លើកដំបូង ទទួលបានបូណឹស 100%
+            <span class="headline-sub">100% FIRST DEPOSIT MATCH</span>
           </h1>
           <p class="hero-description">
-            បង្កើតគណនី បំពេញការដាក់ប្រាក់លើកដំបូង ហើយទទួលបានបូណឹសស្វាគមន៍សម្រាប់ចាប់ផ្តើមលេង។
+            ដាក់ប្រាក់ប៉ុន្មាន ទទួលបានបូណឹសប៉ុណ្ណោះ។ ដាក់កាន់តែច្រើន ទទួលបានកាន់តែច្រើន ដោយគ្មានដែនកំណត់។
           </p>
 
           <div class="bonus-offer" aria-label="First deposit bonus">
-            <span>បូណឹសដាក់ប្រាក់លើកដំបូងរហូតដល់</span>
-            <strong data-bonus-amount>US$188</strong>
-            <small>RANDOM PROMOTIONAL TIER · BONUS TERMS APPLY</small>
+            <span>បូណឹសដាក់ប្រាក់លើកដំបូង</span>
+            <strong>100%</strong>
+            <small>DEPOSIT MATCH · MORE DEPOSIT, MORE BONUS · NO CAP</small>
           </div>
 
           <div class="hero-action">
@@ -741,8 +752,8 @@
         </article>
         <article class="benefit">
           <span class="benefit-index">02</span>
-          <h2>ដាក់ប្រាក់លើកដំបូង</h2>
-          <p>Complete your first deposit.</p>
+          <h2>បូណឹសដាក់ប្រាក់ដំបូង 100%</h2>
+          <p>Deposit more, receive more. No bonus cap.</p>
         </article>
         <article class="benefit">
           <span class="benefit-index">03</span>
@@ -755,28 +766,24 @@
     <section class="experience" aria-labelledby="experience-title">
       <div class="section-inner experience-grid">
         <div class="experience-copy">
-          <p class="section-kicker">Choose your style</p>
-          <h2 id="experience-title">ជ្រើសរើសហ្គេមដែលសាកសមនឹងអ្នក</h2>
-          <p>Classic reels, jewel adventures and premium jackpot-inspired themes are ready to explore in a polished mobile experience.</p>
+          <p class="section-kicker">More rewards</p>
+          <h2 id="experience-title">រង្វាន់បន្ថែមសម្រាប់អ្នក</h2>
+          <p>Claim up to US$177 every week and receive an extra 30% bonus when you play SLOTS.</p>
         </div>
 
-        <div class="game-list" aria-label="Slot game styles">
+        <div class="game-list" aria-label="Additional promotions">
           <article class="game-item">
             <div class="game-label">
-              <strong>GOLD CLASSIC</strong>
-              <span>Classic reels</span>
+              <strong class="promo-amount">UP TO US$177</strong>
+              <strong>WEEKLY REWARD</strong>
+              <span>ទទួលបានរហូតដល់ US$177 រៀងរាល់សប្តាហ៍</span>
             </div>
           </article>
           <article class="game-item">
             <div class="game-label">
-              <strong>JEWEL QUEST</strong>
-              <span>Colorful adventure</span>
-            </div>
-          </article>
-          <article class="game-item">
-            <div class="game-label">
-              <strong>ROYAL SPIN</strong>
-              <span>Premium experience</span>
+              <strong class="promo-amount">EXTRA 30%</strong>
+              <strong>SLOTS BONUS</strong>
+              <span>លេង SLOTS ទទួលបានបូណឹសបន្ថែម 30%</span>
             </div>
           </article>
         </div>
@@ -785,7 +792,7 @@
 
     <footer class="responsible">
       <div class="section-inner">
-        <p>For adults aged 18 and over only. Gambling involves risk. Play responsibly, set limits, and never spend more than you can afford to lose.</p>
+        <p>For adults aged 18 and over only. Promotional eligibility and wagering requirements apply. Gambling involves risk. Play responsibly, set limits, and never spend more than you can afford to lose.</p>
       </div>
     </footer>
   </main>
@@ -793,8 +800,8 @@
   <aside class="sticky-action" aria-label="Open SLOT KH">
     <div class="sticky-inner">
       <div class="sticky-copy">
-        <strong>បូណឹសដាក់ប្រាក់ដំបូងរហូតដល់ <span data-bonus-amount>US$188</span></strong>
-        <span>Register, make your first deposit and claim.</span>
+        <strong>បូណឹសដាក់ប្រាក់ដំបូង 100% · ដាក់កាន់តែច្រើន ទទួលបានកាន់តែច្រើន</strong>
+        <span>100% first deposit match · No bonus cap.</span>
       </div>
       <button class="primary-cta js-purchase" type="button" aria-label="ចុះឈ្មោះ និងទទួលបូណឹស">
         <span>
@@ -812,38 +819,6 @@
     const ADJUST_TRACKER = "https://app.adjust.com/23unfu9c";
     const REDIRECT_URL = "https://886jp.com/?action=register&rs=FXM7FPEF4O";
     const REDIRECT_DELAY = 420;
-    const BONUS_AMOUNTS = ["US$188", "US$288", "US$388", "US$588", "US$888"];
-    const BONUS_STORAGE_KEY = "slots_kh_bonus_amount";
-
-    function getRandomBonusAmount() {
-      try {
-        const savedAmount = window.sessionStorage.getItem(BONUS_STORAGE_KEY);
-        if (BONUS_AMOUNTS.includes(savedAmount)) return savedAmount;
-
-        let randomIndex;
-        if (window.crypto && typeof window.crypto.getRandomValues === "function") {
-          const values = new Uint32Array(1);
-          window.crypto.getRandomValues(values);
-          randomIndex = values[0] % BONUS_AMOUNTS.length;
-        } else {
-          randomIndex = Math.floor(Math.random() * BONUS_AMOUNTS.length);
-        }
-
-        const selectedAmount = BONUS_AMOUNTS[randomIndex];
-        window.sessionStorage.setItem(BONUS_STORAGE_KEY, selectedAmount);
-        return selectedAmount;
-      } catch (error) {
-        return BONUS_AMOUNTS[Math.floor(Math.random() * BONUS_AMOUNTS.length)];
-      }
-    }
-
-    function renderBonusAmount() {
-      const amount = getRandomBonusAmount();
-      document.querySelectorAll("[data-bonus-amount]").forEach((element) => {
-        element.textContent = amount;
-      });
-      return amount;
-    }
 
     function firstParam(search, names) {
       for (const name of names) {
@@ -966,13 +941,9 @@
       button.addEventListener("click", handlePurchaseClick);
     });
 
-    renderBonusAmount();
-
     window.slotsKhLanding = {
       buildAdjustUrl,
-      sendPurchaseEvent,
-      getRandomBonusAmount,
-      renderBonusAmount
+      sendPurchaseEvent
     };
   </script>
 </body>
