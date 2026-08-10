@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="km">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090b08">
+  <meta name="description" content="Premium online slots entertainment for players in Cambodia. Adults 18+ only.">
+  <title>SLOT KH | Online Slots Entertainment</title>
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1274653351309614');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1274653351309614&ev=PageView&noscript=1"
+    alt=""></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f8f3e8;
+      --muted: #b7b2a7;
+      --gold: #f4bf4f;
+      --gold-strong: #ffd978;
+      --emerald: #0c7557;
+      --ruby: #a51f39;
+      --surface: #10140f;
+      --surface-soft: #171c15;
+      --line: rgba(244, 191, 79, 0.24);
+      --page-width: 1180px;
+      --cta-height: 92px;
+      font-family: "Noto Sans Khmer", "Khmer Sangam MN", "Leelawadee UI", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #070807;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      padding-bottom: calc(var(--cta-height) + env(safe-area-inset-bottom));
+      background: #070807;
+      color: var(--ink);
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page-shell {
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      min-height: min(820px, calc(100svh - 40px));
+      isolation: isolate;
+    }
+
+    .hero-media,
+    .hero-shade {
+      position: absolute;
+      inset: 0;
+    }
+
+    .hero-media {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 57%;
+      z-index: -3;
+    }
+
+    .hero-shade {
+      z-index: -2;
+      background:
+        linear-gradient(180deg, rgba(5, 8, 6, 0.82) 0%, rgba(5, 8, 6, 0.23) 34%, rgba(5, 8, 6, 0.12) 58%, #070807 100%),
+        linear-gradient(90deg, rgba(6, 8, 6, 0.38), transparent 55%, rgba(6, 8, 6, 0.34));
+    }
+
+    .hero-inner,
+    .section-inner {
+      width: min(var(--page-width), calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      min-height: 78px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid rgba(255, 217, 120, 0.5);
+      border-radius: 50%;
+      background: #11170f;
+      color: var(--gold-strong);
+      box-shadow: inset 0 0 0 4px rgba(244, 191, 79, 0.09);
+      font-size: 18px;
+    }
+
+    .age-mark {
+      display: inline-flex;
+      min-height: 34px;
+      padding: 0 12px;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 4px;
+      background: rgba(7, 8, 7, 0.48);
+      color: #fff;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .hero-copy {
+      width: min(620px, 100%);
+      padding-top: clamp(46px, 8vh, 92px);
+    }
+
+    .eyebrow {
+      display: flex;
+      margin: 0 0 15px;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold-strong);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+      content: "";
+    }
+
+    h1 {
+      max-width: 610px;
+      margin: 0;
+      font-size: clamp(40px, 7vw, 78px);
+      line-height: 1.04;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .headline-sub {
+      display: block;
+      margin-top: 8px;
+      color: var(--gold-strong);
+      font-family: Arial, sans-serif;
+      font-size: 0.62em;
+      font-weight: 900;
+    }
+
+    .hero-description {
+      max-width: 560px;
+      margin: 20px 0 0;
+      color: #e4dfd4;
+      font-size: clamp(16px, 2.2vw, 19px);
+      line-height: 1.72;
+    }
+
+    .bonus-offer {
+      display: grid;
+      width: min(410px, 100%);
+      margin-top: 18px;
+      padding: 13px 0 13px 16px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 5px 18px;
+      border-left: 3px solid var(--gold);
+      background: rgba(7, 10, 8, 0.7);
+    }
+
+    .bonus-offer span,
+    .bonus-offer strong,
+    .bonus-offer small {
+      display: block;
+      letter-spacing: 0;
+    }
+
+    .bonus-offer span {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .bonus-offer strong {
+      padding-right: 16px;
+      grid-row: 1 / span 2;
+      grid-column: 2;
+      color: var(--gold-strong);
+      font-family: Arial, sans-serif;
+      font-size: clamp(27px, 4vw, 38px);
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .bonus-offer small {
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      line-height: 1.4;
+    }
+
+    .hero-action {
+      display: flex;
+      margin-top: 20px;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .primary-cta {
+      display: inline-grid;
+      min-width: 240px;
+      min-height: 62px;
+      padding: 8px 24px;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      border: 1px solid #ffe5a2;
+      border-radius: 6px;
+      background: var(--gold);
+      box-shadow: 0 14px 36px rgba(244, 191, 79, 0.21);
+      color: #171105;
+      cursor: pointer;
+      font-weight: 900;
+      text-align: left;
+      transition: transform 160ms ease, background-color 160ms ease;
+    }
+
+    .primary-cta:hover {
+      background: var(--gold-strong);
+      transform: translateY(-2px);
+    }
+
+    .primary-cta:active {
+      transform: translateY(0);
+    }
+
+    .primary-cta:disabled {
+      cursor: wait;
+      opacity: 0.76;
+      transform: none;
+    }
+
+    .primary-cta strong,
+    .primary-cta small {
+      display: block;
+      letter-spacing: 0;
+    }
+
+    .primary-cta strong {
+      font-size: 17px;
+    }
+
+    .primary-cta small {
+      margin-top: 2px;
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      opacity: 0.68;
+    }
+
+    .cta-arrow {
+      font-family: Arial, sans-serif;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .hero-note {
+      margin: 0;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .benefit-band {
+      position: relative;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #0c100b;
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .benefit {
+      min-height: 120px;
+      padding: 24px clamp(18px, 3vw, 34px);
+      border-right: 1px solid var(--line);
+    }
+
+    .benefit:last-child {
+      border-right: 0;
+    }
+
+    .benefit-index {
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .benefit h2 {
+      margin: 8px 0 4px;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .benefit p {
+      margin: 0;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .experience {
+      padding: 66px 0 72px;
+      background:
+        linear-gradient(90deg, rgba(12, 117, 87, 0.09), transparent 44%),
+        #070807;
+    }
+
+    .experience-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      align-items: end;
+      gap: 48px;
+    }
+
+    .section-kicker {
+      margin: 0 0 12px;
+      color: var(--gold);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .experience h2 {
+      margin: 0;
+      font-size: clamp(30px, 4.5vw, 52px);
+      line-height: 1.13;
+      letter-spacing: 0;
+    }
+
+    .experience-copy > p:last-child {
+      max-width: 520px;
+      margin: 17px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .game-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .game-item {
+      position: relative;
+      min-height: 176px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface-soft);
+    }
+
+    .game-item::before {
+      position: absolute;
+      inset: 0;
+      background-image: url("assets/kh-slots-hero.jpg");
+      background-position: center 66%;
+      background-size: 360%;
+      content: "";
+      filter: saturate(0.94);
+      transform: scale(1.04);
+    }
+
+    .game-item:nth-child(2)::before {
+      background-position: 37% 71%;
+    }
+
+    .game-item:nth-child(3)::before {
+      background-position: 63% 77%;
+    }
+
+    .game-item::after {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 22%, rgba(6, 8, 6, 0.94) 100%);
+      content: "";
+    }
+
+    .game-label {
+      position: absolute;
+      right: 14px;
+      bottom: 13px;
+      left: 14px;
+      z-index: 1;
+    }
+
+    .game-label strong,
+    .game-label span {
+      display: block;
+    }
+
+    .game-label strong {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    .game-label span {
+      margin-top: 3px;
+      color: var(--gold-strong);
+      font-size: 11px;
+    }
+
+    .responsible {
+      padding: 22px 0 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: #080908;
+      color: #898b84;
+      text-align: center;
+    }
+
+    .responsible p {
+      max-width: 760px;
+      margin: 0 auto;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .sticky-action {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 20;
+      min-height: calc(var(--cta-height) + env(safe-area-inset-bottom));
+      padding: 12px max(16px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      border-top: 1px solid rgba(244, 191, 79, 0.28);
+      background: rgba(8, 10, 8, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .sticky-inner {
+      display: grid;
+      width: min(720px, 100%);
+      margin: 0 auto;
+      grid-template-columns: 1fr minmax(220px, 300px);
+      align-items: center;
+      gap: 18px;
+    }
+
+    .sticky-copy strong,
+    .sticky-copy span {
+      display: block;
+    }
+
+    .sticky-copy strong {
+      font-size: 15px;
+    }
+
+    .sticky-copy span {
+      margin-top: 2px;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+    }
+
+    .sticky-copy strong [data-bonus-amount] {
+      display: inline;
+      color: var(--gold-strong);
+      font-family: Arial, sans-serif;
+      white-space: nowrap;
+    }
+
+    .sticky-action .primary-cta {
+      width: 100%;
+      min-height: 58px;
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --cta-height: 84px;
+      }
+
+      .hero {
+        min-height: 830px;
+      }
+
+      .hero-inner,
+      .section-inner {
+        width: min(100% - 28px, 620px);
+      }
+
+      .topbar {
+        min-height: 66px;
+      }
+
+      .brand {
+        font-size: 18px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+      }
+
+      .hero-copy {
+        padding-top: 38px;
+      }
+
+      h1 {
+        font-size: clamp(38px, 12vw, 58px);
+      }
+
+      .hero-action {
+        display: block;
+      }
+
+      .bonus-offer {
+        width: 100%;
+      }
+
+      .hero-action .primary-cta {
+        width: 100%;
+      }
+
+      .hero-note {
+        margin-top: 12px;
+        text-align: center;
+      }
+
+      .benefits {
+        grid-template-columns: 1fr;
+      }
+
+      .benefit {
+        display: grid;
+        min-height: 88px;
+        padding: 18px 4px;
+        grid-template-columns: 36px 1fr;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .benefit:last-child {
+        border-bottom: 0;
+      }
+
+      .benefit h2 {
+        margin: 0 0 3px;
+      }
+
+      .benefit p {
+        grid-column: 2;
+      }
+
+      .experience {
+        padding: 48px 0 52px;
+      }
+
+      .experience-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .game-list {
+        gap: 8px;
+      }
+
+      .game-item {
+        min-height: 142px;
+      }
+
+      .game-label {
+        right: 9px;
+        bottom: 9px;
+        left: 9px;
+      }
+
+      .game-label strong {
+        font-size: 11px;
+      }
+
+      .game-label span {
+        display: none;
+      }
+
+      .sticky-inner {
+        display: block;
+      }
+
+      .sticky-copy {
+        display: none;
+      }
+
+      .sticky-action .primary-cta {
+        min-height: 60px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .hero {
+        min-height: 790px;
+      }
+
+      .hero-description {
+        font-size: 15px;
+      }
+
+      .game-list {
+        grid-template-columns: 1fr;
+      }
+
+      .game-item {
+        min-height: 122px;
+      }
+
+      .game-item::before {
+        background-size: 230%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .primary-cta {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-media" src="assets/kh-slots-hero.jpg" alt="Premium gold slot machine with colorful jewel symbols">
+      <div class="hero-shade" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <header class="topbar">
+          <div class="brand" aria-label="SLOT KH">
+            <span class="brand-mark" aria-hidden="true">7</span>
+            <span>SLOT KH</span>
+          </div>
+          <span class="age-mark">18+ ONLY</span>
+        </header>
+
+        <div class="hero-copy">
+          <p class="eyebrow">Register · Deposit · Claim</p>
+          <h1 id="hero-title">
+            ចុះឈ្មោះ និងទទួលបានបូណឹសស្វាគមន៍
+            <span class="headline-sub">FIRST DEPOSIT BONUS</span>
+          </h1>
+          <p class="hero-description">
+            បង្កើតគណនី បំពេញការដាក់ប្រាក់លើកដំបូង ហើយទទួលបានបូណឹសស្វាគមន៍សម្រាប់ចាប់ផ្តើមលេង។
+          </p>
+
+          <div class="bonus-offer" aria-label="First deposit bonus">
+            <span>បូណឹសដាក់ប្រាក់លើកដំបូងរហូតដល់</span>
+            <strong data-bonus-amount>US$188</strong>
+            <small>RANDOM PROMOTIONAL TIER · BONUS TERMS APPLY</small>
+          </div>
+
+          <div class="hero-action">
+            <button class="primary-cta js-purchase" type="button" aria-label="ចុះឈ្មោះ និងទទួលបូណឹស">
+              <span>
+                <strong>ចុះឈ្មោះ ទទួលបូណឹស</strong>
+                <small>REGISTER &amp; CLAIM BONUS</small>
+              </span>
+              <span class="cta-arrow" aria-hidden="true">›</span>
+            </button>
+            <p class="hero-note">18+ · Bonus terms apply</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefit-band" aria-label="Registration steps">
+      <div class="section-inner benefits">
+        <article class="benefit">
+          <span class="benefit-index">01</span>
+          <h2>ចុះឈ្មោះ</h2>
+          <p>Create your player account.</p>
+        </article>
+        <article class="benefit">
+          <span class="benefit-index">02</span>
+          <h2>ដាក់ប្រាក់លើកដំបូង</h2>
+          <p>Complete your first deposit.</p>
+        </article>
+        <article class="benefit">
+          <span class="benefit-index">03</span>
+          <h2>ទទួលបានបូណឹស</h2>
+          <p>Claim your welcome reward.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="experience" aria-labelledby="experience-title">
+      <div class="section-inner experience-grid">
+        <div class="experience-copy">
+          <p class="section-kicker">Choose your style</p>
+          <h2 id="experience-title">ជ្រើសរើសហ្គេមដែលសាកសមនឹងអ្នក</h2>
+          <p>Classic reels, jewel adventures and premium jackpot-inspired themes are ready to explore in a polished mobile experience.</p>
+        </div>
+
+        <div class="game-list" aria-label="Slot game styles">
+          <article class="game-item">
+            <div class="game-label">
+              <strong>GOLD CLASSIC</strong>
+              <span>Classic reels</span>
+            </div>
+          </article>
+          <article class="game-item">
+            <div class="game-label">
+              <strong>JEWEL QUEST</strong>
+              <span>Colorful adventure</span>
+            </div>
+          </article>
+          <article class="game-item">
+            <div class="game-label">
+              <strong>ROYAL SPIN</strong>
+              <span>Premium experience</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <footer class="responsible">
+      <div class="section-inner">
+        <p>For adults aged 18 and over only. Gambling involves risk. Play responsibly, set limits, and never spend more than you can afford to lose.</p>
+      </div>
+    </footer>
+  </main>
+
+  <aside class="sticky-action" aria-label="Open SLOT KH">
+    <div class="sticky-inner">
+      <div class="sticky-copy">
+        <strong>បូណឹសដាក់ប្រាក់ដំបូងរហូតដល់ <span data-bonus-amount>US$188</span></strong>
+        <span>Register, make your first deposit and claim.</span>
+      </div>
+      <button class="primary-cta js-purchase" type="button" aria-label="ចុះឈ្មោះ និងទទួលបូណឹស">
+        <span>
+          <strong>ចុះឈ្មោះ ទទួលបូណឹស</strong>
+          <small>REGISTER &amp; CLAIM BONUS</small>
+        </span>
+        <span class="cta-arrow" aria-hidden="true">›</span>
+      </button>
+    </div>
+  </aside>
+
+  <script>
+    const PIXEL_ID = "1274653351309614";
+    const ACCESS_TOKEN = "EAAYZBZC3ZCKRg4BSGhNCZBsoZBXSZBNOPnLVVedTJcdsgGefg2lWVjnzxKObrdOV0HwOIOt5nrZBKD1kMZCkIbZBheMnIEp9gAeUUTNZAuooUyNLtzRmhVOmjbUH92vhxLD9K4TrSnPkB2nOn7Q0ed0EsMFkbKQbp7mOIVo9dDeQiZBkZAjYxyjZATaswDXuPv8FE15da3AZDZD";
+    const ADJUST_TRACKER = "https://app.adjust.com/23unfu9c";
+    const REDIRECT_URL = "https://886jp.com/?action=register&rs=FXM7FPEF4O";
+    const REDIRECT_DELAY = 420;
+    const BONUS_AMOUNTS = ["US$188", "US$288", "US$388", "US$588", "US$888"];
+    const BONUS_STORAGE_KEY = "slots_kh_bonus_amount";
+
+    function getRandomBonusAmount() {
+      try {
+        const savedAmount = window.sessionStorage.getItem(BONUS_STORAGE_KEY);
+        if (BONUS_AMOUNTS.includes(savedAmount)) return savedAmount;
+
+        let randomIndex;
+        if (window.crypto && typeof window.crypto.getRandomValues === "function") {
+          const values = new Uint32Array(1);
+          window.crypto.getRandomValues(values);
+          randomIndex = values[0] % BONUS_AMOUNTS.length;
+        } else {
+          randomIndex = Math.floor(Math.random() * BONUS_AMOUNTS.length);
+        }
+
+        const selectedAmount = BONUS_AMOUNTS[randomIndex];
+        window.sessionStorage.setItem(BONUS_STORAGE_KEY, selectedAmount);
+        return selectedAmount;
+      } catch (error) {
+        return BONUS_AMOUNTS[Math.floor(Math.random() * BONUS_AMOUNTS.length)];
+      }
+    }
+
+    function renderBonusAmount() {
+      const amount = getRandomBonusAmount();
+      document.querySelectorAll("[data-bonus-amount]").forEach((element) => {
+        element.textContent = amount;
+      });
+      return amount;
+    }
+
+    function firstParam(search, names) {
+      for (const name of names) {
+        const value = search.get(name);
+        if (value) return value;
+      }
+      return "";
+    }
+
+    function formatLevel(name, id, fallbackName, fallbackId) {
+      if (name && id) return `${name} (${id})`;
+      if (name) return name;
+      if (id) return `(${id})`;
+      return `${fallbackName} (${fallbackId})`;
+    }
+
+    function buildAdjustUrl() {
+      const incoming = new URLSearchParams(window.location.search);
+      const target = new URL(ADJUST_TRACKER);
+
+      const campaign = firstParam(incoming, ["campaign"])
+        || formatLevel(
+          firstParam(incoming, ["campaign_name", "fb_campaign_name"]),
+          firstParam(incoming, ["campaign_id", "fb_campaign_id"]),
+          "{{campaign.name}}",
+          "{{campaign.id}}"
+        );
+      const adgroup = firstParam(incoming, ["adgroup"])
+        || formatLevel(
+          firstParam(incoming, ["adset_name", "adgroup_name", "fb_adset_name"]),
+          firstParam(incoming, ["adset_id", "adgroup_id", "fb_adset_id"]),
+          "{{adset.name}}",
+          "{{adset.id}}"
+        );
+      const creative = firstParam(incoming, ["creative"])
+        || formatLevel(
+          firstParam(incoming, ["ad_name", "creative_name", "fb_ad_name"]),
+          firstParam(incoming, ["ad_id", "creative_id", "fb_ad_id"]),
+          "{{ad.name}}",
+          "{{ad.id}}"
+        );
+
+      target.searchParams.set("campaign", campaign);
+      target.searchParams.set("adgroup", adgroup);
+      target.searchParams.set("creative", creative);
+      target.searchParams.set("redirect", REDIRECT_URL);
+      target.searchParams.set("pixel_id", PIXEL_ID);
+      target.searchParams.set("token", ACCESS_TOKEN);
+
+      const fbclid = firstParam(incoming, ["fbclid"]);
+      if (fbclid) target.searchParams.set("fbclid", fbclid);
+
+      return target.toString();
+    }
+
+    function createEventId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+      return `purchase-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function sendPurchaseEvent(eventId) {
+      if (typeof window.fbq === "function") {
+        window.fbq("track", "Purchase", {
+          value: 0.00,
+          currency: "USD"
+        }, {
+          eventID: eventId
+        });
+      }
+
+      const endpoint = `https://graph.facebook.com/${PIXEL_ID}/events?access_token=${encodeURIComponent(ACCESS_TOKEN)}`;
+      const payload = {
+        data: [
+          {
+            event_name: "Purchase",
+            event_time: Math.floor(Date.now() / 1000),
+            event_id: eventId,
+            action_source: "website",
+            event_source_url: window.location.href,
+            user_data: {
+              client_user_agent: navigator.userAgent
+            },
+            custom_data: {
+              value: 0.00,
+              currency: "USD"
+            }
+          }
+        ]
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(() => {});
+    }
+
+    function handlePurchaseClick(event) {
+      const button = event.currentTarget;
+      const targetUrl = buildAdjustUrl();
+      const eventId = createEventId();
+
+      document.querySelectorAll(".js-purchase").forEach((item) => {
+        item.disabled = true;
+        item.setAttribute("aria-busy", "true");
+      });
+
+      sendPurchaseEvent(eventId);
+      window.setTimeout(() => window.location.assign(targetUrl), REDIRECT_DELAY);
+
+      if (button) button.blur();
+    }
+
+    document.querySelectorAll(".js-purchase").forEach((button) => {
+      button.addEventListener("click", handlePurchaseClick);
+    });
+
+    renderBonusAmount();
+
+    window.slotsKhLanding = {
+      buildAdjustUrl,
+      sendPurchaseEvent,
+      getRandomBonusAmount,
+      renderBonusAmount
+    };
+  </script>
+</body>
+</html>
