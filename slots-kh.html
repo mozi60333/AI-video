@@ -730,7 +730,7 @@
           </div>
 
           <div class="hero-action">
-            <button class="primary-cta js-purchase" type="button" aria-label="ចុះឈ្មោះ និងទទួលបូណឹស">
+            <button class="primary-cta js-lead" type="button" aria-label="ចុះឈ្មោះ និងទទួលបូណឹស">
               <span>
                 <strong>ចុះឈ្មោះ ទទួលបូណឹស</strong>
                 <small>REGISTER &amp; CLAIM BONUS</small>
@@ -803,7 +803,7 @@
         <strong>បូណឹសដាក់ប្រាក់ដំបូង 100% · ដាក់កាន់តែច្រើន ទទួលបានកាន់តែច្រើន</strong>
         <span>100% first deposit match · No bonus cap.</span>
       </div>
-      <button class="primary-cta js-purchase" type="button" aria-label="ចុះឈ្មោះ និងទទួលបូណឹស">
+      <button class="primary-cta js-lead" type="button" aria-label="ចុះឈ្មោះ និងទទួលបូណឹស">
         <span>
           <strong>ចុះឈ្មោះ ទទួលបូណឹស</strong>
           <small>REGISTER &amp; CLAIM BONUS</small>
@@ -878,15 +878,12 @@
       if (window.crypto && typeof window.crypto.randomUUID === "function") {
         return window.crypto.randomUUID();
       }
-      return `purchase-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      return `lead-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     }
 
-    function sendPurchaseEvent(eventId) {
+    function sendLeadEvent(eventId) {
       if (typeof window.fbq === "function") {
-        window.fbq("track", "Purchase", {
-          value: 0.00,
-          currency: "USD"
-        }, {
+        window.fbq("track", "Lead", {}, {
           eventID: eventId
         });
       }
@@ -895,17 +892,13 @@
       const payload = {
         data: [
           {
-            event_name: "Purchase",
+            event_name: "Lead",
             event_time: Math.floor(Date.now() / 1000),
             event_id: eventId,
             action_source: "website",
             event_source_url: window.location.href,
             user_data: {
               client_user_agent: navigator.userAgent
-            },
-            custom_data: {
-              value: 0.00,
-              currency: "USD"
             }
           }
         ]
@@ -921,29 +914,29 @@
       }).catch(() => {});
     }
 
-    function handlePurchaseClick(event) {
+    function handleLeadClick(event) {
       const button = event.currentTarget;
       const targetUrl = buildAdjustUrl();
       const eventId = createEventId();
 
-      document.querySelectorAll(".js-purchase").forEach((item) => {
+      document.querySelectorAll(".js-lead").forEach((item) => {
         item.disabled = true;
         item.setAttribute("aria-busy", "true");
       });
 
-      sendPurchaseEvent(eventId);
+      sendLeadEvent(eventId);
       window.setTimeout(() => window.location.assign(targetUrl), REDIRECT_DELAY);
 
       if (button) button.blur();
     }
 
-    document.querySelectorAll(".js-purchase").forEach((button) => {
-      button.addEventListener("click", handlePurchaseClick);
+    document.querySelectorAll(".js-lead").forEach((button) => {
+      button.addEventListener("click", handleLeadClick);
     });
 
     window.slotsKhLanding = {
       buildAdjustUrl,
-      sendPurchaseEvent
+      sendLeadEvent
     };
   </script>
 </body>
