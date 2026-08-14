@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="origin">
+    <meta name="theme-color" content="#0f8f68">
+    <title>Redirecting</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f8faf9;
+        --text: #202124;
+        --muted: #5f6368;
+        --line: #dde3df;
+        --accent: #0f8f68;
+        --accent-dark: #0b7556;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        margin: 0;
+        place-items: center;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      main {
+        width: min(420px, calc(100% - 32px));
+        padding: 28px 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        text-align: center;
+      }
+
+      .loader {
+        width: 42px;
+        height: 42px;
+        margin: 0 auto 18px;
+        border: 4px solid #d8ebe4;
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      .slots-logo {
+        display: flex;
+        width: 148px;
+        height: 64px;
+        gap: 4px;
+        margin: 0 auto 18px;
+        padding: 6px;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #c89117;
+        border-radius: 8px;
+        background: #202124;
+        box-shadow: 0 0 0 3px #f7dfa0, 0 8px 16px rgba(32, 33, 36, 0.14);
+      }
+
+      .slots-logo span {
+        display: grid;
+        width: 40px;
+        height: 48px;
+        place-items: center;
+        border-radius: 4px;
+        background: #fff8e3;
+        color: #c22d2d;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 40px;
+        font-weight: 900;
+        line-height: 1;
+        text-shadow: 0 1px 0 #fff;
+        animation: reel-bounce 1.05s ease-in-out infinite;
+      }
+
+      .slots-logo span:nth-child(2) {
+        animation-delay: 0.14s;
+      }
+
+      .slots-logo span:nth-child(3) {
+        animation-delay: 0.28s;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        line-height: 1.3;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .home-link {
+        display: flex;
+        width: fit-content;
+        min-height: 40px;
+        margin: 22px auto 0;
+        padding: 0 16px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: inherit;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .home-link:hover {
+        border-color: var(--accent);
+        color: var(--accent-dark);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes reel-bounce {
+        0%, 100% {
+          transform: translateY(0) scale(1);
+        }
+
+        50% {
+          transform: translateY(-5px) scale(1.06);
+        }
+      }
+    </style>
+    <script>
+      const ANDROID_URL = "https://ad.xptirty6.click/?channel_id=10002";
+      const IOS_URL = "https://app.adjust.com/22jt7yhg";
+      const HOME_URL = "https://ad.xptirty6.click/?channel_id=10002";
+      const REDIRECT_DELAY = 300;
+      const FIXED_ANDROID_PARAMS = {
+        channel_id: "10002"
+      };
+
+      function getForwardParams() {
+        const source = new URLSearchParams(window.location.search);
+        const params = new URLSearchParams();
+
+        source.forEach((value, key) => params.append(key, value));
+
+        return params;
+      }
+
+      function buildTargetUrl(baseUrl, fixedParams, forwardParams) {
+        if (!baseUrl) return "";
+
+        const target = new URL(baseUrl);
+        forwardParams.forEach((value, key) => target.searchParams.append(key, value));
+        Object.entries(fixedParams).forEach(([key, value]) => target.searchParams.set(key, value));
+        return target.toString();
+      }
+
+      function detectDevice() {
+        const forcedDevice = new URLSearchParams(window.location.search).get("device");
+        if (forcedDevice === "android") return "android";
+        if (forcedDevice === "ios" || forcedDevice === "apple") return "apple";
+        if (forcedDevice === "other") return "other";
+
+        const ua = navigator.userAgent || "";
+        const platform = navigator.platform || "";
+        const isAndroid = /android/i.test(ua);
+        const isIOS = /iphone|ipad|ipod/i.test(ua);
+        const isIPadOS = platform === "MacIntel" && navigator.maxTouchPoints > 1;
+        const isMac = /macintosh|mac os x/i.test(ua) && !isAndroid;
+
+        if (isAndroid) return "android";
+        if (isIOS || isIPadOS || isMac) return "apple";
+        return "other";
+      }
+
+      function showHomeEntry(messageText, forwardParams = new URLSearchParams()) {
+        const message = document.getElementById("message");
+        const homeLink = document.getElementById("home-link");
+
+        if (message) message.textContent = messageText;
+        if (homeLink) {
+          homeLink.href = buildTargetUrl(HOME_URL, FIXED_ANDROID_PARAMS, forwardParams);
+          homeLink.hidden = false;
+        }
+      }
+
+      function redirect() {
+        const forwardParams = getForwardParams();
+        if (!forwardParams.get("fbclid")) {
+          document.documentElement.dataset.device = "waiting";
+          showHomeEntry("Loading... Please wait.", forwardParams);
+          return;
+        }
+
+        const device = detectDevice();
+        const target = device === "android"
+          ? buildTargetUrl(ANDROID_URL, FIXED_ANDROID_PARAMS, forwardParams)
+          : device === "apple"
+            ? buildTargetUrl(IOS_URL, {}, forwardParams)
+            : "";
+
+        document.documentElement.dataset.device = device;
+
+        if (target) {
+          const message = document.getElementById("message");
+          if (message) message.textContent = device === "android" ? "Android device detected. Redirecting..." : "iOS device detected. Redirecting...";
+          window.setTimeout(() => window.location.replace(target), REDIRECT_DELAY);
+          return;
+        }
+
+        showHomeEntry("Loading... Please wait.", forwardParams);
+      }
+
+      window.addEventListener("DOMContentLoaded", redirect);
+    </script>
+  </head>
+  <body>
+    <main>
+      <div class="slots-logo" aria-label="777 Slots">
+        <span>7</span><span>7</span><span>7</span>
+      </div>
+      <div class="loader" aria-hidden="true"></div>
+      <h1>Loading... Please wait.</h1>
+      <a class="home-link" id="home-link" href="https://ad.xptirty6.click/?channel_id=10002" hidden>Return to home</a>
+    </main>
+  </body>
+</html>
