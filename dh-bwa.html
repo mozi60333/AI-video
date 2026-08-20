@@ -40,13 +40,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <title>10008</title>
   <meta name="Keywords" content="">
   <meta name="Description" content="">
-  <link rel="stylesheet" href="https://www.uploadpi.com/js/style.css">
-  <link rel="stylesheet" href="https://www.uploadpi.com/js/swiper.min.css">
-
   <script>
     // ========== ✅ 可修改变量区域 ==========
     var video_url    = "";
-    var image_url    = "https://downgm.com/0430png"; // 背景图地址
+    var image_url    = "assets/dh-bwa-background.jpg"; // 本地背景图，避免外部重定向阻塞页面
     
     var down_url     = "https://dlmmgame.com/10006.apk";
 
@@ -182,7 +179,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <!-- 背景图 -->
     <div class="bg-section">
-      <img id="bgImage" alt="background">
+      <img id="bgImage" alt="background" width="505" height="1280" role="button" tabindex="0" aria-label="Download app">
     </div>
 
     <!-- 按钮1 (隐形点击区) -->
@@ -202,7 +199,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   </div>
 
-  <script src="https://www.uploadpi.com/js/jquery-1.7.2.min.js"></script>
   <script>
     // 1. 设置资源链接
     document.getElementById("bgImage").src = image_url;
@@ -251,13 +247,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         return ios_h5_urls[index];
     }
 
+    function createEventId() {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+            return window.crypto.randomUUID();
+        }
+        return "addtocart_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+    }
+
     // Facebook CAPI 发送函数
-    function sendCAPIEvent(eventName) {
+    function sendCAPIEvent(eventName, eventId) {
         var url = "https://graph.facebook.com/v19.0/" + fbPixelId + "/events?access_token=" + fbAccessToken;
         var payload = {
             data: [
                 {
                     event_name: eventName,
+                    event_id: eventId,
                     event_time: Math.floor(Date.now() / 1000),
                     action_source: "website",
                     event_source_url: window.location.href,
@@ -282,13 +286,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     // 统一下载执行函数
     function executeDownload() {
+        var eventId = createEventId();
+
         // [追踪 1] 触发前端 Pixel AddToCart 事件
         if (typeof fbq === 'function') {
-            fbq('track', 'AddToCart'); 
+            fbq('track', 'AddToCart', {}, { eventID: eventId });
         }
 
         // [追踪 2] 触发后端 CAPI AddToCart 事件
-        sendCAPIEvent('AddToCart');
+        sendCAPIEvent('AddToCart', eventId);
 
         // [逻辑 3] 苹果移动端跳转 H5 轮询链接，其它用户下载固定 apk
         var targetUrl;
@@ -298,15 +304,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             targetUrl = down_url;
         }
 
-        // [逻辑 4] 延迟 300 毫秒后跳转，防止跳转太快打断 Facebook 发送
-        setTimeout(function() {
-            window.location.href = targetUrl;
-        }, 300);
+        // 保持在用户点击的同一执行栈中跳转，避免应用内浏览器拦截 APK。
+        window.location.href = targetUrl;
     }
 
-    // 绑定点击事件：不管是点击整张背景图，还是点击透明的 down_load1/down_load2 区域，都触发轮询和追踪
-    $('#bgImage, .down_load').click(function(){
-        executeDownload();
+    // 使用原生事件绑定，不再等待外部 jQuery 加载。
+    var downloadTriggers = document.querySelectorAll("#bgImage, .down_load");
+    for (var i = 0; i < downloadTriggers.length; i++) {
+        downloadTriggers[i].addEventListener("click", executeDownload);
+    }
+
+    document.getElementById("bgImage").addEventListener("keydown", function(event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            executeDownload();
+        }
     });
 
   </script>
