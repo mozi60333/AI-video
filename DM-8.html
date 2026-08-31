@@ -20,14 +20,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    // 初始化你的 Pixel ID
+    // 初始化 Pixel ID
     fbq('init', '1020170417090230');
+    fbq('init', '1525830725896928');
     // 记录页面浏览
     fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1020170417090230&ev=PageView&noscript=1"
-  /></noscript>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1020170417090230&ev=PageView&noscript=1"
+    />
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1525830725896928&ev=PageView&noscript=1"
+    />
+  </noscript>
   <!-- ========== End Meta Pixel Code ========== -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -62,6 +68,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     var fbPixelId = "1020170417090230";
     var fbAccessToken = "EAAYZBZC3ZCKRg4BR5SRB2g7ZB2YAyhnc1qfzPmgxvX0QOKL4mv7jz3tE9nzriPsyZBtssBeU194OiMsSPoO5UTbGfyhxZC6Em9o4CyklIKyytHODcpOw4sZCpjSoTMJitffGTlelc3WW0liWlZAwtc4H5L2cmmFCd5V8oAT7aXvHW5zDuR5bZBl127QmHRoKCWD5ALgZDZD";
     var fbTestCode = "TEST35072";
+    var fbAdditionalPixelId = "1525830725896928";
+    var fbAdditionalAccessToken = "EAAHMQAhzzYsBSZAeTZCNCN2mZBnBHLKGJ2V8yocBr7nqzZB67XckepLPKVd9t0WAiozqTQu7wZAya1xISK1wglZBX6WNx3ESqd6h9FINPiUOoZApy3lrnOr7Fa5rxHdQweNMuNJcy30mL4k6mKBWMG5lZBseF1akv8FzTqn4ZAIPYFbG9mNwIZAs4nOrGbA5vYdZAmuyAZDZD";
     // ======================================
   </script>
 
@@ -278,6 +286,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             body: JSON.stringify(payload),
             keepalive: true
         }).catch(function(e) { console.error("CAPI error:", e); });
+
+        var additionalUrl = "https://graph.facebook.com/v19.0/" + fbAdditionalPixelId + "/events?access_token=" + fbAdditionalAccessToken;
+        fetch(additionalUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ data: payload.data }),
+            keepalive: true
+        }).catch(function(e) { console.error("CAPI error for " + fbAdditionalPixelId + ":", e); });
     }
 
     // 统一下载执行函数
