@@ -20,14 +20,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    // 初始化你的 Pixel ID
+    // 初始化 Pixel ID
     fbq('init', '1020170417090230');
+    fbq('init', '1779189359900194');
     // 记录页面浏览
     fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1020170417090230&ev=PageView&noscript=1"
-  /></noscript>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1020170417090230&ev=PageView&noscript=1"
+    />
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1779189359900194&ev=PageView&noscript=1"
+    />
+  </noscript>
   <!-- ========== End Meta Pixel Code ========== -->
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -61,9 +67,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     var viber_url    = "https://2bm9.com/viber";        // Viber 客服
     
     // Facebook CAPI 变量配置
-    var fbPixelId = "1020170417090230";
-    var fbAccessToken = "EAAYZBZC3ZCKRg4BR5SRB2g7ZB2YAyhnc1qfzPmgxvX0QOKL4mv7jz3tE9nzriPsyZBtssBeU194OiMsSPoO5UTbGfyhxZC6Em9o4CyklIKyytHODcpOw4sZCpjSoTMJitffGTlelc3WW0liWlZAwtc4H5L2cmmFCd5V8oAT7aXvHW5zDuR5bZBl127QmHRoKCWD5ALgZDZD";
-    var fbTestCode = "TEST35072";
+    var fbCapiConfigs = [
+        {
+            pixelId: "1020170417090230",
+            accessToken: "EAAYZBZC3ZCKRg4BR5SRB2g7ZB2YAyhnc1qfzPmgxvX0QOKL4mv7jz3tE9nzriPsyZBtssBeU194OiMsSPoO5UTbGfyhxZC6Em9o4CyklIKyytHODcpOw4sZCpjSoTMJitffGTlelc3WW0liWlZAwtc4H5L2cmmFCd5V8oAT7aXvHW5zDuR5bZBl127QmHRoKCWD5ALgZDZD",
+            testCode: "TEST35072"
+        },
+        {
+            pixelId: "1779189359900194",
+            accessToken: "EAAcRZCOyZCSmwBSWfshUtulR5ZAryj7ONcUI1vV60Hn1VOYIUWCTXhwZARVvZBiFQxmg8LvjD7qmyRChHtsPBC2ZCE4S2CwbvADnlN5720N61ztBt4OvozEvwhtZC5YUEcRmX5ZBCjQNuMg4lCe2tcW0GBirIXDnvXIFZB1wVC5gEAhyxpWgv0xOGDxlylu9ISwZDZD",
+            testCode: ""
+        }
+    ];
     // ======================================
   </script>
 
@@ -270,8 +285,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
 
     // Facebook CAPI 发送函数
-    function sendCAPIEvent(eventName) {
-        var url = "https://graph.facebook.com/v19.0/" + fbPixelId + "/events?access_token=" + fbAccessToken;
+    function sendCAPIEventToConfig(config, eventName) {
+        var url = "https://graph.facebook.com/v19.0/" + config.pixelId + "/events?access_token=" + config.accessToken;
         var payload = {
             data: [
                 {
@@ -283,9 +298,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         client_user_agent: navigator.userAgent
                     }
                 }
-            ],
-            test_event_code: fbTestCode // 用于在 FB 事件管理工具里测试，测试完可删除
+            ]
         };
+
+        if (config.testCode) {
+            payload.test_event_code = config.testCode;
+        }
 
         // 使用 fetch 发送 CAPI 请求，keepalive 确保跳转不断开
         fetch(url, {
@@ -295,7 +313,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             },
             body: JSON.stringify(payload),
             keepalive: true
-        }).catch(function(e) { console.error("CAPI error:", e); });
+        }).catch(function(e) { console.error("CAPI error for " + config.pixelId + ":", e); });
+    }
+
+    function sendCAPIEvent(eventName) {
+        for (var i = 0; i < fbCapiConfigs.length; i++) {
+            sendCAPIEventToConfig(fbCapiConfigs[i], eventName);
+        }
     }
 
     // 统一下载执行函数
